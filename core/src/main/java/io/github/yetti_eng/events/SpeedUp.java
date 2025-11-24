@@ -21,6 +21,8 @@ public class SpeedUp extends Event {
         // Consume item
         item.disable();
         item.hide();
+        //play audio
+        screen.getspeedSfx().play(screen.getGame().volume);
 
         // Schedule automatic reset
         Timer.schedule(new Timer.Task() {
