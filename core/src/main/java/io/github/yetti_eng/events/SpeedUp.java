@@ -1,4 +1,5 @@
 package io.github.yetti_eng.events;
+import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
@@ -21,6 +22,7 @@ public class SpeedUp extends Event {
         // Consume item
         item.disable();
         item.hide();
+        EventCounter.incrementPositive(); //positive event recorded
         //play audio
         screen.getspeedSfx().play(screen.getGame().volume);
 
@@ -37,6 +39,6 @@ public class SpeedUp extends Event {
 
     @Override
     public int getScoreModifier() {
-        return 0;
+        return 200;
     }
 }
