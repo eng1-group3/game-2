@@ -12,7 +12,7 @@ public class IncreasePointsEvent extends Event {
         item.disable();
         item.hide();
         screen.getQuackSfx().play(screen.getGame().volume);
-        screen.spawnInteractionMessage("Found Long Boi (+" + getScoreModifier() + ")");
+        screen.spawnInteractionMessage("Found Long Boi (+" + getScoreModifier()[1] + ")");
         return true;
     }
 
@@ -22,8 +22,8 @@ public class IncreasePointsEvent extends Event {
      * @return score modifier
      */
     @Override
-    public int getScoreModifier() {
+    public int[] getScoreModifier() {
         // TODO placeholder value
-        return 100;
+        return new int[] {0, 100};
     }
 }

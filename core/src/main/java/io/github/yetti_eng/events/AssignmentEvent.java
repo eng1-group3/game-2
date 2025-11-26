@@ -4,13 +4,13 @@ import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
 
-public class KeyEvent extends Event {
+public class AssignmentEvent extends Event{
     @Override
     public boolean activate(GameScreen screen, Player player, Item item) {
         item.disable();
         item.hide();
         screen.getPaperSfx().play(screen.getGame().volume);
-        screen.spawnInteractionMessage("Got check-in code");
+        screen.spawnInteractionMessage("Completed Assignment!");
         return true;
     }
 
