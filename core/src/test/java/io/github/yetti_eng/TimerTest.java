@@ -31,7 +31,4 @@ public class TimerTest {
     public void createNegativeTimerTest() {
         assertThrows(AssertionError.class, () -> new Timer(-10));
     }
-
-    
-
 }
