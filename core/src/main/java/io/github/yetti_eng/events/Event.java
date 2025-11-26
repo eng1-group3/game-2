@@ -18,11 +18,29 @@ public abstract class Event {
      */
     public abstract boolean activate(final GameScreen screen, Player player, Item item);
 
-    public abstract int getScoreModifier();
+    /**
+     * @return Index 0 of the returned array returns a value which corresponds to the operator,
+     * Index 1 of the returned array returns the operand
+     *
+     */
+    public abstract int[] getScoreModifier();
 
     // Consolidated "scoreIncrement" and "scoreDecrement" into single "modifyScore" method
     public void modifyScore(final YettiGame game) {
-        game.score += getScoreModifier();
+        switch(getScoreModifier()[0]) {
+            case 0:
+                game.score += getScoreModifier()[1];
+                break;
+            case 1:
+                game.score -= getScoreModifier()[1];
+                break;
+            case 2:
+                game.score *= getScoreModifier()[1];
+                break;
+            case 3:
+                game.score /= getScoreModifier()[1];
+                break;
+        }
     }
 
 

@@ -52,6 +52,8 @@ public class GameScreen implements Screen {
     private Texture longBoiTexture;
     private Texture waterSpillTexture;
     private Texture pauseTexture;
+    private Texture lecturerTexture;
+    private Texture assignmentTexture;
 
     private MapManager mapManager;
     private OrthographicCamera camera;
@@ -95,6 +97,8 @@ public class GameScreen implements Screen {
         doorframeTexture = new Texture("item/doorframe.png");
         longBoiTexture = new Texture("item/long_boi.png");
         waterSpillTexture = new Texture("item/water_spill.png");
+        lecturerTexture = new Texture("character/lecturer.png");
+        assignmentTexture = new Texture("item/assignment.png");
 
         pauseTexture = new Texture("ui/pause.png");
 
@@ -121,6 +125,9 @@ public class GameScreen implements Screen {
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
         entities.add(new Item(new IncreasePointsEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
         entities.add(new Item(new HiddenDeductPointsEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
+        entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
+        entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
+
 
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
 
