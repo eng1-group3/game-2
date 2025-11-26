@@ -10,6 +10,7 @@ public class Timer {
     private int endTime;
 
     public Timer(int duration) {
+        assert duration >= 0;
         this.duration = duration;
     }
 

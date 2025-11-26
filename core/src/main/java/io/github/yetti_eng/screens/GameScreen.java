@@ -124,6 +124,8 @@ public class GameScreen implements Screen {
         entities.add(new Item(new HiddenDeductPointsEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
         entities.add(new Item(new SpeedUp(), "speed_up", new Texture("item/speed.png"), 25, 17, 4f, 4f));
 
+        entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
+
         //start new timer
         game.timer = new Timer(TIMER_LENGTH);
         game.timer.play();
@@ -249,6 +251,12 @@ public class GameScreen implements Screen {
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());
+
+        entities.forEach(e -> {
+            if (e instanceof Item item && item.ID.equals("closing_door")) {
+                ((ClosingDoorEvent) item.getEvent()).checkForAutoClose(this, player, item, delta);
+            }
+        });
 
         // Release the Dean if the timer is at 60 or less
         if (timeRemaining <= 60 && !dean.isEnabled()) {
@@ -406,6 +414,10 @@ public class GameScreen implements Screen {
 
     public Texture getDoorframeTexture() {
         return doorframeTexture;
+    }
+
+    public Texture getDoorTexture() {
+        return doorTexture;
     }
 
     public Sound getQuackSfx() {
