@@ -256,7 +256,7 @@ public class GameScreen implements Screen {
         timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
 
         //score
-        scoreText.setText(game.score);
+        scoreText.setText(game.score + game.timer.getRemainingTime());
         scoreText.setStyle(new Label.LabelStyle(game.fontBordered, Color.WHITE));
 
         //updates event counters

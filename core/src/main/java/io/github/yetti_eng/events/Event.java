@@ -27,20 +27,23 @@ public abstract class Event {
 
     // Consolidated "scoreIncrement" and "scoreDecrement" into single "modifyScore" method
     public void modifyScore(final YettiGame game) {
+        int combined = game.score + game.timer.getRemainingTime();
+
         switch(getScoreModifier()[0]) {
             case 0:
-                game.score += getScoreModifier()[1];
+                combined += getScoreModifier()[1];
                 break;
             case 1:
-                game.score -= getScoreModifier()[1];
+                combined -= getScoreModifier()[1];
                 break;
             case 2:
-                game.score *= getScoreModifier()[1];
+                combined *= getScoreModifier()[1];
                 break;
             case 3:
-                game.score /= getScoreModifier()[1];
+                combined /= getScoreModifier()[1];
                 break;
         }
+        game.score = combined - game.timer.getRemainingTime();
     }
 
 

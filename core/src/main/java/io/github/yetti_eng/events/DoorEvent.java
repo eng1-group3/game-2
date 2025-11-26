@@ -23,6 +23,6 @@ public class DoorEvent extends Event {
 
     @Override
     public int[] getScoreModifier() {
-        return new int[] {0,0};
+        return new int[] {0,10};
     }
 }
