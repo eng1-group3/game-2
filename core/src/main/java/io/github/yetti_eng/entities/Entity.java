@@ -27,11 +27,11 @@ public abstract class Entity extends Sprite {
     /**
      * Constructor for a new Entity
      * @param tex texture to render with
-     * @param x intial x position
+     * @param x initial x position
      * @param y initial y position
-     * @param width
-     * @param height
-     * @param speed
+     * @param width the width of the entity
+     * @param height the height of the entity
+     * @param speed the speed of the entity
      * @param solid whether object should cause collision with player
      */
     public Entity(Texture tex, float x, float y, float width, float height, float speed, boolean solid) {
@@ -45,6 +45,9 @@ public abstract class Entity extends Sprite {
         this.movement = new Vector2(0, 0);
     }
 
+    /**
+     * reset the player movements
+     */
     public void resetMovement() {
         movement.set(0, 0);
     }

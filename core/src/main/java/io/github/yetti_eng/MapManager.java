@@ -58,7 +58,7 @@ public class MapManager {
      *Checks if any corner of a rectangle object falls in an invalid position.
      *
      * @param rect represents the hitbox of the player
-     * @return true if any corner if in the collision layer
+     * @return true if any corner is in the collision layer
      */
     //rectangle is blocked if any corners of the rectangle are invalid tiles
     public boolean isRectInvalid(Rectangle rect) {
