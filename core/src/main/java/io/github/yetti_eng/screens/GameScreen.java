@@ -75,6 +75,7 @@ public class GameScreen implements Screen {
     private Label negativeText;
     private Label positiveText;
     private Label timerText;
+    private Label scoreText;
     private final ArrayList<Label> messages = new ArrayList<>();
     private Button pauseButton;
 
@@ -137,6 +138,8 @@ public class GameScreen implements Screen {
         //create labels and position timer and event counters on screen
         timerText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
         timerText.setPosition(0, scaled(8.5f));
+        scoreText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
+        scoreText.setPosition(11, scaled(8.5f));
         hiddenText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         hiddenText.setPosition(scaled(4f), scaled(8.5f));
         negativeText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
@@ -252,6 +255,10 @@ public class GameScreen implements Screen {
         timerText.setText(text);
         timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
 
+        //score
+        scoreText.setText(game.score);
+        //scoreText.setStyle(new Label.LabelStyle(game.fontBordered));
+
         //updates event counters
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
@@ -312,6 +319,7 @@ public class GameScreen implements Screen {
 
         //draw timer and event counters to screen
         timerText.draw(game.batch, 1.0f);
+        scoreText.draw(game.batch, 1.0f);
         hiddenText.draw(game.batch, 1.0f);
         positiveText.draw(game.batch, 1.0f);
         negativeText.draw(game.batch, 1.0f);
