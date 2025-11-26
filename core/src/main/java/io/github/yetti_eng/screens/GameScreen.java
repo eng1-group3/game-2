@@ -56,6 +56,9 @@ public class GameScreen implements Screen {
     private MapManager mapManager;
     private OrthographicCamera camera;
 
+    private float mapWidth;
+    private float mapHeight;
+
     private OrthographicCamera interfaceCamera;
 
     private Sound quackSfx;
@@ -99,11 +102,15 @@ public class GameScreen implements Screen {
         pauseTexture = new Texture("ui/pause.png");
 
         camera = new  OrthographicCamera();
-        camera.setToOrtho(false, 90, 60);
+        camera.setToOrtho(false, 45, 30);
+
         interfaceCamera = new  OrthographicCamera();
         interfaceCamera.setToOrtho(false, scaled(16), scaled(9));
         mapManager = new MapManager(camera);
         mapManager.loadMap("map/map.tmx");
+
+        mapWidth = mapManager.getMapWidth();
+        mapHeight = mapManager.getMapHeight();
 
         quackSfx = Gdx.audio.newSound(Gdx.files.internal("audio/duck_quack.mp3"));
         paperSfx = Gdx.audio.newSound(Gdx.files.internal("audio/paper_rustle.wav"));
@@ -227,15 +234,37 @@ public class GameScreen implements Screen {
             }
         });
 
-        // Clamp to edges of screen
-        float worldWidth = game.viewport.getWorldWidth();
-        float worldHeight = game.viewport.getWorldHeight();
+        // Centre camera on player
+        float playerCenterX = currentPos.x;
+        float playerCenterY = currentPos.y;
 
-        float playerWidth = player.getWidth();
-        float playerHeight = player.getHeight();
+        camera.position.set(playerCenterX, playerCenterY, 0);
 
-        player.setX(MathUtils.clamp(player.getX(), 0, worldWidth - playerWidth));
-        player.setY(MathUtils.clamp(player.getY(), 0, worldHeight - playerHeight));
+        // Define camera and viewport variables
+        float halfViewportWidth = game.viewport.getWorldWidth() / 2;
+        float halfViewportHeight = game.viewport.getWorldHeight() / 2;
+
+        float minCameraX = halfViewportWidth;
+        float maxCameraX = mapWidth - halfViewportWidth;
+        float minCameraY = halfViewportHeight;
+        float maxCameraY = mapHeight - halfViewportHeight;
+
+        //clamp camera
+        // Only clamp if map is larger than viewport in each dimension
+        if (mapWidth >= game.viewport.getWorldWidth()) {
+            camera.position.x = MathUtils.clamp(
+                camera.position.x,
+                minCameraX,
+                maxCameraX
+            );
+        }
+        if (mapHeight >= game.viewport.getWorldHeight()) {
+            camera.position.y = MathUtils.clamp(
+                camera.position.y,
+                minCameraY,
+                maxCameraY
+            );
+        }
 
         // Calculate remaining time
         int timeRemaining = game.timer.getRemainingTime();
@@ -267,10 +296,10 @@ public class GameScreen implements Screen {
 
     private void draw(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
+
         camera.update();
         //draw map
         mapManager.render();
-        game.viewport.apply();
 
         //main camera with map and entities
         game.batch.setProjectionMatrix(camera.combined);
@@ -337,7 +366,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        game.viewport.update(width, height, true);
+        game.viewport.update(width, height);
     }
 
     @Override

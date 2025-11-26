@@ -68,6 +68,20 @@ public class MapManager {
             isPositionInvalid(rect.x + rect.width, rect.y + rect.height); // top right
     }
 
+    public float getMapWidth() {
+        int mapWidthInTiles = map.getProperties().get("width", Integer.class);
+        int tilePixelWidth = map.getProperties().get("tilewidth", Integer.class);
+
+        return (mapWidthInTiles * tilePixelWidth / 48f);
+    }
+
+    public float getMapHeight() {
+        int mapHeightInTiles = map.getProperties().get("height", Integer.class);
+        int tilePixelHeight = map.getProperties().get("tileheight", Integer.class);
+
+        return (mapHeightInTiles * tilePixelHeight / 48f);
+    }
+
     public void dispose(){
         renderer.dispose();
         map.dispose();
