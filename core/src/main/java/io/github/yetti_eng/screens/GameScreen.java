@@ -139,7 +139,7 @@ public class GameScreen implements Screen {
         timerText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
         timerText.setPosition(0, scaled(8.5f));
         scoreText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
-        scoreText.setPosition(225, scaled(8.5f));
+        scoreText.setPosition(0, 40);
         hiddenText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         hiddenText.setPosition(scaled(4f), scaled(8.5f));
         negativeText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
