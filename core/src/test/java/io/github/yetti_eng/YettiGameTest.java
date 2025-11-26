@@ -23,13 +23,13 @@ public class YettiGameTest {
         }
     }
     // Needds Mockito
-    //@Test
-    //public void viewPortScaleTest() {
-    //    YettiGame Game = new YettiGame();
-    //    Game.create();
-    //    System.out.print(Game.viewport.getScreenHeight());
-    //    Game.viewport.getScreenHeight();
-    //}
+    @Test
+    public void viewPortScaleTest() {
+        YettiGame Game = new YettiGame();
+        Game.create();
+        System.out.print(Game.viewport.getScreenHeight());
+        Game.viewport.getScreenHeight();
+    }
 
     // Will need mockito for this I think
     @Test
