@@ -39,7 +39,10 @@ public class Item extends Entity {
         return used;
     }
 
-    // Make setSolid public for Items
+    public Event getEvent() {
+        return event;
+    }
+
     @Override
     public void setSolid(boolean solid) {
         super.setSolid(solid);
