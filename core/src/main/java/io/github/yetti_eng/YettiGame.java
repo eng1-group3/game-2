@@ -36,16 +36,17 @@ public class YettiGame extends Game {
     public void create() {
         batch = new SpriteBatch();
         gameViewport = new FitViewport(45,30);
+
         uiViewport = new ScreenViewport();
 
         robotoGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto.ttf"));
 
         var fontParameter = new FreeTypeFontParameter();
-        fontParameter.size = (int) scaled(1);
+        fontParameter.size = 50;
         fontParameter.color = Color.WHITE.cpy();
         font = robotoGenerator.generateFont(fontParameter);
 
-        fontParameter.size = (int) scaled(0.5f);
+        fontParameter.size = 40;
         fontSmall = robotoGenerator.generateFont(fontParameter);
 
         fontParameter.color = Color.BLACK.cpy();
@@ -53,7 +54,7 @@ public class YettiGame extends Game {
         fontParameter.borderWidth = 2;
         fontBorderedSmall = robotoGenerator.generateFont(fontParameter);
 
-        fontParameter.size = (int) scaled(1f);
+        fontParameter.size = 50;
         fontParameter.borderWidth = 4;
         fontBordered = robotoGenerator.generateFont(fontParameter);
 

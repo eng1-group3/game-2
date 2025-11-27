@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -15,20 +16,31 @@ import static io.github.yetti_eng.YettiGame.scaled;
 public class MenuScreen implements Screen {
     private final YettiGame game;
     private final Stage stage;
+    private final Table table;
 
     public MenuScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
+        table = new Table();
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
+        table.setFillParent(true);
+
+        table.setDebug(true);
+
+        stage.addActor(table);
+
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(null, null, null, game.font);
 
+        float centre_x = stage.getViewport().getWorldWidth() / 2;
+        float centre_y = stage.getViewport().getWorldHeight() / 2;
+        float height = stage.getViewport().getWorldHeight();
+
         TextButton playButton = new TextButton("Play", style);
-        playButton.setPosition(scaled(16) / 2, scaled(6f), Align.center);
         playButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -37,10 +49,9 @@ public class MenuScreen implements Screen {
                 return true;
             }
         });
-        stage.addActor(playButton);
+        table.add(playButton).pad(10).row();
 
         TextButton settingsButton = new TextButton("Settings", style);
-        settingsButton.setPosition(scaled(16) / 2, scaled(4.5f), Align.center);
         settingsButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -49,10 +60,9 @@ public class MenuScreen implements Screen {
                 return true;
             }
         });
-        stage.addActor(settingsButton);
+        table.add(settingsButton).row();
 
         TextButton creditsButton = new TextButton("Credits", style);
-        creditsButton.setPosition(scaled(16) / 2, scaled(3f), Align.center);
         creditsButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -61,10 +71,9 @@ public class MenuScreen implements Screen {
                 return true;
             }
         });
-        stage.addActor(creditsButton);
+        table.add(creditsButton).pad(10).row();
 
         TextButton quitButton = new TextButton("Quit", style);
-        quitButton.setPosition(scaled(16) / 2, scaled(1.5f), Align.center);
         quitButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -72,7 +81,7 @@ public class MenuScreen implements Screen {
                 return true;
             }
         });
-        stage.addActor(quitButton);
+        table.add(quitButton).pad(10).row();
     }
 
     @Override
@@ -81,15 +90,18 @@ public class MenuScreen implements Screen {
         game.uiViewport.apply();
         game.batch.setProjectionMatrix(game.uiViewport.getCamera().combined);
         game.batch.begin();
-        game.font.draw(game.batch, "Welcome to YettiGame", 0, scaled(8), scaled(16), Align.center, false);
+        game.font.draw(game.batch, "Welcome to YettiGame", 0, game.uiViewport.getWorldHeight()-50, game.uiViewport.getWorldWidth(), Align.center, false);
         game.batch.end();
 
+        stage.getViewport().apply();
+        stage.act(delta);
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
         game.uiViewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

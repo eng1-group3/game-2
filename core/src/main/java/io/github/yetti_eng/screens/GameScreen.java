@@ -103,9 +103,11 @@ public class GameScreen implements Screen {
 
         camera = new  OrthographicCamera();
         camera.setToOrtho(false, game.gameViewport.getWorldWidth(), game.gameViewport.getWorldHeight());
+        game.gameViewport.setCamera(camera);
 
         interfaceCamera = new  OrthographicCamera();
-        interfaceCamera.setToOrtho(false, game.uiViewport.getScreenWidth(), game.uiViewport.getScreenHeight());
+        interfaceCamera.setToOrtho(false, game.uiViewport.getWorldWidth(), game.uiViewport.getWorldHeight());
+        game.uiViewport.setCamera(interfaceCamera);
         mapManager = new MapManager(camera);
         mapManager.loadMap("map/map.tmx");
 
@@ -296,13 +298,16 @@ public class GameScreen implements Screen {
 
     private void draw(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
+        // game world
+        game.gameViewport.apply();
 
         camera.update();
+
         //draw map
         mapManager.render();
 
         //main camera with map and entities
-        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(game.gameViewport.getCamera().combined);
         game.batch.begin();
         // Draw only visible entities
         entities.forEach(e -> { if (e.isVisible()) e.draw(game.batch); });
@@ -312,14 +317,15 @@ public class GameScreen implements Screen {
         if (dean.isVisible()) dean.draw(game.batch);
         game.batch.end();
 
+        game.uiViewport.apply();
         //separate user interface camera for text on screen
-        game.batch.setProjectionMatrix(interfaceCamera.combined);
+        game.batch.setProjectionMatrix(game.uiViewport.getCamera().combined);
         game.batch.begin();
 
         if (game.isPaused()) {
             game.fontBordered.draw(
                 game.batch, "PAUSED",
-                0, interfaceCamera.viewportHeight / 2, interfaceCamera.viewportWidth,
+                0, game.uiViewport.getWorldHeight() / 2, game.uiViewport.getWorldWidth(),
                 Align.center, false
             );
         }
@@ -366,7 +372,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        game.gameViewport.update(width, height);
+        game.gameViewport.update(width, height, true);
         game.uiViewport.update(width, height, true);
     }
 
