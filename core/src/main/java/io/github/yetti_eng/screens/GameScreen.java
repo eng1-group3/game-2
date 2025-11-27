@@ -65,6 +65,7 @@ public class GameScreen implements Screen {
     private Sound doorSfx;
     private Sound slipSfx;
     private Sound growlSfx;
+    public Sound speedSfx;
 
     private Player player;
     private Dean dean;
@@ -115,7 +116,7 @@ public class GameScreen implements Screen {
         doorSfx = Gdx.audio.newSound(Gdx.files.internal("audio/dorm_door_opening.wav"));
         slipSfx = Gdx.audio.newSound(Gdx.files.internal("audio/cartoon_quick_slip.wav"));
         growlSfx = Gdx.audio.newSound(Gdx.files.internal("audio/deep_growl_1.wav"));
-
+        speedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/speed.mp3"));
         player = new Player(playerTexDown, 55, 25);
         exit = new Item(new WinEvent(), "exit", exitTexture, 80, 54, 2, 2.2f);
         dean = new Dean(yetiTexture, -2, 4.5f);
@@ -129,6 +130,7 @@ public class GameScreen implements Screen {
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
         entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
 
+        entities.add(new Item(new SpeedUp(), "speed_up", new Texture("item/speed.png"), 58, 2, 2f, 2f));
 
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
 
@@ -400,6 +402,7 @@ public class GameScreen implements Screen {
         doorSfx.dispose();
         slipSfx.dispose();
         growlSfx.dispose();
+        speedSfx.dispose();
     }
 
     /**
@@ -446,6 +449,9 @@ public class GameScreen implements Screen {
 
     public Sound getSlipSfx() {
         return slipSfx;
+    }
+    public Sound getspeedSfx() {
+        return speedSfx;
     }
 
     /**
