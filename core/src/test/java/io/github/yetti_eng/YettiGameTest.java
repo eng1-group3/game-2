@@ -3,11 +3,7 @@ package io.github.yetti_eng;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-//import org.junit.jupiter.api.BeforeEach;
-//import static org.mockito.Mockito.mock;
-
 public class YettiGameTest {
-
     @Test
     public void scaledTest() {
         // Given
@@ -21,20 +17,6 @@ public class YettiGameTest {
             // Then
             assertEquals(expected, result, 0.001f, "failed on input = " + input);
         }
-    }
-    // Needds Mockito
-    //@Test
-    //public void viewPortScaleTest() {
-    //    YettiGame Game = new YettiGame();
-    //    Game.create();
-    //    System.out.print(Game.viewport.getScreenHeight());
-    //    Game.viewport.getScreenHeight();
-    //}
-
-    // Will need mockito for this I think
-    @Test
-    public void createDisposeTest() {
-
     }
 
     @Test

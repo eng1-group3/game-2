@@ -6,11 +6,11 @@ dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
   
   testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
-  testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
   testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-  testImplementation platform('org.junit:junit-bom:5.10.0')
-  testImplementation 'org.junit.jupiter:junit-jupiter'
+  testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
   testImplementation 'org.mockito:mockito-core:5.11.0'
+  testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
+
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
