@@ -449,7 +449,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * @return The current YettiGame object.
+     * @return The current YetiGame object.
      */
     public YettiGame getGame() {
         return game;
