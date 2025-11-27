@@ -16,7 +16,7 @@ public class WinEvent extends Event {
     }
 
     @Override
-    public int getScoreModifier() {
-        return 0;
+    public int[] getScoreModifier() {
+        return new int[] {0,0};
     }
 }

@@ -52,6 +52,8 @@ public class GameScreen implements Screen {
     private Texture longBoiTexture;
     private Texture waterSpillTexture;
     private Texture pauseTexture;
+    private Texture lecturerTexture;
+    private Texture assignmentTexture;
 
     private MapManager mapManager;
     private OrthographicCamera camera;
@@ -74,6 +76,7 @@ public class GameScreen implements Screen {
     private Label negativeText;
     private Label positiveText;
     private Label timerText;
+    private Label scoreText;
     private final ArrayList<Label> messages = new ArrayList<>();
     private Button pauseButton;
 
@@ -96,6 +99,8 @@ public class GameScreen implements Screen {
         doorframeTexture = new Texture("item/doorframe.png");
         longBoiTexture = new Texture("item/long_boi.png");
         waterSpillTexture = new Texture("item/water_spill.png");
+        lecturerTexture = new Texture("character/lecturer.png");
+        assignmentTexture = new Texture("item/assignment.png");
 
         pauseTexture = new Texture("ui/pause.png");
 
@@ -122,6 +127,9 @@ public class GameScreen implements Screen {
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
         entities.add(new Item(new IncreasePointsEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
         entities.add(new Item(new HiddenDeductPointsEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
+        entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
+        entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
+
         entities.add(new Item(new SpeedUp(), "speed_up", new Texture("item/speed.png"), 58, 2, 2f, 2f));
 
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
@@ -132,6 +140,8 @@ public class GameScreen implements Screen {
         //create labels and position timer and event counters on screen
         timerText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
         timerText.setPosition(0, scaled(8.5f));
+        scoreText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
+        scoreText.setPosition(0, 40);
         hiddenText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         hiddenText.setPosition(scaled(4f), scaled(8.5f));
         negativeText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
@@ -247,6 +257,10 @@ public class GameScreen implements Screen {
         timerText.setText(text);
         timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
 
+        //score
+        scoreText.setText(game.score + game.timer.getRemainingTime());
+        scoreText.setStyle(new Label.LabelStyle(game.fontBordered, Color.WHITE));
+
         //updates event counters
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
@@ -307,6 +321,7 @@ public class GameScreen implements Screen {
 
         //draw timer and event counters to screen
         timerText.draw(game.batch, 1.0f);
+        scoreText.draw(game.batch, 1.0f);
         hiddenText.draw(game.batch, 1.0f);
         positiveText.draw(game.batch, 1.0f);
         negativeText.draw(game.batch, 1.0f);
@@ -440,7 +455,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * @return The current YettiGame object.
+     * @return The current YetiGame object.
      */
     public YettiGame getGame() {
         return game;

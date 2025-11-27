@@ -32,6 +32,6 @@ public class ClosingDoorEventTest {
     @Test
     public void testScoreModifierIsZero() {
         ClosingDoorEvent event = new ClosingDoorEvent(19, 2.2f);
-        assertEquals(0, event.getScoreModifier());
+        assertEquals(0, event.getScoreModifier()[1]);
     }
 }
