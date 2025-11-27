@@ -10,7 +10,7 @@ public class Timer {
     private int endTime;
 
     public Timer(int duration) {
-        assert duration >= 0;
+        assert duration >= 0 : "The duration of a Timer cannot be neagtive.";
         this.duration = duration;
     }
 
