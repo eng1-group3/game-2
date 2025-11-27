@@ -38,7 +38,7 @@ public class SpeedUp extends Event {
     }
 
     @Override
-    public int getScoreModifier() {
-        return 200;
+    public int[] getScoreModifier() {
+        return new int[]  {0,200};
     }
 }
