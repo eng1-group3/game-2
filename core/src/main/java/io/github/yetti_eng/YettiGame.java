@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.yetti_eng.screens.MenuScreen;
 
 // Called "Game" in the architecture documentation; renamed to avoid clash with LibGDX class name
@@ -16,7 +17,8 @@ public class YettiGame extends Game {
     private static final float WORLD_SCALE = 80; // 16:9 * 80 = 1280:720
 
     public SpriteBatch batch;
-    public FitViewport viewport;
+    public FitViewport gameViewport;
+    public ScreenViewport uiViewport;
 
     private FreeTypeFontGenerator robotoGenerator;
     public BitmapFont font;
@@ -33,7 +35,8 @@ public class YettiGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        viewport = new FitViewport(scaled(16), scaled(9));
+        gameViewport = new FitViewport(45,30);
+        uiViewport = new ScreenViewport();
 
         robotoGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto.ttf"));
 

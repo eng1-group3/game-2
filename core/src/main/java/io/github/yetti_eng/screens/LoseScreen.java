@@ -23,8 +23,8 @@ public class LoseScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.4f, 0.15f, 0.2f, 1f);
-        game.viewport.apply();
-        game.batch.setProjectionMatrix(game.viewport.getCamera().combined);
+        game.uiViewport.apply();
+        game.batch.setProjectionMatrix(game.uiViewport.getCamera().combined);
         game.batch.begin();
         game.font.draw(game.batch, "You lost :(", 0, scaled(5.5f), scaled(16), Align.center, false);
         game.font.draw(game.batch, "Score: " + score, 0, scaled(4.5f), scaled(16), Align.center, false);
@@ -33,7 +33,7 @@ public class LoseScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        game.viewport.update(width, height, true);
+        game.uiViewport.update(width, height, true);
     }
 
     @Override

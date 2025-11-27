@@ -28,7 +28,7 @@ public class SettingsScreen implements Screen {
 
     public SettingsScreen(final YettiGame game) {
         this.game = game;
-        stage = new Stage(game.viewport, game.batch);
+        stage = new Stage(game.uiViewport, game.batch);
     }
 
     @Override
@@ -68,8 +68,8 @@ public class SettingsScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.4f, 0.4f, 0.4f, 1f);
-        game.viewport.apply();
-        game.batch.setProjectionMatrix(game.viewport.getCamera().combined);
+        game.uiViewport.apply();
+        game.batch.setProjectionMatrix(game.uiViewport.getCamera().combined);
         game.batch.begin();
         game.font.draw(game.batch, "Settings", 0, scaled(8), scaled(16), Align.center, false);
         game.font.draw(game.batch, "Volume", 0, scaled(6), scaled(16), Align.center, false);
@@ -80,7 +80,7 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        game.viewport.update(width, height, true);
+        game.uiViewport.update(width, height, true);
     }
 
     @Override

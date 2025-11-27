@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final YettiGame game) {
         this.game = game;
-        stage = new Stage(game.viewport, game.batch);
+        stage = new Stage(game.uiViewport, game.batch);
     }
 
     @Override
@@ -102,10 +102,10 @@ public class GameScreen implements Screen {
         pauseTexture = new Texture("ui/pause.png");
 
         camera = new  OrthographicCamera();
-        camera.setToOrtho(false, 45, 30);
+        camera.setToOrtho(false, game.gameViewport.getWorldWidth(), game.gameViewport.getWorldHeight());
 
         interfaceCamera = new  OrthographicCamera();
-        interfaceCamera.setToOrtho(false, scaled(16), scaled(9));
+        interfaceCamera.setToOrtho(false, game.uiViewport.getScreenWidth(), game.uiViewport.getScreenHeight());
         mapManager = new MapManager(camera);
         mapManager.loadMap("map/map.tmx");
 
@@ -241,8 +241,8 @@ public class GameScreen implements Screen {
         camera.position.set(playerCenterX, playerCenterY, 0);
 
         // Define camera and viewport variables
-        float halfViewportWidth = game.viewport.getWorldWidth() / 2;
-        float halfViewportHeight = game.viewport.getWorldHeight() / 2;
+        float halfViewportWidth = game.gameViewport.getWorldWidth() / 2;
+        float halfViewportHeight = game.gameViewport.getWorldHeight() / 2;
 
         float minCameraX = halfViewportWidth;
         float maxCameraX = mapWidth - halfViewportWidth;
@@ -251,14 +251,14 @@ public class GameScreen implements Screen {
 
         //clamp camera
         // Only clamp if map is larger than viewport in each dimension
-        if (mapWidth >= game.viewport.getWorldWidth()) {
+        if (mapWidth >= game.gameViewport.getWorldWidth()) {
             camera.position.x = MathUtils.clamp(
                 camera.position.x,
                 minCameraX,
                 maxCameraX
             );
         }
-        if (mapHeight >= game.viewport.getWorldHeight()) {
+        if (mapHeight >= game.gameViewport.getWorldHeight()) {
             camera.position.y = MathUtils.clamp(
                 camera.position.y,
                 minCameraY,
@@ -366,7 +366,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        game.viewport.update(width, height);
+        game.gameViewport.update(width, height);
+        game.uiViewport.update(width, height, true);
     }
 
     @Override

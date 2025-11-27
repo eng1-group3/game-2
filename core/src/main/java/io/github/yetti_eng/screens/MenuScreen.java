@@ -18,7 +18,7 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(final YettiGame game) {
         this.game = game;
-        stage = new Stage(game.viewport, game.batch);
+        stage = new Stage(game.uiViewport, game.batch);
     }
 
     @Override
@@ -78,8 +78,8 @@ public class MenuScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        game.viewport.apply();
-        game.batch.setProjectionMatrix(game.viewport.getCamera().combined);
+        game.uiViewport.apply();
+        game.batch.setProjectionMatrix(game.uiViewport.getCamera().combined);
         game.batch.begin();
         game.font.draw(game.batch, "Welcome to YettiGame", 0, scaled(8), scaled(16), Align.center, false);
         game.batch.end();
@@ -89,7 +89,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        game.viewport.update(width, height, true);
+        game.uiViewport.update(width, height, true);
     }
 
     @Override
