@@ -9,6 +9,11 @@ public class LeaderboardEntry{
         this.playerName = playerName;
         this.score = score;
     }
+
+    public LeaderboardEntry(){
+        this.playerName = "";
+        this.score = Integer.MIN_VALUE;
+    }
 }
 
 class SortLeaderboard implements Comparator<LeaderboardEntry> {

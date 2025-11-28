@@ -1,6 +1,8 @@
 package io.github.yetti_eng;
 import java.io.FileWriter;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.io.IOException;
 import java.io.File;                  // Import the File class
@@ -23,7 +25,7 @@ public class Leaderboard {
 
         try (Scanner myReader = new Scanner(leaderboard)) {
             LeaderboardEntry topScores[] = new LeaderboardEntry[leaderboardSize];
-            Arrays.fill(topScores, Integer.MIN_VALUE);
+            Arrays.fill(topScores, new LeaderboardEntry());
 
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -40,13 +42,18 @@ public class Leaderboard {
 
                 int score = Integer.parseInt(data.substring(data.indexOf(" ") + 1));
                 String playerName = data.substring(0, data.indexOf(" "));
-                System.out.println(playerName);
+                //System.out.println(playerName);
 
                 if(score > lowestScore){
-                    topScores[lowestScoreIndex].score = score;
+                    topScores[lowestScoreIndex] = new LeaderboardEntry(playerName, score);
                 }
-                Arrays.sort(topScores);
-                System.out.println(Arrays.toString(topScores));
+                SortLeaderboard sortedLeaderboard = new SortLeaderboard();
+                Arrays.sort(topScores, sortedLeaderboard);
+
+                System.out.println("\nTop scores:");
+                for (LeaderboardEntry entry : topScores) {
+                    System.out.println(entry.playerName + " " + entry.score);
+                }
             }
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
