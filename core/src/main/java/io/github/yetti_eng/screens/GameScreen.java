@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -60,6 +61,8 @@ public class GameScreen implements Screen {
     private float mapHeight;
 
     private OrthographicCamera interfaceCamera;
+
+    private Table table;
 
     private Sound quackSfx;
     private Sound paperSfx;
@@ -114,6 +117,11 @@ public class GameScreen implements Screen {
         mapWidth = mapManager.getMapWidth();
         mapHeight = mapManager.getMapHeight();
 
+        table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        table.setDebug(true);
+
         quackSfx = Gdx.audio.newSound(Gdx.files.internal("audio/duck_quack.mp3"));
         paperSfx = Gdx.audio.newSound(Gdx.files.internal("audio/paper_rustle.wav"));
         doorSfx = Gdx.audio.newSound(Gdx.files.internal("audio/dorm_door_opening.wav"));
@@ -136,18 +144,18 @@ public class GameScreen implements Screen {
         game.timer.play();
         //create labels and position timer and event counters on screen
         timerText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
-        timerText.setPosition(0, scaled(8.5f));
         hiddenText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        hiddenText.setPosition(scaled(4f), scaled(8.5f));
         negativeText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        negativeText.setPosition(scaled(7f), scaled(8.5f));
         positiveText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        positiveText.setPosition(scaled(10f), scaled(8.5f));
+
+        table.add(timerText);
+        table.add(positiveText);
+        table.add(negativeText);
+        table.add(hiddenText);
 
         Gdx.input.setInputProcessor(stage);
         pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
         pauseButton.setSize(48, 48);
-        pauseButton.setPosition(scaled(15.6f), scaled(8.6f), Align.center);
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -158,7 +166,7 @@ public class GameScreen implements Screen {
                 }
             }
         });
-        stage.addActor(pauseButton);
+        table.add(pauseButton);
     }
 
     @Override
@@ -329,12 +337,6 @@ public class GameScreen implements Screen {
                 Align.center, false
             );
         }
-
-        //draw timer and event counters to screen
-        timerText.draw(game.batch, 1.0f);
-        hiddenText.draw(game.batch, 1.0f);
-        positiveText.draw(game.batch, 1.0f);
-        negativeText.draw(game.batch, 1.0f);
 
         //draws messages fading out in an upwards direction
         for (Label l : messages) {
