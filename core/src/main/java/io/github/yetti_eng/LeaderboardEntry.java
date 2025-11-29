@@ -53,7 +53,7 @@ class SortLeaderboard implements Comparator<LeaderboardEntry> {
 
     @Override
     public int compare(LeaderboardEntry o1, LeaderboardEntry o2) {
-        return Integer.compare(o1.getScore(), o2.getScore());
+        return Integer.compare(o2.getScore(), o1.getScore());
     }
 }
 

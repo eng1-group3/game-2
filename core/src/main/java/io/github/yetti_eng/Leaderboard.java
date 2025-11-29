@@ -87,7 +87,7 @@ public class Leaderboard {
 
             // Sorts topScores using comparators
             Comparator myComparator = new SortLeaderboard();
-            Collections.sort(topScores, myComparator);
+            topScores.sort(myComparator);
 
             System.out.println("\nTop scores:");
             for (Object obj : topScores) {
