@@ -121,6 +121,7 @@ public class GameScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
         table.setDebug(true);
+        table.top().left();
 
         quackSfx = Gdx.audio.newSound(Gdx.files.internal("audio/duck_quack.mp3"));
         paperSfx = Gdx.audio.newSound(Gdx.files.internal("audio/paper_rustle.wav"));
@@ -148,14 +149,13 @@ public class GameScreen implements Screen {
         negativeText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         positiveText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
 
-        table.add(timerText);
-        table.add(positiveText);
-        table.add(negativeText);
-        table.add(hiddenText);
+        table.add(timerText).expandX().left().padLeft(10);
+        table.add(positiveText).pad(10);
+        table.add(negativeText).pad(10);
+        table.add(hiddenText).pad(10);
 
         Gdx.input.setInputProcessor(stage);
         pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
-        pauseButton.setSize(48, 48);
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -166,7 +166,7 @@ public class GameScreen implements Screen {
                 }
             }
         });
-        table.add(pauseButton);
+        table.add(pauseButton).width(50f).height(50f).pad(10);
     }
 
     @Override
@@ -327,7 +327,7 @@ public class GameScreen implements Screen {
 
         game.uiViewport.apply();
         //separate user interface camera for text on screen
-        game.batch.setProjectionMatrix(game.uiViewport.getCamera().combined);
+        game.batch.setProjectionMatrix(interfaceCamera.combined);
         game.batch.begin();
 
         if (game.isPaused()) {
@@ -424,7 +424,7 @@ public class GameScreen implements Screen {
      */
     public void spawnLargeMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBordered, Color.WHITE.cpy()));
-        label.setPosition(scaled(8), scaled(4.5f), Align.center);
+        label.setPosition(interfaceCamera.viewportWidth-15, scaled(4.5f), Align.center);
         messages.add(label);
     }
 
@@ -435,7 +435,7 @@ public class GameScreen implements Screen {
      */
     public void spawnInteractionMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        label.setPosition(interfaceCamera.viewportWidth, label.getHeight(), Align.right);
+        label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
         messages.add(label);
     }
 

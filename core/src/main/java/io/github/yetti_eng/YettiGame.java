@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.yetti_eng.screens.MenuScreen;
@@ -17,7 +18,7 @@ public class YettiGame extends Game {
     private static final float WORLD_SCALE = 80; // 16:9 * 80 = 1280:720
 
     public SpriteBatch batch;
-    public FitViewport gameViewport;
+    public FillViewport gameViewport;
     public ScreenViewport uiViewport;
 
     private FreeTypeFontGenerator robotoGenerator;
@@ -35,7 +36,10 @@ public class YettiGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        gameViewport = new FitViewport(45,30);
+
+        // aspect ratio = width/height.
+        float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+        gameViewport = new FillViewport(30*aspectRatio,30);
 
         uiViewport = new ScreenViewport();
 
