@@ -10,6 +10,7 @@ public class WinEvent extends Event {
     @Override
     public boolean activate(GameScreen screen, Player player, Item item) {
         YettiGame game = screen.getGame();
+        game.timer.pause();
         game.setScreen(new WinScreen(game));
         screen.dispose();
         return true;
