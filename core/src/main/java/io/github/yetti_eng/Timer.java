@@ -79,4 +79,8 @@ public class Timer {
     private int currentTimeSeconds() {
         return Math.toIntExact(System.currentTimeMillis() / 1000);
     }
+
+    public String formatTimer(int seconds) {
+        return (seconds / 60) + ":" + String.format("%02d", seconds % 60);
+    }
 }

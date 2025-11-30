@@ -253,7 +253,7 @@ public class GameScreen implements Screen {
 
         // Calculate remaining time
         int timeRemaining = game.timer.getRemainingTime();
-        String text = (timeRemaining / 60) + ":" + String.format("%02d", timeRemaining % 60);
+        String text = game.timer.formatTimer(game.timer.getRemainingTime());
         timerText.setText(text);
         timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
 
