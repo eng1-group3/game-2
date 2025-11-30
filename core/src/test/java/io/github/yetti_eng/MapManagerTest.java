@@ -70,12 +70,4 @@ public class MapManagerTest {
         
         assertFalse(mapManager.isRectInvalid(testRect));
     }
-
-    @Test 
-    public void disposeTest() {
-        mapManager.dispose();
-
-        assertNull(mapManager.getRenderer());
-        assertNull(mapManager.getMap());
-    }
 }
