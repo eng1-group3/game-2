@@ -12,9 +12,6 @@ public class KeyEvent extends Event {
         item.hide();
         screen.getPaperSfx().play(screen.getGame().volume);
         screen.spawnInteractionMessage("Got check-in code");
-        Leaderboard leaderboard = new Leaderboard();
-        //leaderboard.addToLeaderboard("taehyun", 67);
-        leaderboard.getTopScores();
         return true;
     }
 

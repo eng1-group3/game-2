@@ -9,21 +9,31 @@ public class Leaderboard {
     private int leaderboardSize = 5;
     private List<LeaderboardEntry> topScores = new ArrayList();
 
-    public void addToLeaderboard(String playerName, int score) {
+    public boolean addToLeaderboard(String playerName, int score) {
+        List<String> usernames = new ArrayList<>();
+        File leaderboard = new File("leaderboard.txt");
+        try (Scanner scanner = new Scanner(leaderboard)) {
+            while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
+
+                String username = data.substring(0, data.indexOf(" "));
+                usernames.add(username);
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if(usernames.contains(playerName)) {
+            return false;
+        }
         try (FileWriter myWriter = new FileWriter("leaderboard.txt", true)) {
             myWriter.write(playerName + " " + score + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return true;
     }
 
-    public void addToLeaderboard(int score) {
-        try (FileWriter myWriter = new FileWriter("leaderboard.txt", true)) {
-            myWriter.write("default" + " " + score + "\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public List getTopScores() {
         sortTopScores();
@@ -40,7 +50,7 @@ public class Leaderboard {
 
             // Add leaderboardSize entries to the topScores arraylist
             for (int i = 0; i < leaderboardSize; i++) {
-                topScores.add(new LeaderboardEntry("", 0));
+                topScores.add(new LeaderboardEntry("", Integer.MIN_VALUE));
             }
 
             // Looks through each line of the leaderboard.txt file
@@ -50,7 +60,7 @@ public class Leaderboard {
                 // Lowest score is to the first entry of the arraylist
                 // Goes through each element of the top scores and if the score is lower than the current lowest score,
                 // it becomes the new lowest score
-                lowestScore = (LeaderboardEntry) topScores.get(0);
+                lowestScore = topScores.get(0);
                 for (Object object : topScores) {
                     LeaderboardEntry entry = (LeaderboardEntry) object;
                     if (entry.getScore() < lowestScore.getScore()) {
@@ -97,11 +107,6 @@ public class Leaderboard {
             Comparator myComparator = new SortLeaderboard();
             topScores.sort(myComparator);
 
-            System.out.println("\nTop scores:");
-            for (Object obj : topScores) {
-                LeaderboardEntry entry = (LeaderboardEntry) obj;
-                entry.printEntry();
-            }
 
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
