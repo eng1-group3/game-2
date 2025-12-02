@@ -424,7 +424,7 @@ public class GameScreen implements Screen {
      */
     public void spawnLargeMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBordered, Color.WHITE.cpy()));
-        label.setPosition(interfaceCamera.viewportWidth-15, scaled(4.5f), Align.center);
+        label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
         messages.add(label);
     }
 
