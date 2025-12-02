@@ -37,8 +37,8 @@ public class MenuScreen implements Screen {
         stage.addActor(table);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(null, null, null, game.font);
-        Label.LabelStyle labelStyle = new Label.LabelStyle(game.font, Color.WHITE);
 
+        Label.LabelStyle labelStyle = new Label.LabelStyle(game.font, Color.WHITE);
         Label titleLabel = new Label("Welcome to YettiGame", labelStyle);
 
         TextButton playButton = new TextButton("Play", style);
