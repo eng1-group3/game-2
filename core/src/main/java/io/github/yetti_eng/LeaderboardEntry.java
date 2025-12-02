@@ -4,6 +4,7 @@ import java.util.Comparator;
 public class LeaderboardEntry {
     private String playerName;
     private int score;
+    private int position = -1;
 
     public LeaderboardEntry(String playerName, int score) {
         this.playerName = playerName;
@@ -31,8 +32,20 @@ public class LeaderboardEntry {
         this.score = score;
     }
 
-    public void print() {
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public void printEntry() {
         System.out.println(this.score + " " + this.playerName);
+    }
+
+    public String toString() {
+        return this.score + " " + this.playerName;
     }
 
     @Override

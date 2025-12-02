@@ -7,19 +7,33 @@ import java.io.FileNotFoundException;
 
 public class Leaderboard {
     private int leaderboardSize = 5;
-    private List topScores = new ArrayList();
+    private List<LeaderboardEntry> topScores = new ArrayList();
 
     public void addToLeaderboard(String playerName, int score) {
         try (FileWriter myWriter = new FileWriter("leaderboard.txt", true)) {
             myWriter.write(playerName + " " + score + "\n");
-            System.out.println(playerName + " " + score);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void getTopScores(){
+    public void addToLeaderboard(int score) {
+        try (FileWriter myWriter = new FileWriter("leaderboard.txt", true)) {
+            myWriter.write("default" + " " + score + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List getTopScores() {
+        sortTopScores();
+        setPositions();
+        return topScores;
+    }
+
+    private void sortTopScores(){
         File leaderboard = new File("leaderboard.txt");
+        topScores.clear();
 
         try (Scanner scanner = new Scanner(leaderboard)) {
             LeaderboardEntry lowestScore =  new LeaderboardEntry();
@@ -56,12 +70,6 @@ public class Leaderboard {
                     topScores.add(leaderboardEntry);
                     topScores.remove(lowestScore);
                 }
-
-                System.out.println("\nTop scores:");
-                for (Object obj : topScores) {
-                    LeaderboardEntry e = (LeaderboardEntry) obj;
-                    e.print();
-                }
             }
 
 
@@ -91,8 +99,8 @@ public class Leaderboard {
 
             System.out.println("\nTop scores:");
             for (Object obj : topScores) {
-                LeaderboardEntry e = (LeaderboardEntry) obj;
-                e.print();
+                LeaderboardEntry entry = (LeaderboardEntry) obj;
+                entry.printEntry();
             }
 
         } catch (FileNotFoundException e) {
@@ -100,5 +108,21 @@ public class Leaderboard {
             e.printStackTrace();
         }
 
+    }
+
+    private void setPositions(){
+        int position = 1;
+        int lastScore = -1;
+
+        for (int i = 0; i < topScores.size(); i++) {
+            LeaderboardEntry entry = topScores.get(i);
+
+            if (entry.getScore() != lastScore) {
+                position = i + 1;
+            }
+
+            entry.setPosition(position);
+            lastScore = entry.getScore();
+        }
     }
 }
