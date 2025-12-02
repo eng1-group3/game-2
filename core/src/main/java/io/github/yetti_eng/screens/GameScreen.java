@@ -120,7 +120,7 @@ public class GameScreen implements Screen {
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        table.setDebug(true);
+        //table.setDebug(true);
         table.top().left();
 
         quackSfx = Gdx.audio.newSound(Gdx.files.internal("audio/duck_quack.mp3"));
