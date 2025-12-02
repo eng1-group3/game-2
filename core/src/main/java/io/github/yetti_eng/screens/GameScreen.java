@@ -32,8 +32,6 @@ import io.github.yetti_eng.EventCounter;
 
 import java.util.ArrayList;
 
-import static io.github.yetti_eng.YettiGame.scaled;
-
 public class GameScreen implements Screen {
     private final YettiGame game;
     private final Stage stage;
@@ -167,6 +165,7 @@ public class GameScreen implements Screen {
         table.add(negativeText).pad(10);
         table.add(hiddenText).pad(10);
 
+
         Gdx.input.setInputProcessor(stage);
         pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
         pauseButton.addListener(new ChangeListener() {
@@ -179,7 +178,8 @@ public class GameScreen implements Screen {
                 }
             }
         });
-        table.add(pauseButton).width(50f).height(50f).pad(10);
+        table.add(pauseButton).width(50f).height(50f).pad(10).row();
+        table.add(scoreText).pad(10).bottom().left().expandY();
     }
 
     @Override

@@ -30,7 +30,7 @@ public class CreditsScreen implements Screen {
 
         // make table fill whole window
         table.setFillParent(true);
-        table.setDebug(true);
+       // table.setDebug(true);
 
         stage.addActor(table);
 
