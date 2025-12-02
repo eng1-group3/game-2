@@ -2,12 +2,15 @@ package io.github.yetti_eng.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -20,6 +23,7 @@ import static io.github.yetti_eng.YettiGame.scaled;
 public class SettingsScreen implements Screen {
     private final YettiGame game;
     private final Stage stage;
+    private final Table table;
 
     private Slider volumeSlider;
 
@@ -29,11 +33,22 @@ public class SettingsScreen implements Screen {
     public SettingsScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
+        table = new Table();
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+
+        // make table fill whole window
+        table.setFillParent(true);
+        //table.setDebug(true);
+
+        stage.addActor(table);
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle(game.font, Color.WHITE);
+        Label titleLabel = new Label("Settings", labelStyle);
+        Label volumeLabel = new Label("Volume", labelStyle);
 
         sliderTexture = new Texture("ui/slider_background.png");
         knobTexture = new Texture("ui/slider_knob.png");
@@ -41,8 +56,6 @@ public class SettingsScreen implements Screen {
         volumeSlider = new Slider(0.0f, 1.0f, 0.01f, false,
             new Slider.SliderStyle(new TextureRegionDrawable(sliderTexture), new TextureRegionDrawable(knobTexture))
         );
-        volumeSlider.setPosition(scaled(4), scaled(3.5f));
-        volumeSlider.setWidth(scaled(8));
         volumeSlider.setValue(game.volume);
         volumeSlider.addListener(new ChangeListener() {
             @Override
@@ -50,10 +63,8 @@ public class SettingsScreen implements Screen {
                 game.volume = volumeSlider.getValue();
             }
         });
-        stage.addActor(volumeSlider);
 
         TextButton menuButton = new TextButton("Return to Menu", new TextButton.TextButtonStyle(null, null, null, game.font));
-        menuButton.setPosition(scaled(16) / 2, scaled(2), Align.center);
         menuButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -62,19 +73,16 @@ public class SettingsScreen implements Screen {
                 return true;
             }
         });
-        stage.addActor(menuButton);
+
+        table.add(titleLabel).pad(20).row();
+        table.add(volumeLabel).pad(10).row();
+        table.add(volumeSlider).pad(10).fillX().row();
+        table.add(menuButton).pad(10).row();
     }
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.4f, 0.4f, 0.4f, 1f);
-        game.uiViewport.apply();
-        game.batch.setProjectionMatrix(game.uiViewport.getCamera().combined);
-        game.batch.begin();
-        game.font.draw(game.batch, "Settings", 0, scaled(8), scaled(16), Align.center, false);
-        game.font.draw(game.batch, "Volume", 0, scaled(6), scaled(16), Align.center, false);
-        game.batch.end();
-
         stage.draw();
     }
 
