@@ -82,7 +82,11 @@ public class Leaderboard {
                 }
             }
 
+            // Sorts topScores using comparators
+            Comparator myComparator = new SortLeaderboard();
+            topScores.sort(myComparator);
 
+            lowestScore = topScores.get(leaderboardSize - 1);
             try (Scanner scanner2 = new Scanner(leaderboard)) {
                 // Looks through each line of the leaderboard.txt file
                 while (scanner2.hasNextLine()) {
@@ -102,11 +106,6 @@ public class Leaderboard {
             catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
-            // Sorts topScores using comparators
-            Comparator myComparator = new SortLeaderboard();
-            topScores.sort(myComparator);
-
 
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
