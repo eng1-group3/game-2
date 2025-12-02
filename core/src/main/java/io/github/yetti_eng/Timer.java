@@ -10,6 +10,7 @@ public class Timer {
     private int endTime;
 
     public Timer(int duration) {
+        assert duration >= 0 : "The duration of a Timer cannot be neagtive.";
         this.duration = duration;
     }
 
@@ -77,5 +78,9 @@ public class Timer {
 
     private int currentTimeSeconds() {
         return Math.toIntExact(System.currentTimeMillis() / 1000);
+    }
+
+    public String formatTimer(int seconds) {
+        return (seconds / 60) + ":" + String.format("%02d", seconds % 60);
     }
 }

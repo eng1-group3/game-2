@@ -53,6 +53,8 @@ public class GameScreen implements Screen {
     private Texture longBoiTexture;
     private Texture waterSpillTexture;
     private Texture pauseTexture;
+    private Texture lecturerTexture;
+    private Texture assignmentTexture;
 
     private MapManager mapManager;
     private OrthographicCamera camera;
@@ -69,6 +71,7 @@ public class GameScreen implements Screen {
     private Sound doorSfx;
     private Sound slipSfx;
     private Sound growlSfx;
+    public Sound speedSfx;
 
     private Player player;
     private Dean dean;
@@ -79,6 +82,7 @@ public class GameScreen implements Screen {
     private Label negativeText;
     private Label positiveText;
     private Label timerText;
+    private Label scoreText;
     private final ArrayList<Label> messages = new ArrayList<>();
     private Button pauseButton;
 
@@ -101,6 +105,8 @@ public class GameScreen implements Screen {
         doorframeTexture = new Texture("item/doorframe.png");
         longBoiTexture = new Texture("item/long_boi.png");
         waterSpillTexture = new Texture("item/water_spill.png");
+        lecturerTexture = new Texture("character/lecturer.png");
+        assignmentTexture = new Texture("item/assignment.png");
 
         pauseTexture = new Texture("ui/pause.png");
 
@@ -128,7 +134,7 @@ public class GameScreen implements Screen {
         doorSfx = Gdx.audio.newSound(Gdx.files.internal("audio/dorm_door_opening.wav"));
         slipSfx = Gdx.audio.newSound(Gdx.files.internal("audio/cartoon_quick_slip.wav"));
         growlSfx = Gdx.audio.newSound(Gdx.files.internal("audio/deep_growl_1.wav"));
-
+        speedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/speed.mp3"));
         player = new Player(playerTexDown, 55, 25);
         exit = new Item(new WinEvent(), "exit", exitTexture, 80, 54, 2, 2.2f);
         dean = new Dean(yetiTexture, -2, 4.5f);
@@ -139,12 +145,19 @@ public class GameScreen implements Screen {
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
         entities.add(new Item(new IncreasePointsEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
         entities.add(new Item(new HiddenDeductPointsEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
+        entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
+        entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
+
+        entities.add(new Item(new SpeedUp(), "speed_up", new Texture("item/speed.png"), 58, 2, 2f, 2f));
+
+        entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
 
         //start new timer
         game.timer = new Timer(TIMER_LENGTH);
         game.timer.play();
         //create labels and position timer and event counters on screen
         timerText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
+        scoreText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
         hiddenText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         negativeText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         positiveText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
@@ -278,14 +291,24 @@ public class GameScreen implements Screen {
 
         // Calculate remaining time
         int timeRemaining = game.timer.getRemainingTime();
-        String text = (timeRemaining / 60) + ":" + String.format("%02d", timeRemaining % 60);
+        String text = game.timer.formatTimer(game.timer.getRemainingTime());
         timerText.setText(text);
         timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
+
+        //score
+        scoreText.setText(game.score + game.timer.getRemainingTime());
+        scoreText.setStyle(new Label.LabelStyle(game.fontBordered, Color.WHITE));
 
         //updates event counters
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());
+
+        entities.forEach(e -> {
+            if (e instanceof Item item && item.ID.equals("closing_door")) {
+                ((ClosingDoorEvent) item.getEvent()).checkForAutoClose(this, player, item, delta);
+            }
+        });
 
         // Release the Dean if the timer is at 60 or less
         if (timeRemaining <= 60 && !dean.isEnabled()) {
@@ -415,6 +438,7 @@ public class GameScreen implements Screen {
         doorSfx.dispose();
         slipSfx.dispose();
         growlSfx.dispose();
+        speedSfx.dispose();
     }
 
     /**
@@ -443,6 +467,10 @@ public class GameScreen implements Screen {
         return doorframeTexture;
     }
 
+    public Texture getDoorTexture() {
+        return doorTexture;
+    }
+
     public Sound getQuackSfx() {
         return quackSfx;
     }
@@ -457,6 +485,9 @@ public class GameScreen implements Screen {
 
     public Sound getSlipSfx() {
         return slipSfx;
+    }
+    public Sound getspeedSfx() {
+        return speedSfx;
     }
 
     /**

@@ -1,5 +1,7 @@
 package io.github.yetti_eng.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -7,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.YettiGame;
+import io.github.yetti_eng.Timer;
 
 import static io.github.yetti_eng.YettiGame.scaled;
 
@@ -36,6 +40,7 @@ public class WinScreen implements Screen {
         Label titleLabel = new Label("You won :D", labelStyle);
         Label scoreLabel = new Label("Score: " + score, labelStyle);
 
+        //add time remaining and 'press R'
         table.add(titleLabel).pad(10).row();
         table.add(scoreLabel).pad(10);
     }
@@ -43,6 +48,15 @@ public class WinScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
+        //Reset game variables and return to main menu on pressing R key
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            game.score = 0;      //  reset score
+            EventCounter.reset();  // reset event counter
+            game.setScreen(new MenuScreen(game)); //return to main menu
+            dispose();
+            return;
+        }
+
         stage.draw();
     }
 

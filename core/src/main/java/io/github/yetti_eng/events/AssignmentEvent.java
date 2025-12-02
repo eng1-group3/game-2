@@ -1,18 +1,16 @@
 package io.github.yetti_eng.events;
 
-import io.github.yetti_eng.YettiGame;
 import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
-import io.github.yetti_eng.screens.WinScreen;
 
-public class WinEvent extends Event {
+public class AssignmentEvent extends Event{
     @Override
     public boolean activate(GameScreen screen, Player player, Item item) {
-        YettiGame game = screen.getGame();
-        game.timer.pause();
-        game.setScreen(new WinScreen(game));
-        screen.dispose();
+        item.disable();
+        item.hide();
+        screen.getPaperSfx().play(screen.getGame().volume);
+        screen.spawnInteractionMessage("Completed Assignment!");
         return true;
     }
 

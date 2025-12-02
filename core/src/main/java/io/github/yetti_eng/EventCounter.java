@@ -34,4 +34,10 @@ public class EventCounter {
         return negative;
     }
 
+    public static void reset() {
+        hidden = 0;
+        positive = 0;
+        negative = 0;
+    }
+
 }
