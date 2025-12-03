@@ -72,6 +72,8 @@ public class WinScreen implements Screen {
             handleTyping();
             return;
         }
+        game.batch.begin();
+        ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
 
         //ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
         //Reset game variables and return to main menu on pressing R key
@@ -90,7 +92,7 @@ public class WinScreen implements Screen {
             i++;
         }
         */
-
+        game.batch.end();
         stage.draw();
     }
 
@@ -115,7 +117,6 @@ public class WinScreen implements Screen {
             if(leaderboard.addToLeaderboard(username, score)){
                 topScores = leaderboard.getTopScores();
                 typing = false;
-                ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
             } else{
                 username = "";
                 uniqueUsername = false;
