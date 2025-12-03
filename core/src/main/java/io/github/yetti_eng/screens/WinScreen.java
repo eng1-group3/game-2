@@ -77,15 +77,15 @@ public class WinScreen implements Screen {
             handleTyping();
             return;
         }
-        game.batch.begin();
+
         //Reset game variables and return to main menu on pressing R key
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             game.score = 0;      //  reset score
             EventCounter.reset();  // reset event counter
             game.setScreen(new MenuScreen(game)); //return to main menu
-            dispose();
             return;
         }
+        game.batch.begin();
         game.batch.end();
         stage.draw();
     }
