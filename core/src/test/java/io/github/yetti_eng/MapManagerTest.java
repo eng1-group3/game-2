@@ -1,13 +1,13 @@
 package io.github.yetti_eng;
 
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import static org.mockito.Mockito.*;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class MapManagerTest {
 
@@ -15,7 +15,7 @@ public class MapManagerTest {
     TiledMapTileLayer mockLayer;
 
     @BeforeEach
-    public void setup2() {
+    public void setup() {
         mapManager = new MapManager(null);
         mockLayer = mock(TiledMapTileLayer.class);
 
