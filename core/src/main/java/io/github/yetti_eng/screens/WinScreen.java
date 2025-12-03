@@ -42,23 +42,31 @@ public class WinScreen implements Screen {
     public void show() {
         table.setFillParent(true);
         stage.addActor(table);
-        //table.setDebug(true);
+        table.setDebug(true);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(game.font, Color.WHITE);
 
         Label titleLabel = new Label("You won :D", labelStyle);
         Label scoreLabel = new Label("Score: " + score, labelStyle);
+        Label topScoresLabel = new Label("Top Scores: ", labelStyle);
 
         //add time remaining and 'press R'
-        table.add(titleLabel).pad(10).row();
-        table.add(scoreLabel).pad(10);
+        table.add(titleLabel).pad(5).row();
+        table.add(scoreLabel).pad(5).row();
+        table.add(topScoresLabel).pad(15).row();
+
+        topScores = leaderboard.getTopScores();
+        for (Object obj : topScores) {
+            LeaderboardEntry entry = (LeaderboardEntry) obj;
+            Label leaderboardLabel = new Label(entry.getPosition() + ")  " + entry.toString(), labelStyle);
+            table.add(leaderboardLabel).pad(5).left().row();
+        }
     }
 
     @Override
     public void render(float delta) {
-
+        ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
         if(typing){
-            ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
             game.batch.begin();
 
             game.font.draw(game.batch, "Enter your username:", 100, 500);
@@ -73,7 +81,6 @@ public class WinScreen implements Screen {
             return;
         }
         game.batch.begin();
-        ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
 
         //ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
         //Reset game variables and return to main menu on pressing R key
