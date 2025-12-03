@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.Leaderboard;
@@ -15,8 +14,6 @@ import io.github.yetti_eng.LeaderboardEntry;
 import io.github.yetti_eng.YettiGame;
 
 import java.util.List;
-
-import static io.github.yetti_eng.YettiGame.scaled;
 
 public class WinScreen implements Screen {
     private final YettiGame game;
@@ -40,9 +37,10 @@ public class WinScreen implements Screen {
 
     @Override
     public void show() {
+        table.clear();
         table.setFillParent(true);
         stage.addActor(table);
-        table.setDebug(true);
+        //table.setDebug(true);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(game.font, Color.WHITE);
 
@@ -51,15 +49,14 @@ public class WinScreen implements Screen {
         Label topScoresLabel = new Label("Top Scores: ", labelStyle);
 
         //add time remaining and 'press R'
-        table.add(titleLabel).pad(5).row();
-        table.add(scoreLabel).pad(5).row();
-        table.add(topScoresLabel).pad(15).row();
-
+        table.add(titleLabel).pad(2).row();
+        table.add(scoreLabel).pad(2).row();
+        table.add(topScoresLabel).pad(20).row();
         topScores = leaderboard.getTopScores();
         for (Object obj : topScores) {
             LeaderboardEntry entry = (LeaderboardEntry) obj;
             Label leaderboardLabel = new Label(entry.getPosition() + ")  " + entry.toString(), labelStyle);
-            table.add(leaderboardLabel).pad(5).left().row();
+            table.add(leaderboardLabel).pad(2).left().row();
         }
     }
 
@@ -81,8 +78,6 @@ public class WinScreen implements Screen {
             return;
         }
         game.batch.begin();
-
-        //ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
         //Reset game variables and return to main menu on pressing R key
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             game.score = 0;      //  reset score
@@ -91,14 +86,6 @@ public class WinScreen implements Screen {
             dispose();
             return;
         }
-        /*
-        int i = 1;
-        for (Object obj : topScores) {
-            LeaderboardEntry entry = (LeaderboardEntry) obj;
-            game.font.draw(game.batch, entry.getPosition() + ")  " + entry.toString(), scaled(5.3f), scaled(7.1f) - scaled(i*0.9f), scaled(16), Align.left, false);
-            i++;
-        }
-        */
         game.batch.end();
         stage.draw();
     }
@@ -124,6 +111,7 @@ public class WinScreen implements Screen {
             if(leaderboard.addToLeaderboard(username, score)){
                 topScores = leaderboard.getTopScores();
                 typing = false;
+                this.show();
             } else{
                 username = "";
                 uniqueUsername = false;
