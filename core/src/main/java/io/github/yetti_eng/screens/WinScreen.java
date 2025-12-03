@@ -9,10 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.Leaderboard;
 import io.github.yetti_eng.LeaderboardEntry;
 import io.github.yetti_eng.YettiGame;
-import io.github.yetti_eng.Timer;
 
 import java.util.List;
 
@@ -56,6 +56,7 @@ public class WinScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
         if(typing){
             ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
             game.batch.begin();
@@ -72,7 +73,7 @@ public class WinScreen implements Screen {
             return;
         }
 
-        ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
+        //ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
         //Reset game variables and return to main menu on pressing R key
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             game.score = 0;      //  reset score
@@ -81,12 +82,14 @@ public class WinScreen implements Screen {
             dispose();
             return;
         }
+        /*
         int i = 1;
         for (Object obj : topScores) {
             LeaderboardEntry entry = (LeaderboardEntry) obj;
             game.font.draw(game.batch, entry.getPosition() + ")  " + entry.toString(), scaled(5.3f), scaled(7.1f) - scaled(i*0.9f), scaled(16), Align.left, false);
             i++;
         }
+        */
 
         stage.draw();
     }
@@ -112,6 +115,7 @@ public class WinScreen implements Screen {
             if(leaderboard.addToLeaderboard(username, score)){
                 topScores = leaderboard.getTopScores();
                 typing = false;
+                ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
             } else{
                 username = "";
                 uniqueUsername = false;
