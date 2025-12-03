@@ -17,10 +17,11 @@ public class Dean extends Entity {
      * Run the logic for when the Dean gets the Player and the Player loses.
      * @param game The current YettiGame object.
      */
-    public void getsPlayer(final YettiGame game) {
+    public boolean getsPlayer(final YettiGame game) {
         Screen prevScreen = game.getScreen();
         game.setScreen(new LoseScreen(game));
         prevScreen.dispose();
+        return true;
     }
 
     /**
