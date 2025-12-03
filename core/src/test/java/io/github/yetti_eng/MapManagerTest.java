@@ -15,7 +15,7 @@ public class MapManagerTest {
     TiledMapTileLayer mockLayer;
 
     @BeforeEach
-    public void setup2() {
+    public void setup() {
         mapManager = new MapManager(null);
         mockLayer = mock(TiledMapTileLayer.class);
 

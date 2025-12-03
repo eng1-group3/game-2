@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -30,8 +31,6 @@ import io.github.yetti_eng.events.*;
 import io.github.yetti_eng.EventCounter;
 
 import java.util.ArrayList;
-
-import static io.github.yetti_eng.YettiGame.scaled;
 
 public class GameScreen implements Screen {
     private final YettiGame game;
@@ -58,7 +57,12 @@ public class GameScreen implements Screen {
     private MapManager mapManager;
     private OrthographicCamera camera;
 
+    private float mapWidth;
+    private float mapHeight;
+
     private OrthographicCamera interfaceCamera;
+
+    private Table table;
 
     private Sound quackSfx;
     private Sound paperSfx;
@@ -82,7 +86,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final YettiGame game) {
         this.game = game;
-        stage = new Stage(game.viewport, game.batch);
+        stage = new Stage(game.uiViewport, game.batch);
     }
 
     @Override
@@ -105,11 +109,23 @@ public class GameScreen implements Screen {
         pauseTexture = new Texture("ui/pause.png");
 
         camera = new  OrthographicCamera();
-        camera.setToOrtho(false, 90, 60);
+        camera.setToOrtho(false, game.gameViewport.getWorldWidth(), game.gameViewport.getWorldHeight());
+        game.gameViewport.setCamera(camera);
+
         interfaceCamera = new  OrthographicCamera();
-        interfaceCamera.setToOrtho(false, scaled(16), scaled(9));
+        interfaceCamera.setToOrtho(false, game.uiViewport.getWorldWidth(), game.uiViewport.getWorldHeight());
+        game.uiViewport.setCamera(interfaceCamera);
         mapManager = new MapManager(camera);
         mapManager.loadMap("map/map.tmx");
+
+        mapWidth = mapManager.getMapWidth();
+        mapHeight = mapManager.getMapHeight();
+
+        table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        //table.setDebug(true);
+        table.top().left();
 
         quackSfx = Gdx.audio.newSound(Gdx.files.internal("audio/duck_quack.mp3"));
         paperSfx = Gdx.audio.newSound(Gdx.files.internal("audio/paper_rustle.wav"));
@@ -139,20 +155,19 @@ public class GameScreen implements Screen {
         game.timer.play();
         //create labels and position timer and event counters on screen
         timerText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
-        timerText.setPosition(0, scaled(8.5f));
         scoreText = new Label(null, new Label.LabelStyle(game.font, Color.WHITE.cpy()));
-        scoreText.setPosition(0, 40);
         hiddenText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        hiddenText.setPosition(scaled(4f), scaled(8.5f));
         negativeText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        negativeText.setPosition(scaled(7f), scaled(8.5f));
         positiveText = new Label(null, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        positiveText.setPosition(scaled(10f), scaled(8.5f));
+
+        table.add(timerText).expandX().left().padLeft(10);
+        table.add(positiveText).pad(10);
+        table.add(negativeText).pad(10);
+        table.add(hiddenText).pad(10);
+
 
         Gdx.input.setInputProcessor(stage);
         pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
-        pauseButton.setSize(48, 48);
-        pauseButton.setPosition(scaled(15.6f), scaled(8.6f), Align.center);
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -163,7 +178,8 @@ public class GameScreen implements Screen {
                 }
             }
         });
-        stage.addActor(pauseButton);
+        table.add(pauseButton).width(50f).height(50f).pad(10).row();
+        table.add(scoreText).pad(10).bottom().left().expandY();
     }
 
     @Override
@@ -241,15 +257,37 @@ public class GameScreen implements Screen {
             }
         });
 
-        // Clamp to edges of screen
-        float worldWidth = game.viewport.getWorldWidth();
-        float worldHeight = game.viewport.getWorldHeight();
+        // Centre camera on player
+        float playerCenterX = currentPos.x;
+        float playerCenterY = currentPos.y;
 
-        float playerWidth = player.getWidth();
-        float playerHeight = player.getHeight();
+        camera.position.set(playerCenterX, playerCenterY, 0);
 
-        player.setX(MathUtils.clamp(player.getX(), 0, worldWidth - playerWidth));
-        player.setY(MathUtils.clamp(player.getY(), 0, worldHeight - playerHeight));
+        // Define camera and viewport variables
+        float halfViewportWidth = game.gameViewport.getWorldWidth() / 2;
+        float halfViewportHeight = game.gameViewport.getWorldHeight() / 2;
+
+        float minCameraX = halfViewportWidth;
+        float maxCameraX = mapWidth - halfViewportWidth;
+        float minCameraY = halfViewportHeight;
+        float maxCameraY = mapHeight - halfViewportHeight;
+
+        //clamp camera
+        // Only clamp if map is larger than viewport in each dimension
+        if (mapWidth >= game.gameViewport.getWorldWidth()) {
+            camera.position.x = MathUtils.clamp(
+                camera.position.x,
+                minCameraX,
+                maxCameraX
+            );
+        }
+        if (mapHeight >= game.gameViewport.getWorldHeight()) {
+            camera.position.y = MathUtils.clamp(
+                camera.position.y,
+                minCameraY,
+                maxCameraY
+            );
+        }
 
         // Calculate remaining time
         int timeRemaining = game.timer.getRemainingTime();
@@ -291,13 +329,16 @@ public class GameScreen implements Screen {
 
     private void draw(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
+        // game world
+        game.gameViewport.apply();
+
         camera.update();
+
         //draw map
         mapManager.render();
-        game.viewport.apply();
 
         //main camera with map and entities
-        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(game.gameViewport.getCamera().combined);
         game.batch.begin();
         // Draw only visible entities
         entities.forEach(e -> { if (e.isVisible()) e.draw(game.batch); });
@@ -307,6 +348,7 @@ public class GameScreen implements Screen {
         if (dean.isVisible()) dean.draw(game.batch);
         game.batch.end();
 
+        game.uiViewport.apply();
         //separate user interface camera for text on screen
         game.batch.setProjectionMatrix(interfaceCamera.combined);
         game.batch.begin();
@@ -314,17 +356,10 @@ public class GameScreen implements Screen {
         if (game.isPaused()) {
             game.fontBordered.draw(
                 game.batch, "PAUSED",
-                0, interfaceCamera.viewportHeight / 2, interfaceCamera.viewportWidth,
+                0, game.uiViewport.getWorldHeight() / 2, game.uiViewport.getWorldWidth(),
                 Align.center, false
             );
         }
-
-        //draw timer and event counters to screen
-        timerText.draw(game.batch, 1.0f);
-        scoreText.draw(game.batch, 1.0f);
-        hiddenText.draw(game.batch, 1.0f);
-        positiveText.draw(game.batch, 1.0f);
-        negativeText.draw(game.batch, 1.0f);
 
         //draws messages fading out in an upwards direction
         for (Label l : messages) {
@@ -362,7 +397,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        game.viewport.update(width, height, true);
+        game.gameViewport.update(width, height, true);
+        game.uiViewport.update(width, height, true);
     }
 
     @Override
@@ -412,7 +448,7 @@ public class GameScreen implements Screen {
      */
     public void spawnLargeMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBordered, Color.WHITE.cpy()));
-        label.setPosition(scaled(8), scaled(4.5f), Align.center);
+        label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
         messages.add(label);
     }
 
@@ -423,7 +459,7 @@ public class GameScreen implements Screen {
      */
     public void spawnInteractionMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        label.setPosition(interfaceCamera.viewportWidth, label.getHeight(), Align.right);
+        label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
         messages.add(label);
     }
 
@@ -455,7 +491,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * @return The current YetiGame object.
+     * @return The current YettiGame object.
      */
     public YettiGame getGame() {
         return game;
