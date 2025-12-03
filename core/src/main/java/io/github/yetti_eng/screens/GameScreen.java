@@ -53,6 +53,8 @@ public class GameScreen implements Screen {
     private Texture pauseTexture;
     private Texture lecturerTexture;
     private Texture assignmentTexture;
+    private Texture wallSolidTexture;
+    private Texture wallPassableTexture;
 
     private MapManager mapManager;
     private OrthographicCamera camera;
@@ -105,6 +107,8 @@ public class GameScreen implements Screen {
         waterSpillTexture = new Texture("item/water_spill.png");
         lecturerTexture = new Texture("character/lecturer.png");
         assignmentTexture = new Texture("item/assignment.png");
+        wallSolidTexture = new Texture("item/walls_hidden.png");
+        wallPassableTexture = new Texture("item/walls_hidden_low_opacity.png");
 
         pauseTexture = new Texture("ui/pause.png");
 
@@ -141,14 +145,18 @@ public class GameScreen implements Screen {
 
         entities.add(new Item(new KeyEvent(), "checkin_code", checkinCodeTexture, 45, 33, 1.5f, 1.5f));
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
-        entities.add(new Item(new IncreasePointsEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
-        entities.add(new Item(new HiddenDeductPointsEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
+        entities.add(new Item(new WaterSpillEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
         entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
 
         entities.add(new Item(new SpeedUp(), "speed_up", new Texture("item/speed.png"), 58, 2, 2f, 2f));
 
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
+
+        // Hidden wall that becomes passable when touched
+        HiddenWallEvent wallEvent = new HiddenWallEvent(wallPassableTexture);
+        entities.add(new Item(wallEvent, "hidden_wall", wallSolidTexture, 31, 17, 2f, 2f, false, true));
 
         //start new timer
         game.timer = new Timer(TIMER_LENGTH);
@@ -164,7 +172,6 @@ public class GameScreen implements Screen {
         table.add(positiveText).pad(10);
         table.add(negativeText).pad(10);
         table.add(hiddenText).pad(10);
-
 
         Gdx.input.setInputProcessor(stage);
         pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
@@ -251,7 +258,7 @@ public class GameScreen implements Screen {
                     player.setPosition(currentPos.x, currentPos.y);
                 }
                 // Check for interaction with items
-                if (e instanceof Item item) {
+                if (e instanceof Item item && !item.isUsed()) {
                     item.interact(game, this, player);
                 }
             }
@@ -428,6 +435,10 @@ public class GameScreen implements Screen {
         doorframeTexture.dispose();
         longBoiTexture.dispose();
         waterSpillTexture.dispose();
+        lecturerTexture.dispose();
+        assignmentTexture.dispose();
+        wallSolidTexture.dispose();
+        wallPassableTexture.dispose();
 
         pauseTexture.dispose();
         mapManager.dispose();
@@ -452,11 +463,6 @@ public class GameScreen implements Screen {
         messages.add(label);
     }
 
-    /**
-     * Spawn a small text label at the bottom right of the screen
-     * that floats upwards and fades out. Used when interacting with Items.
-     * @param text The text that should be displayed.
-     */
     public void spawnInteractionMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
