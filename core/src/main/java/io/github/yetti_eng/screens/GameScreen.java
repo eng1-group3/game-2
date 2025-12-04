@@ -249,67 +249,24 @@ public class GameScreen implements Screen {
             }
         }
 
-        // Detect collision with objects
-        entities.forEach(e -> {
-            if (player.collidedWith(e) && e.isEnabled()) {
-                // Check for collision with solid objects
-                if (e.isSolid()) {
-                    //set the position of player to previous position if collision
-                    player.setPosition(currentPos.x, currentPos.y);
-                }
-                // Check for interaction with items
-                if (e instanceof Item item && !item.isUsed()) {
-                    item.interact(game, this, player);
-                }
-            }
-        });
+        // Detect player collisions
+        detectCollisions(currentPos);
 
         // Centre camera on player
-        float playerCenterX = currentPos.x;
-        float playerCenterY = currentPos.y;
+        camera.position.set(currentPos.x, currentPos.y, 0);
 
-        camera.position.set(playerCenterX, playerCenterY, 0);
-
-        // Define camera and viewport variables
-        float halfViewportWidth = game.gameViewport.getWorldWidth() / 2;
-        float halfViewportHeight = game.gameViewport.getWorldHeight() / 2;
-
-        float minCameraX = halfViewportWidth;
-        float maxCameraX = mapWidth - halfViewportWidth;
-        float minCameraY = halfViewportHeight;
-        float maxCameraY = mapHeight - halfViewportHeight;
-
-        //clamp camera
-        // Only clamp if map is larger than viewport in each dimension
-        if (mapWidth >= game.gameViewport.getWorldWidth()) {
-            camera.position.x = MathUtils.clamp(
-                camera.position.x,
-                minCameraX,
-                maxCameraX
-            );
-        }
-        if (mapHeight >= game.gameViewport.getWorldHeight()) {
-            camera.position.y = MathUtils.clamp(
-                camera.position.y,
-                minCameraY,
-                maxCameraY
-            );
-        }
+        // Clamp camera to edges of screen
+        clampCamera();
 
         // Calculate remaining time
-        int timeRemaining = game.timer.getRemainingTime();
-        String text = game.timer.formatTimer(game.timer.getRemainingTime());
-        timerText.setText(text);
-        timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
+        int timeRemaining = calculateTimeRemaining();
 
-        //score
-        scoreText.setText(game.score + game.timer.getRemainingTime());
+        // Update score
+        scoreText.setText(game.score + timeRemaining);
         scoreText.setStyle(new Label.LabelStyle(game.fontBordered, Color.WHITE));
 
-        //updates event counters
-        hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
-        positiveText.setText("Positive:" + EventCounter.getPositiveCount());
-        negativeText.setText("Negative:" + EventCounter.getNegativeCount());
+        // Update event counter text
+        updateEventCounters();
 
         entities.forEach(e -> {
             if (e instanceof Item item && item.ID.equals("closing_door")) {
@@ -469,6 +426,61 @@ public class GameScreen implements Screen {
         messages.add(label);
     }
 
+    private int calculateTimeRemaining() {
+        int timeRemaining = game.timer.getRemainingTime();
+        String text = game.timer.formatTimer(game.timer.getRemainingTime());
+        timerText.setText(text);
+        timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
+        return timeRemaining;
+    }
+
+    private void updateEventCounters() {
+        hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
+        positiveText.setText("Positive:" + EventCounter.getPositiveCount());
+        negativeText.setText("Negative:" + EventCounter.getNegativeCount());
+    }
+
+    private void detectCollisions(Vector2 currentPos) {
+        entities.forEach(e -> {
+            if (player.collidedWith(e) && e.isEnabled()) {
+                // Check for collision with solid objects
+                if (e.isSolid()) {
+                    //set the position of player to previous position if collision
+                    player.setPosition(currentPos.x, currentPos.y);
+                }
+                // Check for interaction with items
+                if (e instanceof Item item && !item.isUsed()) {
+                    item.interact(game, this, player);
+                }
+            }
+        });
+    }
+
+    private void clampCamera() {
+        // Define camera and viewport variables
+        float minCameraX = game.gameViewport.getWorldWidth() / 2;
+        float minCameraY = game.gameViewport.getWorldHeight() / 2;
+
+        float maxCameraX = mapWidth - minCameraX;
+        float maxCameraY = mapHeight - minCameraY;
+
+        // Only clamp if map is larger than viewport in each dimension
+        if (mapWidth >= game.gameViewport.getWorldWidth()) {
+            camera.position.x = MathUtils.clamp(
+                camera.position.x,
+                minCameraX,
+                maxCameraX
+            );
+        }
+        if (mapHeight >= game.gameViewport.getWorldHeight()) {
+            camera.position.y = MathUtils.clamp(
+                camera.position.y,
+                minCameraY,
+                maxCameraY
+            );
+        }
+    }
+
     public Texture getDoorframeTexture() {
         return doorframeTexture;
     }
@@ -492,6 +504,7 @@ public class GameScreen implements Screen {
     public Sound getSlipSfx() {
         return slipSfx;
     }
+
     public Sound getspeedSfx() {
         return speedSfx;
     }
