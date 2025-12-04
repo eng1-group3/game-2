@@ -24,6 +24,6 @@ public class HiddenWallEvent extends Event {
 
     @Override
     public int[] getScoreModifier() {
-        return new int[] {0, 0};
+        return new int[] {0, 200};
     }
 }

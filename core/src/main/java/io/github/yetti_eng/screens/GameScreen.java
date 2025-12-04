@@ -145,14 +145,21 @@ public class GameScreen implements Screen {
 
         entities.add(new Item(new KeyEvent(), "checkin_code", checkinCodeTexture, 45, 33, 1.5f, 1.5f));
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
-        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
         entities.add(new Item(new WaterSpillEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
         entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
-
         entities.add(new Item(new SpeedUp(), "speed_up", new Texture("item/speed.png"), 58, 2, 2f, 2f));
-
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
+
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 25, 46, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 26, 46, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 25, 48, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 26, 48, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 24, 47, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 60, 44, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 29, 27, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 48, 41, 1.5f, 1.5f));
 
         // Hidden wall that becomes passable when touched
         HiddenWallEvent wallEvent = new HiddenWallEvent(wallPassableTexture);
