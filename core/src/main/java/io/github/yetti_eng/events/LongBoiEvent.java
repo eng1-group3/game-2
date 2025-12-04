@@ -22,7 +22,7 @@ public class LongBoiEvent extends Event {
         if (EventCounter.getLongBoiCollected() == TOTAL_LONG_BOIS) {
 
             // Unlock the achievement
-            screen.getGame().achievements.unlock("longwall_master");
+            screen.getGame().achievements.unlock("longboi_master");
 
             // Player feedback
             screen.spawnLargeMessage("🏆 Achievement Unlocked: Long-Boi Master!");
