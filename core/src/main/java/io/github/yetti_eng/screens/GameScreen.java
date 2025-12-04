@@ -313,6 +313,13 @@ public class GameScreen implements Screen {
         scoreText.setText(game.score + game.timer.getRemainingTime());
         scoreText.setStyle(new Label.LabelStyle(game.fontBordered, Color.WHITE));
 
+        int totalScore = game.score + game.timer.getRemainingTime();
+
+        if (totalScore >= 2000 && !game.achievements.isUnlocked("score_2000")) {
+            game.achievements.unlock("score_2000");
+            spawnLargeMessage("🏆 Achievement Unlocked: Score 2000!");
+        }
+
         //updates event counters
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());

@@ -18,7 +18,9 @@ public class HiddenWallEvent extends Event {
         EventCounter.incrementHidden();
         item.setTexture(passableTexture);
         item.setSolid(false);
-        screen.spawnInteractionMessage("The wall crumbles away...");
+
+        screen.getGame().achievements.unlock("Wall_Crusher");
+        screen.spawnInteractionMessage("achievement unlocked: I was not lost, I was exploring ");
         return true;
     }
 
