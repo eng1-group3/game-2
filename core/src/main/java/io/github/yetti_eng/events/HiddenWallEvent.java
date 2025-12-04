@@ -18,12 +18,13 @@ public class HiddenWallEvent extends Event {
         EventCounter.incrementHidden();
         item.setTexture(passableTexture);
         item.setSolid(false);
-        screen.spawnInteractionMessage("The wall crumbles away...");
+        screen.getGame().achievements.unlock("wall_crasher");
+        screen.spawnInteractionMessage("achievement unlocked");
         return true;
     }
 
     @Override
     public int[] getScoreModifier() {
-        return new int[] {0, 0};
+        return new int[] {0, 200};
     }
 }

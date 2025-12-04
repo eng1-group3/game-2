@@ -29,7 +29,7 @@ public class HiddenWallEventTest {
     public void testScoreModifierIsZero() {
         Texture mockTexture = mock(Texture.class);
         HiddenWallEvent event = new HiddenWallEvent(mockTexture);
-        assertArrayEquals(new int[]{0, 0}, event.getScoreModifier());
+        assertArrayEquals(new int[]{0, 200}, event.getScoreModifier());
     }
 
     @Test
