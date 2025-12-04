@@ -1,12 +1,12 @@
 package io.github.yetti_eng.events;
 
 import io.github.yetti_eng.EventCounter;
-import io.github.yetti_eng.YettiGame;
 import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
 
-public class HiddenDeductPointsEvent extends Event {
+public class WaterSpillEvent
+    extends Event {
     @Override
     public boolean activate(GameScreen screen, Player player, Item item) {
         if (!item.isUsed()){
