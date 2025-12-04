@@ -2,6 +2,7 @@ package io.github.yetti_eng.entities;
 import io.github.yetti_eng.InputHelper;
 import io.github.yetti_eng.YettiGame;
 import io.github.yetti_eng.screens.GameScreen;
+import io.github.yetti_eng.screens.LoseScreen;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -12,17 +13,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class DeanTest {
-
-   /*  @Test
-    public void getsPlayerTest() {
-        Texture tex = mock(Texture.class);
-        Dean dean = new Dean(tex, 0f, 0f);
-
-        YettiGame game = mock(YettiGame.class);
-        GameScreen screen = mock(GameScreen.class);
-        when(game.getScreen()).thenReturn(screen);
-        assertTrue(dean.getsPlayer(game));*/
-    //}
 
     @Test
     public void calculateMovementTest1() {
