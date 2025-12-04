@@ -317,7 +317,7 @@ public class GameScreen implements Screen {
 
         if (totalScore >= 2000 && !game.achievements.isUnlocked("score_2000")) {
             game.achievements.unlock("score_2000");
-            spawnLargeMessage("🏆 Achievement Unlocked: Score 2000!");
+            spawnLargeMessage("Achievement Unlocked: Score 2000!");
         }
 
         //updates event counters

@@ -25,7 +25,7 @@ public class LongBoiEvent extends Event {
             screen.getGame().achievements.unlock("longboi_master");
 
             // Player feedback
-            screen.spawnLargeMessage("🏆 Achievement Unlocked: Long-Boi Master!");
+            screen.spawnLargeMessage("Achievement Unlocked: Long-Boi Master!");
         }
         return true;
     }
