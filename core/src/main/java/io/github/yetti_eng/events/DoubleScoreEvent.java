@@ -12,7 +12,7 @@ public class DoubleScoreEvent extends Event {
             EventCounter.incrementPositive();
             item.disable();
             screen.getGame().achievements.unlock("assignment_done");
-            screen.spawnInteractionMessage("🏆 Achievement Unlocked: not AI-Generated (i swear) ");
+            screen.spawnInteractionMessage("Achievement Unlocked: not AI-Generated (i swear) ");
 
             return true;
         }

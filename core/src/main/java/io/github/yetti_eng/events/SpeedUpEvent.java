@@ -5,9 +5,9 @@ import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
 import com.badlogic.gdx.utils.Timer;
 
-public class SpeedUp extends Event {
+public class SpeedUpEvent extends Event {
 
-    private static final float BOOST_MULTIPLIER = 3f; // +10%
+    private static final float BOOST_MULTIPLIER = 3f; // +30% speed go VOOOOOOOOMMMMMM!!!!!!
     private static final float DURATION = 10f; // lasts 10 seconds
 
     @Override
@@ -26,7 +26,7 @@ public class SpeedUp extends Event {
         //play audio
         screen.getspeedSfx().play(screen.getGame().volume);
 
-        // Schedule automatic reset
+        // reset the speed after the duration ends
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {

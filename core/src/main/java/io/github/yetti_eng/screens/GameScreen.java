@@ -55,7 +55,8 @@ public class GameScreen implements Screen {
     private Texture assignmentTexture;
     private Texture wallSolidTexture;
     private Texture wallPassableTexture;
-
+    private Texture slowDownTexture;
+    private Texture speedBoostTexture;
     private MapManager mapManager;
     private OrthographicCamera camera;
 
@@ -109,7 +110,8 @@ public class GameScreen implements Screen {
         assignmentTexture = new Texture("item/assignment.png");
         wallSolidTexture = new Texture("item/walls_hidden.png");
         wallPassableTexture = new Texture("item/walls_hidden_low_opacity.png");
-
+        speedBoostTexture = new Texture("item/speed.png");
+        slowDownTexture = new Texture("item/slow_down.png");
         pauseTexture = new Texture("ui/pause.png");
 
         camera = new  OrthographicCamera();
@@ -148,7 +150,8 @@ public class GameScreen implements Screen {
         entities.add(new Item(new WaterSpillEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
         entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
-        entities.add(new Item(new SpeedUp(), "speed_up", new Texture("item/speed.png"), 58, 2, 2f, 2f));
+        entities.add(new Item(new SpeedUpEvent(), "speed_up",speedBoostTexture, 58, 2, 2f, 2f));
+        entities.add(new Item(new SlowDownEvent(), "slow_down",slowDownTexture, 2.5f, 6, 2f, 2f));
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
         // longboi gang below careful
         entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
@@ -276,7 +279,7 @@ public class GameScreen implements Screen {
 
         if (totalScore >= 2000 && !game.achievements.isUnlocked("score_2000")) {
             game.achievements.unlock("score_2000");
-            spawnLargeMessage("Achievement Unlocked: Score 2000!");
+            spawnLargeMessage("Achievement Unlocked: Score 2000! Bro Thinks He’s Him");
         }
 
         //updates event counters
