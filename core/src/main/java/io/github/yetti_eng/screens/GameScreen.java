@@ -33,7 +33,7 @@ import io.github.yetti_eng.EventCounter;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
-    private final YettiGame game;
+    public final YettiGame game;
     private final Stage stage;
 
     private static final int TIMER_LENGTH = 300; // 300s = 5min
@@ -58,10 +58,10 @@ public class GameScreen implements Screen {
     private Texture slowDownTexture;
     private Texture speedBoostTexture;
     private MapManager mapManager;
-    private OrthographicCamera camera;
+    OrthographicCamera camera;
 
-    private float mapWidth;
-    private float mapHeight;
+    float mapWidth;
+    float mapHeight;
 
     private OrthographicCamera interfaceCamera;
 
@@ -74,10 +74,10 @@ public class GameScreen implements Screen {
     private Sound growlSfx;
     public Sound speedSfx;
 
-    private Player player;
+    Player player;
     private Dean dean;
     private Item exit;
-    private final ArrayList<Entity> entities = new ArrayList<>();
+    final ArrayList<Entity> entities = new ArrayList<>();
 
     private Label hiddenText;
     private Label negativeText;
@@ -90,6 +90,11 @@ public class GameScreen implements Screen {
     public GameScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
+    }
+
+    public GameScreen(final YettiGame game, boolean skipStage) {
+        this.game = game;
+        this.stage = null;
     }
 
     @Override
@@ -445,7 +450,7 @@ public class GameScreen implements Screen {
         messages.add(label);
     }
 
-    private int calculateTimeRemaining() {
+    public int calculateTimeRemaining() {
         int timeRemaining = game.timer.getRemainingTime();
         String text = game.timer.formatTimer(game.timer.getRemainingTime());
         timerText.setText(text);
@@ -459,7 +464,7 @@ public class GameScreen implements Screen {
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());
     }
 
-    private void detectCollisions(Vector2 currentPos) {
+    void detectCollisions(Vector2 currentPos) {
         entities.forEach(e -> {
             if (player.collidedWith(e) && e.isEnabled()) {
                 // Check for collision with solid objects
@@ -475,7 +480,7 @@ public class GameScreen implements Screen {
         });
     }
 
-    private void clampCamera() {
+    void clampCamera() {
         // Define camera and viewport variables
         float minCameraX = game.gameViewport.getWorldWidth() / 2;
         float minCameraY = game.gameViewport.getWorldHeight() / 2;
