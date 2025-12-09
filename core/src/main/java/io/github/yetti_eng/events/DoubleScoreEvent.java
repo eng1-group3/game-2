@@ -11,7 +11,9 @@ public class DoubleScoreEvent extends Event {
         if(player.hasUsedItem("assignment")) {
             EventCounter.incrementPositive();
             item.disable();
-            screen.spawnInteractionMessage("Submitted! Score doubled!");
+            screen.getGame().achievements.unlock("assignment_done");
+            screen.spawnInteractionMessage("Achievement Unlocked: not AI-Generated (i swear) ");
+
             return true;
         }
         return false;
