@@ -1,4 +1,4 @@
-package io.github.yetti_eng;
+package io.github.yetti_eng.events;
 
 import io.github.yetti_eng.events.ClosingDoorEvent;
 import io.github.yetti_eng.entities.Item;

@@ -33,7 +33,7 @@ import io.github.yetti_eng.EventCounter;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
-    private final YettiGame game;
+    public final YettiGame game;
     private final Stage stage;
 
     private static final int TIMER_LENGTH = 300; // 300s = 5min
@@ -58,12 +58,12 @@ public class GameScreen implements Screen {
     private Texture slowDownTexture;
     private Texture speedBoostTexture;
     private MapManager mapManager;
-    private OrthographicCamera camera;
+    OrthographicCamera camera;
 
-    private float mapWidth;
-    private float mapHeight;
+    float mapWidth;
+    float mapHeight;
 
-    private OrthographicCamera interfaceCamera;
+    OrthographicCamera interfaceCamera;
 
     private Table table;
 
@@ -74,22 +74,27 @@ public class GameScreen implements Screen {
     private Sound growlSfx;
     public Sound speedSfx;
 
-    private Player player;
-    private Dean dean;
+    Player player;
+    Dean dean;
     private Item exit;
-    private final ArrayList<Entity> entities = new ArrayList<>();
+    final ArrayList<Entity> entities = new ArrayList<>();
 
-    private Label hiddenText;
-    private Label negativeText;
-    private Label positiveText;
+    Label hiddenText;
+    Label negativeText;
+    Label positiveText;
     private Label timerText;
     private Label scoreText;
-    private final ArrayList<Label> messages = new ArrayList<>();
+    final ArrayList<Label> messages = new ArrayList<>();
     private Button pauseButton;
 
     public GameScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
+    }
+
+    public GameScreen(final YettiGame game, boolean skipStage) {
+        this.game = game;
+        this.stage = null;
     }
 
     @Override
@@ -294,12 +299,7 @@ public class GameScreen implements Screen {
         });
 
         // Release the Dean if the timer is at 60 or less
-        if (timeRemaining <= 60 && !dean.isEnabled()) {
-            growlSfx.play(game.volume);
-            spawnLargeMessage("Run! The dean is coming!");
-            dean.show();
-            dean.enable();
-        }
+        releaseDean(timeRemaining, true, true);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (game.isPaused()) {
@@ -428,13 +428,22 @@ public class GameScreen implements Screen {
         speedSfx.dispose();
     }
 
+    public void releaseDean(int timeRemaining, boolean playSound, boolean displayMessage) {
+        if (timeRemaining <= 60 && !dean.isEnabled()) {
+                if (playSound) {growlSfx.play(game.volume);};
+                if (displayMessage) {spawnLargeMessage("Run! The dean is coming!");};
+            dean.show();
+            dean.enable();
+        }
+    }
+
     /**
      * Spawn a text label at the centre of the screen
      * that floats upwards and fades out. Used to alert the player.
      * @param text The text that should be displayed.
      */
     public void spawnLargeMessage(String text) {
-        Label label = new Label(text, new Label.LabelStyle(game.fontBordered, Color.WHITE.cpy()));
+        Label label = new Label(text, new Label.LabelStyle(game.getFontBordered(), Color.WHITE.cpy()));
         label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
         messages.add(label);
     }
@@ -445,7 +454,7 @@ public class GameScreen implements Screen {
         messages.add(label);
     }
 
-    private int calculateTimeRemaining() {
+    public int calculateTimeRemaining() {
         int timeRemaining = game.timer.getRemainingTime();
         String text = game.timer.formatTimer(game.timer.getRemainingTime());
         timerText.setText(text);
@@ -453,13 +462,13 @@ public class GameScreen implements Screen {
         return timeRemaining;
     }
 
-    private void updateEventCounters() {
+    void updateEventCounters() {
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());
     }
 
-    private void detectCollisions(Vector2 currentPos) {
+    void detectCollisions(Vector2 currentPos) {
         entities.forEach(e -> {
             if (player.collidedWith(e) && e.isEnabled()) {
                 // Check for collision with solid objects
@@ -475,7 +484,7 @@ public class GameScreen implements Screen {
         });
     }
 
-    private void clampCamera() {
+    void clampCamera() {
         // Define camera and viewport variables
         float minCameraX = game.gameViewport.getWorldWidth() / 2;
         float minCameraY = game.gameViewport.getWorldHeight() / 2;
