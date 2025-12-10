@@ -8,10 +8,19 @@ import java.io.FileNotFoundException;
 public class Leaderboard {
     private int leaderboardSize = 5;
     private List<LeaderboardEntry> topScores = new ArrayList();
+    private String pathname;
+
+    public Leaderboard() {
+        pathname = "leaderboard.txt";
+    }
+
+    public Leaderboard(String pathString) {
+        pathname = pathString;
+    }
 
     public boolean addToLeaderboard(String playerName, int score) {
         List<String> usernames = new ArrayList<>();
-        File leaderboard = new File("leaderboard.txt");
+        File leaderboard = new File(pathname);
         try (Scanner scanner = new Scanner(leaderboard)) {
             while (scanner.hasNextLine()) {
                 String data = scanner.nextLine();
@@ -26,7 +35,7 @@ public class Leaderboard {
         if(usernames.contains(playerName)) {
             return false;
         }
-        try (FileWriter myWriter = new FileWriter("leaderboard.txt", true)) {
+        try (FileWriter myWriter = new FileWriter(pathname, true)) {
             myWriter.write(playerName + " " + score + "\n");
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,7 +51,7 @@ public class Leaderboard {
     }
 
     private void sortTopScores(){
-        File leaderboard = new File("leaderboard.txt");
+        File leaderboard = new File(pathname);
         topScores.clear();
 
         try (Scanner scanner = new Scanner(leaderboard)) {
@@ -53,7 +62,7 @@ public class Leaderboard {
                 topScores.add(new LeaderboardEntry("", Integer.MIN_VALUE));
             }
 
-            // Looks through each line of the leaderboard.txt file
+            // Looks through each line of the leaderboard file
             while (scanner.hasNextLine()) {
                 String data = scanner.nextLine();
 
@@ -92,7 +101,7 @@ public class Leaderboard {
                 while (scanner2.hasNextLine()) {
                     String data = scanner2.nextLine();
 
-                    // Gets the playerName and score for the line of leaderboard.txt
+                    // Gets the playerName and score for the line of leaderboard file
                     String playerName = data.substring(0, data.indexOf(" "));
                     int score = Integer.parseInt(data.substring(data.indexOf(" ") + 1));
                     LeaderboardEntry entry = new LeaderboardEntry(playerName, score);

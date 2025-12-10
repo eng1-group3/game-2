@@ -112,7 +112,6 @@ public class WinScreen implements Screen {
         for (int key = Input.Keys.A; key <= Input.Keys.Z; key++) {
             if (Gdx.input.isKeyJustPressed(key)) {
                 username += Input.Keys.toString(key);
-                System.out.println(username);
             }
         }
 
