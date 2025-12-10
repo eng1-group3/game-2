@@ -63,7 +63,7 @@ public class GameScreen implements Screen {
     float mapWidth;
     float mapHeight;
 
-    private OrthographicCamera interfaceCamera;
+    OrthographicCamera interfaceCamera;
 
     private Table table;
 
@@ -75,16 +75,16 @@ public class GameScreen implements Screen {
     public Sound speedSfx;
 
     Player player;
-    private Dean dean;
+    Dean dean;
     private Item exit;
     final ArrayList<Entity> entities = new ArrayList<>();
 
-    private Label hiddenText;
-    private Label negativeText;
-    private Label positiveText;
+    Label hiddenText;
+    Label negativeText;
+    Label positiveText;
     private Label timerText;
     private Label scoreText;
-    private final ArrayList<Label> messages = new ArrayList<>();
+    final ArrayList<Label> messages = new ArrayList<>();
     private Button pauseButton;
 
     public GameScreen(final YettiGame game) {
@@ -299,12 +299,7 @@ public class GameScreen implements Screen {
         });
 
         // Release the Dean if the timer is at 60 or less
-        if (timeRemaining <= 60 && !dean.isEnabled()) {
-            growlSfx.play(game.volume);
-            spawnLargeMessage("Run! The dean is coming!");
-            dean.show();
-            dean.enable();
-        }
+        releaseDean(timeRemaining, true, true);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (game.isPaused()) {
@@ -433,13 +428,22 @@ public class GameScreen implements Screen {
         speedSfx.dispose();
     }
 
+    public void releaseDean(int timeRemaining, boolean playSound, boolean displayMessage) {
+        if (timeRemaining <= 60 && !dean.isEnabled()) {
+                if (playSound) {growlSfx.play(game.volume);};
+                if (displayMessage) {spawnLargeMessage("Run! The dean is coming!");};
+            dean.show();
+            dean.enable();
+        }
+    }
+
     /**
      * Spawn a text label at the centre of the screen
      * that floats upwards and fades out. Used to alert the player.
      * @param text The text that should be displayed.
      */
     public void spawnLargeMessage(String text) {
-        Label label = new Label(text, new Label.LabelStyle(game.fontBordered, Color.WHITE.cpy()));
+        Label label = new Label(text, new Label.LabelStyle(game.getFontBordered(), Color.WHITE.cpy()));
         label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
         messages.add(label);
     }
@@ -458,7 +462,7 @@ public class GameScreen implements Screen {
         return timeRemaining;
     }
 
-    private void updateEventCounters() {
+    void updateEventCounters() {
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());

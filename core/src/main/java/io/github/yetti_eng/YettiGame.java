@@ -114,4 +114,8 @@ public class YettiGame extends Game {
         score += timer.getRemainingTime();
         return score;
     }
+
+    public BitmapFont getFontBordered() {
+        return fontBordered;
+    }
 }
