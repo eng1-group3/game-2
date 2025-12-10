@@ -35,6 +35,24 @@ public class WinScreen implements Screen {
         this.leaderboard = new Leaderboard();
     }
 
+    public WinScreen(final YettiGame game, boolean setUi) {
+        this.game = game;
+        if (setUi) { 
+            stage = new Stage(game.uiViewport, game.batch);
+            table = new Table();
+        } else {
+            stage = null;
+            table = null;
+        }
+        
+        score = game.calculateFinalScore();
+        this.leaderboard = new Leaderboard();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
     @Override
     public void show() {
         table.clear();
@@ -90,10 +108,11 @@ public class WinScreen implements Screen {
         stage.draw();
     }
 
-    private void handleTyping() {
+    void handleTyping() {
         for (int key = Input.Keys.A; key <= Input.Keys.Z; key++) {
             if (Gdx.input.isKeyJustPressed(key)) {
                 username += Input.Keys.toString(key);
+                System.out.println(username);
             }
         }
 
