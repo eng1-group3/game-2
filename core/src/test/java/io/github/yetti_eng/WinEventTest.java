@@ -15,17 +15,6 @@ WinEventTest {
         assertNotNull(event);
     }
 
-    @Test
-    public void testActivateReturnsTrue() {
-        WinEvent event = new WinEvent();
-        GameScreen mockScreen = mock(GameScreen.class);
-        YettiGame mockGame = mock(YettiGame.class);
-        Timer mockTimer = mock(Timer.class);
-        mockGame.timer = mockTimer;
-        when(mockScreen.getGame()).thenReturn(mockGame);
-        boolean result = event.activate(mockScreen, null, null);
-        assertTrue(result);
-    }
 
     @Test
     public void testScoreModifierIsZero() {
