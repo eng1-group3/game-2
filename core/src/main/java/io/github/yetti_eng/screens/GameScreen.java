@@ -33,7 +33,7 @@ import io.github.yetti_eng.EventCounter;
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
-    private final YettiGame game;
+    public final YettiGame game;
     private final Stage stage;
 
     private static final int TIMER_LENGTH = 300; // 300s = 5min
@@ -54,14 +54,17 @@ public class GameScreen implements Screen {
     private Texture pauseTexture;
     private Texture lecturerTexture;
     private Texture assignmentTexture;
-
+    private Texture wallSolidTexture;
+    private Texture wallPassableTexture;
+    private Texture slowDownTexture;
+    private Texture speedBoostTexture;
     private MapManager mapManager;
-    private OrthographicCamera camera;
+    OrthographicCamera camera;
 
-    private float mapWidth;
-    private float mapHeight;
+    float mapWidth;
+    float mapHeight;
 
-    private OrthographicCamera interfaceCamera;
+    OrthographicCamera interfaceCamera;
 
     private Table table;
 
@@ -72,22 +75,27 @@ public class GameScreen implements Screen {
     private Sound growlSfx;
     public Sound speedSfx;
 
-    private Player player;
-    private Dean dean;
+    Player player;
+    Dean dean;
     private Item exit;
-    private final ArrayList<Entity> entities = new ArrayList<>();
+    final ArrayList<Entity> entities = new ArrayList<>();
 
-    private Label hiddenText;
-    private Label negativeText;
-    private Label positiveText;
+    Label hiddenText;
+    Label negativeText;
+    Label positiveText;
     private Label timerText;
     private Label scoreText;
-    private final ArrayList<Label> messages = new ArrayList<>();
+    final ArrayList<Label> messages = new ArrayList<>();
     private Button pauseButton;
 
     public GameScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
+    }
+
+    public GameScreen(final YettiGame game, boolean skipStage) {
+        this.game = game;
+        this.stage = null;
     }
 
     @Override
@@ -107,7 +115,10 @@ public class GameScreen implements Screen {
         waterSpillTexture = new Texture("item/water_spill.png");
         lecturerTexture = new Texture("character/lecturer.png");
         assignmentTexture = new Texture("item/assignment.png");
-
+        wallSolidTexture = new Texture("item/walls_hidden.png");
+        wallPassableTexture = new Texture("item/walls_hidden_low_opacity.png");
+        speedBoostTexture = new Texture("item/speed.png");
+        slowDownTexture = new Texture("item/slow_down.png");
         pauseTexture = new Texture("ui/pause.png");
 
         camera = new  OrthographicCamera();
@@ -149,14 +160,26 @@ public class GameScreen implements Screen {
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
         //find coordinates
         entities.add(new Item(new ExitEvent(), "end_door", doorTexture, 60, 21, 2, 2.2f, false, true));
-        entities.add(new Item(new IncreasePointsEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
-        entities.add(new Item(new HiddenDeductPointsEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
+        entities.add(new Item(new WaterSpillEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
         entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
-
-        entities.add(new Item(new SpeedUp(), "speed_up", new Texture("item/speed.png"), 58, 2, 2f, 2f));
-
+        entities.add(new Item(new SpeedUpEvent(), "speed_up",speedBoostTexture, 58, 2, 2f, 2f));
+        entities.add(new Item(new SlowDownEvent(), "slow_down",slowDownTexture, 2.5f, 6, 2f, 2f));
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
+        // longboi gang below careful
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 25, 46, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 26, 46, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 25, 48, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 26, 48, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 24, 47, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 60, 44, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 29, 27, 1.5f, 1.5f));
+        entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 48, 41, 1.5f, 1.5f));
+
+        // Hidden wall that becomes passable when touched
+        HiddenWallEvent wallEvent = new HiddenWallEvent(wallPassableTexture);
+        entities.add(new Item(wallEvent, "hidden_wall", wallSolidTexture, 31, 17, 2f, 2f, false, true));
 
         //start new timer
         game.timer = new Timer(TIMER_LENGTH);
@@ -172,7 +195,6 @@ public class GameScreen implements Screen {
         table.add(positiveText).pad(10);
         table.add(negativeText).pad(10);
         table.add(hiddenText).pad(10);
-
 
         Gdx.input.setInputProcessor(stage);
         pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
@@ -250,62 +272,28 @@ public class GameScreen implements Screen {
             }
         }
 
-        // Detect collision with objects
-        entities.forEach(e -> {
-            if (player.collidedWith(e) && e.isEnabled()) {
-                // Check for collision with solid objects
-                if (e.isSolid()) {
-                    //set the position of player to previous position if collision
-                    player.setPosition(currentPos.x, currentPos.y);
-                }
-                // Check for interaction with items
-                if (e instanceof Item item) {
-                    item.interact(game, this, player);
-                }
-            }
-        });
+        // Detect player collisions
+        detectCollisions(currentPos);
 
         // Centre camera on player
-        float playerCenterX = currentPos.x;
-        float playerCenterY = currentPos.y;
+        camera.position.set(currentPos.x, currentPos.y, 0);
 
-        camera.position.set(playerCenterX, playerCenterY, 0);
-
-        // Define camera and viewport variables
-        float halfViewportWidth = game.gameViewport.getWorldWidth() / 2;
-        float halfViewportHeight = game.gameViewport.getWorldHeight() / 2;
-
-        float minCameraX = halfViewportWidth;
-        float maxCameraX = mapWidth - halfViewportWidth;
-        float minCameraY = halfViewportHeight;
-        float maxCameraY = mapHeight - halfViewportHeight;
-
-        //clamp camera
-        // Only clamp if map is larger than viewport in each dimension
-        if (mapWidth >= game.gameViewport.getWorldWidth()) {
-            camera.position.x = MathUtils.clamp(
-                camera.position.x,
-                minCameraX,
-                maxCameraX
-            );
-        }
-        if (mapHeight >= game.gameViewport.getWorldHeight()) {
-            camera.position.y = MathUtils.clamp(
-                camera.position.y,
-                minCameraY,
-                maxCameraY
-            );
-        }
+        // Clamp camera to edges of screen
+        clampCamera();
 
         // Calculate remaining time
-        int timeRemaining = game.timer.getRemainingTime();
-        String text = game.timer.formatTimer(game.timer.getRemainingTime());
-        timerText.setText(text);
-        timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
+        int timeRemaining = calculateTimeRemaining();
 
-        //score
-        scoreText.setText(game.score + game.timer.getRemainingTime());
+        // Update score
+        scoreText.setText(game.score + timeRemaining);
         scoreText.setStyle(new Label.LabelStyle(game.fontBordered, Color.WHITE));
+
+        int totalScore = game.score + game.timer.getRemainingTime();
+
+        if (totalScore >= 2000 && !game.achievements.isUnlocked("score_2000")) {
+            game.achievements.unlock("score_2000");
+            spawnLargeMessage("Achievement Unlocked: Score 2000! Bro Thinks He’s Him");
+        }
 
         //updates event counters
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
@@ -319,12 +307,7 @@ public class GameScreen implements Screen {
         });
 
         // Release the Dean if the timer is at 60 or less
-        if (timeRemaining <= 60 && !dean.isEnabled()) {
-            growlSfx.play(game.volume);
-            spawnLargeMessage("Run! The dean is coming!");
-            dean.show();
-            dean.enable();
-        }
+        releaseDean(timeRemaining, true, true);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (game.isPaused()) {
@@ -437,6 +420,10 @@ public class GameScreen implements Screen {
         doorframeTexture.dispose();
         longBoiTexture.dispose();
         waterSpillTexture.dispose();
+        lecturerTexture.dispose();
+        assignmentTexture.dispose();
+        wallSolidTexture.dispose();
+        wallPassableTexture.dispose();
 
         pauseTexture.dispose();
         mapManager.dispose();
@@ -450,26 +437,85 @@ public class GameScreen implements Screen {
         speedSfx.dispose();
     }
 
+    public void releaseDean(int timeRemaining, boolean playSound, boolean displayMessage) {
+        if (timeRemaining <= 60 && !dean.isEnabled()) {
+                if (playSound) {growlSfx.play(game.volume);};
+                if (displayMessage) {spawnLargeMessage("Run! The dean is coming!");};
+            dean.show();
+            dean.enable();
+        }
+    }
+
     /**
      * Spawn a text label at the centre of the screen
      * that floats upwards and fades out. Used to alert the player.
      * @param text The text that should be displayed.
      */
     public void spawnLargeMessage(String text) {
-        Label label = new Label(text, new Label.LabelStyle(game.fontBordered, Color.WHITE.cpy()));
+        Label label = new Label(text, new Label.LabelStyle(game.getFontBordered(), Color.WHITE.cpy()));
         label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
         messages.add(label);
     }
 
-    /**
-     * Spawn a small text label at the bottom right of the screen
-     * that floats upwards and fades out. Used when interacting with Items.
-     * @param text The text that should be displayed.
-     */
     public void spawnInteractionMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
         messages.add(label);
+    }
+
+    public int calculateTimeRemaining() {
+        int timeRemaining = game.timer.getRemainingTime();
+        String text = game.timer.formatTimer(game.timer.getRemainingTime());
+        timerText.setText(text);
+        timerText.setStyle(new Label.LabelStyle(game.fontBordered, (game.timer.isActive() ? Color.WHITE : Color.RED).cpy()));
+        return timeRemaining;
+    }
+
+    void updateEventCounters() {
+        hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
+        positiveText.setText("Positive:" + EventCounter.getPositiveCount());
+        negativeText.setText("Negative:" + EventCounter.getNegativeCount());
+    }
+
+    void detectCollisions(Vector2 currentPos) {
+        entities.forEach(e -> {
+            if (player.collidedWith(e) && e.isEnabled()) {
+                // Check for collision with solid objects
+                if (e.isSolid()) {
+                    //set the position of player to previous position if collision
+                    player.setPosition(currentPos.x, currentPos.y);
+                }
+                // Check for interaction with items
+                if (e instanceof Item item && !item.isUsed()) {
+                    item.interact(game, this, player);
+                }
+            }
+        });
+    }
+
+    void clampCamera() {
+        // Define camera and viewport variables
+        float minCameraX = game.gameViewport.getWorldWidth() / 2;
+        float minCameraY = game.gameViewport.getWorldHeight() / 2;
+
+        float maxCameraX = mapWidth - minCameraX;
+        float maxCameraY = mapHeight - minCameraY;
+
+        // Only clamp if map is larger than viewport in each dimension
+        if (mapWidth >= game.gameViewport.getWorldWidth()) {
+            camera.position.x = MathUtils.clamp(
+                camera.position.x,
+                minCameraX,
+                maxCameraX
+            );
+        }
+        if (mapHeight >= game.gameViewport.getWorldHeight()) {
+            camera.position.y = MathUtils.clamp(
+                camera.position.y,
+                minCameraY,
+                maxCameraY
+            );
+        }
     }
 
     public Texture getDoorframeTexture() {
@@ -495,6 +541,7 @@ public class GameScreen implements Screen {
     public Sound getSlipSfx() {
         return slipSfx;
     }
+
     public Sound getspeedSfx() {
         return speedSfx;
     }

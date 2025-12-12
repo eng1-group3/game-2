@@ -5,25 +5,33 @@ import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
 
-public class IncreasePointsEvent extends Event {
+
+
+public class LongBoiEvent extends Event {
     @Override
     public boolean activate(GameScreen screen, Player player, Item item) {
-        EventCounter.incrementPositive(); //positive event recorded
+        final int TOTAL_LONG_BOIS = 9;
+
+        EventCounter.incrementPositive();
+        EventCounter.incrementLongBoi();
+
         item.disable();
         item.hide();
         screen.getQuackSfx().play(screen.getGame().volume);
         screen.spawnInteractionMessage("Found Long Boi (+" + getScoreModifier()[1] + ")");
+        if (EventCounter.getLongBoiCollected() == TOTAL_LONG_BOIS) {
+
+            // Unlock the achievement
+            screen.getGame().achievements.unlock("longboi_master");
+
+            // Player feedback
+            screen.spawnLargeMessage("Achievement Unlocked: Duck Dealer!");
+        }
         return true;
     }
 
-    /**
-     *Returns the number of points the player gains from this event
-     *
-     * @return score modifier
-     */
     @Override
     public int[] getScoreModifier() {
-        // TODO placeholder value
         return new int[] {0, 100};
     }
 }

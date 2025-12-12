@@ -7,16 +7,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.Leaderboard;
 import io.github.yetti_eng.LeaderboardEntry;
 import io.github.yetti_eng.YettiGame;
-import io.github.yetti_eng.Timer;
 
 import java.util.List;
-
-import static io.github.yetti_eng.YettiGame.scaled;
 
 public class WinScreen implements Screen {
     private final YettiGame game;
@@ -38,8 +35,27 @@ public class WinScreen implements Screen {
         this.leaderboard = new Leaderboard();
     }
 
+    public WinScreen(final YettiGame game, boolean setUi) {
+        this.game = game;
+        if (setUi) { 
+            stage = new Stage(game.uiViewport, game.batch);
+            table = new Table();
+        } else {
+            stage = null;
+            table = null;
+        }
+        
+        score = game.calculateFinalScore();
+        this.leaderboard = new Leaderboard();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
     @Override
     public void show() {
+        table.clear();
         table.setFillParent(true);
         stage.addActor(table);
         //table.setDebug(true);
@@ -48,16 +64,24 @@ public class WinScreen implements Screen {
 
         Label titleLabel = new Label("You won :D", labelStyle);
         Label scoreLabel = new Label("Score: " + score, labelStyle);
+        Label topScoresLabel = new Label("Top Scores: ", labelStyle);
 
         //add time remaining and 'press R'
-        table.add(titleLabel).pad(10).row();
-        table.add(scoreLabel).pad(10);
+        table.add(titleLabel).pad(2).row();
+        table.add(scoreLabel).pad(2).row();
+        table.add(topScoresLabel).pad(20).row();
+        topScores = leaderboard.getTopScores();
+        for (Object obj : topScores) {
+            LeaderboardEntry entry = (LeaderboardEntry) obj;
+            Label leaderboardLabel = new Label(entry.getPosition() + ")  " + entry.toString(), labelStyle);
+            table.add(leaderboardLabel).pad(2).left().row();
+        }
     }
 
     @Override
     public void render(float delta) {
+        ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
         if(typing){
-            ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
             game.batch.begin();
 
             game.font.draw(game.batch, "Enter your username:", 100, 500);
@@ -72,26 +96,19 @@ public class WinScreen implements Screen {
             return;
         }
 
-        ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
         //Reset game variables and return to main menu on pressing R key
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             game.score = 0;      //  reset score
             EventCounter.reset();  // reset event counter
             game.setScreen(new MenuScreen(game)); //return to main menu
-            dispose();
             return;
         }
-        int i = 1;
-        for (Object obj : topScores) {
-            LeaderboardEntry entry = (LeaderboardEntry) obj;
-            game.font.draw(game.batch, entry.getPosition() + ")  " + entry.toString(), scaled(5.3f), scaled(7.1f) - scaled(i*0.9f), scaled(16), Align.left, false);
-            i++;
-        }
-
+        game.batch.begin();
+        game.batch.end();
         stage.draw();
     }
 
-    private void handleTyping() {
+    void handleTyping() {
         for (int key = Input.Keys.A; key <= Input.Keys.Z; key++) {
             if (Gdx.input.isKeyJustPressed(key)) {
                 username += Input.Keys.toString(key);
@@ -112,6 +129,7 @@ public class WinScreen implements Screen {
             if(leaderboard.addToLeaderboard(username, score)){
                 topScores = leaderboard.getTopScores();
                 typing = false;
+                this.show();
             } else{
                 username = "";
                 uniqueUsername = false;

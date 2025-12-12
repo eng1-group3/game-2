@@ -29,6 +29,7 @@ public class YettiGame extends Game {
 
     public float volume = 1.0f;
     private boolean paused;
+    public Achievements achievements;
 
     public Timer timer;
     public int score;
@@ -38,7 +39,7 @@ public class YettiGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-
+        achievements = new Achievements();
         // aspect ratio = width/height.
         float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         gameViewport = new FillViewport(30*aspectRatio,30);
@@ -75,6 +76,10 @@ public class YettiGame extends Game {
         font.dispose();
         fontBordered.dispose();
         fontBorderedSmall.dispose();
+        if (achievements != null) {
+            achievements.deleteFile();
+        }
+
     }
 
     /**
@@ -110,5 +115,9 @@ public class YettiGame extends Game {
     public int calculateFinalScore() {
         score += timer.getRemainingTime();
         return score;
+    }
+
+    public BitmapFont getFontBordered() {
+        return fontBordered;
     }
 }

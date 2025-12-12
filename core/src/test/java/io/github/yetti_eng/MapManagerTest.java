@@ -1,13 +1,13 @@
 package io.github.yetti_eng;
 
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import static org.mockito.Mockito.*;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class MapManagerTest {
 
@@ -15,7 +15,7 @@ public class MapManagerTest {
     TiledMapTileLayer mockLayer;
 
     @BeforeEach
-    public void setup2() {
+    public void setup() {
         mapManager = new MapManager(null);
         mockLayer = mock(TiledMapTileLayer.class);
 
@@ -56,8 +56,7 @@ public class MapManagerTest {
     @Test
     public void invalidRectTest() {
         // A rect that doesn't avoid the (1,1) invalid cell
-        // Rect covers (0,1) and (1,1)
-        Rectangle testRect = new Rectangle(0, 1, 1, 0);
+        Rectangle testRect = new Rectangle(0f, 1f, 1.5f, 0.5f);
         
         assertTrue(mapManager.isRectInvalid(testRect));
     }
@@ -65,8 +64,23 @@ public class MapManagerTest {
     @Test
     public void validRectTest() {
         // A rect that avoids the (1,1) invalid cell
-        // Rect covers (0,0) and (0,1)
-        Rectangle testRect = new Rectangle(0, 0, 0, 1);
+        Rectangle testRect = new Rectangle(0.25f, 0.25f, 0.5f, 1f);
+        
+        assertFalse(mapManager.isRectInvalid(testRect));
+    }
+
+    @Test
+    public void boundaryInvalidRectTest() {
+        // A rect that goes just over the boundary
+        Rectangle testRect = new Rectangle(0f, 1f, 1f, 0.5f);
+        
+        assertTrue(mapManager.isRectInvalid(testRect));
+    }
+
+    @Test
+    public void boundaryValidRectTest() {
+        // A rect that stay
+        Rectangle testRect = new Rectangle(0f, 1f, 0.9999f, 0.5f);
         
         assertFalse(mapManager.isRectInvalid(testRect));
     }
