@@ -33,6 +33,8 @@ public class YettiGame extends Game {
     public Timer timer;
     public int score;
 
+    // public boolean hasKeycard = false;
+
     @Override
     public void create() {
         batch = new SpriteBatch();

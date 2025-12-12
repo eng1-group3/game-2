@@ -45,6 +45,7 @@ public class GameScreen implements Screen {
     private Texture yetiTexture;
 
     private Texture exitTexture;
+    private Texture keyCardTexture;
     private Texture checkinCodeTexture;
     private Texture doorTexture;
     private Texture doorframeTexture;
@@ -98,6 +99,7 @@ public class GameScreen implements Screen {
         yetiTexture = new Texture("character/yeti.png");
 
         exitTexture = new Texture("item/exit.png");
+        keyCardTexture = new Texture("item/key_card.png");
         checkinCodeTexture = new Texture("item/checkin_code.png");
         doorTexture = new Texture("item/door.png");
         doorframeTexture = new Texture("item/doorframe.png");
@@ -139,8 +141,14 @@ public class GameScreen implements Screen {
         dean.disable();
         dean.hide();
 
+        //game.hasKeycard = false;
+
         entities.add(new Item(new KeyEvent(), "checkin_code", checkinCodeTexture, 45, 33, 1.5f, 1.5f));
+        // find coordinates
+        entities.add(new Item(new CardEvent(), "key_card", keyCardTexture, 60, 33, 1.5f, 1.5f));
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
+        //find coordinates
+        entities.add(new Item(new ExitEvent(), "end_door", doorTexture, 60, 21, 2, 2.2f, false, true));
         entities.add(new Item(new IncreasePointsEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
         entities.add(new Item(new HiddenDeductPointsEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
@@ -423,6 +431,7 @@ public class GameScreen implements Screen {
         yetiTexture.dispose();
 
         exitTexture.dispose();
+        keyCardTexture.dispose();
         checkinCodeTexture.dispose();
         doorTexture.dispose();
         doorframeTexture.dispose();
