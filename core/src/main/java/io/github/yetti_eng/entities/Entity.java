@@ -142,4 +142,12 @@ public abstract class Entity extends Sprite {
     public Vector2 getCurrentPos() {
         return new Vector2(getX(), getY());
     }
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
 }

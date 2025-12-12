@@ -34,4 +34,22 @@ public class EventCounter {
         return negative;
     }
 
+
+    private static int longBoiCollected = 0;
+
+    public static void incrementLongBoi() {
+        longBoiCollected++;
+    }
+
+    public static int getLongBoiCollected() {
+        return longBoiCollected;
+    }
+
+
+    public static void reset() {
+        hidden = 0;
+        positive = 0;
+        negative = 0;
+    }
+
 }

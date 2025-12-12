@@ -21,6 +21,24 @@ public class MapManager {
         this.camera = camera; //for rendering on the screen
     }
 
+    // Methods for unit testing using Mockito
+    public void setCollisionsLayer(TiledMapTileLayer newCollisionsLayer) {
+        collisionsLayer = newCollisionsLayer;
+    }
+
+    public void setRenderer(OrthogonalTiledMapRenderer newRenderer) {
+        renderer = newRenderer;
+    }
+
+    public OrthogonalTiledMapRenderer getRenderer() {
+        return renderer;
+    }
+
+    public TiledMap getMap() {
+        return map;
+    }
+    // End of unit test methods
+
     /**
      *Loads the tilemap and defines the collision layer
      * @param mapName internal path of the file of the map
@@ -49,7 +67,7 @@ public class MapManager {
         //finds tile coordinates of a map position
         int x = (int)(posX / tileWidth);
         int y = (int)(posY / tileHeight);
-        //if the cell at tile coords is null, position is invalid
+        //if the cell at tile coords is null, position is valid
         TiledMapTileLayer.Cell cell = collisionsLayer.getCell(x, y);
         return cell != null; //position is invalid if it falls in an unwalkable tile
     }
@@ -66,6 +84,20 @@ public class MapManager {
             isPositionInvalid(rect.x + rect.width, rect.y) || // bottom right
             isPositionInvalid(rect.x, rect.y + rect.height) || // top left
             isPositionInvalid(rect.x + rect.width, rect.y + rect.height); // top right
+    }
+
+    public float getMapWidth() {
+        int mapWidthInTiles = map.getProperties().get("width", Integer.class);
+        int tilePixelWidth = map.getProperties().get("tilewidth", Integer.class);
+
+        return (mapWidthInTiles * tilePixelWidth / 48f);
+    }
+
+    public float getMapHeight() {
+        int mapHeightInTiles = map.getProperties().get("height", Integer.class);
+        int tilePixelHeight = map.getProperties().get("tileheight", Integer.class);
+
+        return (mapHeightInTiles * tilePixelHeight / 48f);
     }
 
     public void dispose(){

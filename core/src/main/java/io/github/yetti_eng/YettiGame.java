@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.yetti_eng.screens.MenuScreen;
 
 // Called "Game" in the architecture documentation; renamed to avoid clash with LibGDX class name
@@ -16,7 +18,8 @@ public class YettiGame extends Game {
     private static final float WORLD_SCALE = 80; // 16:9 * 80 = 1280:720
 
     public SpriteBatch batch;
-    public FitViewport viewport;
+    public FillViewport gameViewport;
+    public ScreenViewport uiViewport;
 
     private FreeTypeFontGenerator robotoGenerator;
     public BitmapFont font;
@@ -26,6 +29,7 @@ public class YettiGame extends Game {
 
     public float volume = 1.0f;
     private boolean paused;
+    public Achievements achievements;
 
     public Timer timer;
     public int score;
@@ -33,16 +37,21 @@ public class YettiGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        viewport = new FitViewport(scaled(16), scaled(9));
+        achievements = new Achievements();
+        // aspect ratio = width/height.
+        float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+        gameViewport = new FillViewport(30*aspectRatio,30);
+
+        uiViewport = new ScreenViewport();
 
         robotoGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto.ttf"));
 
         var fontParameter = new FreeTypeFontParameter();
-        fontParameter.size = (int) scaled(1);
+        fontParameter.size = 50;
         fontParameter.color = Color.WHITE.cpy();
         font = robotoGenerator.generateFont(fontParameter);
 
-        fontParameter.size = (int) scaled(0.5f);
+        fontParameter.size = 40;
         fontSmall = robotoGenerator.generateFont(fontParameter);
 
         fontParameter.color = Color.BLACK.cpy();
@@ -50,7 +59,7 @@ public class YettiGame extends Game {
         fontParameter.borderWidth = 2;
         fontBorderedSmall = robotoGenerator.generateFont(fontParameter);
 
-        fontParameter.size = (int) scaled(1f);
+        fontParameter.size = 50;
         fontParameter.borderWidth = 4;
         fontBordered = robotoGenerator.generateFont(fontParameter);
 
@@ -65,6 +74,10 @@ public class YettiGame extends Game {
         font.dispose();
         fontBordered.dispose();
         fontBorderedSmall.dispose();
+        if (achievements != null) {
+            achievements.deleteFile();
+        }
+
     }
 
     /**
@@ -100,5 +113,9 @@ public class YettiGame extends Game {
     public int calculateFinalScore() {
         score += timer.getRemainingTime();
         return score;
+    }
+
+    public BitmapFont getFontBordered() {
+        return fontBordered;
     }
 }
