@@ -25,9 +25,9 @@ public class MapManagerTest {
         when(mockLayer.getTileWidth()).thenReturn(48);
         when(mockLayer.getTileHeight()).thenReturn(48);
         
-        // Simulate a simple 2x2 map with one invalid cell
-        int MAP_WIDTH = 2;
-        int MAP_HEIGHT = 2;
+        // Simulate a simple 3x3 map with one invalid cell in the middle
+        int MAP_WIDTH = 3;
+        int MAP_HEIGHT = 3;
         TiledMapTileLayer.Cell validCell = null;
         TiledMapTileLayer.Cell invalidCell = mock(TiledMapTileLayer.Cell.class);
         when(mockLayer.getCell(anyInt(), anyInt())).thenAnswer(lambda -> {
@@ -143,5 +143,21 @@ public class MapManagerTest {
         Rectangle testRect = new Rectangle(0f, 1f, 0.9999f, 0.5f);
         
         assertFalse(mapManager.isRectInvalid(testRect));
+    }
+
+    @Test
+    public void rectAroundBlockedCellTest() {
+        // A rect that straddles the blocked cell
+        Rectangle testRect = new Rectangle(0.5f, 0.5f, 2f, 2f);
+        
+        assertTrue(mapManager.isRectInvalid(testRect));
+    }
+
+    @Test
+    public void rectEdgeCrossesBlockedCellTest() {
+        // A rect whose edge crosses the blocked cell but the corners aren't in the blocked cell
+        Rectangle testRect = new Rectangle(0.5f, 0.5f, 2f, 0.75f);
+        
+        assertTrue(mapManager.isRectInvalid(testRect));
     }
 }
