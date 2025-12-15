@@ -80,6 +80,14 @@ public class MapManagerTest {
         assertTrue(mapManager.isPositionInvalid(x, y));
     }
 
+    @Test 
+    public void invalidOutOfMapPosTest() {
+        float x = 2.5f;
+        float y = 1.5f;
+
+        assertTrue(mapManager.isPositionInvalid(x, y));
+    }
+
     @Test
     public void entirelyInvalidRectTest() {
         // A rect that is entirely in the blocked cell
