@@ -26,11 +26,22 @@ public class MapManagerTest {
         when(mockLayer.getTileHeight()).thenReturn(48);
         
         // Simulate a simple 2x2 map with one invalid cell
-        when(mockLayer.getCell(0, 0)).thenReturn(null);
-        when(mockLayer.getCell(0,1)).thenReturn(null);
-        when(mockLayer.getCell(1, 0)).thenReturn(null);
+        int MAP_WIDTH = 2;
+        int MAP_HEIGHT = 2;
+        TiledMapTileLayer.Cell validCell = null;
         TiledMapTileLayer.Cell invalidCell = mock(TiledMapTileLayer.Cell.class);
-        when(mockLayer.getCell(1, 1)).thenReturn(invalidCell);
+        when(mockLayer.getCell(anyInt(), anyInt())).thenAnswer(lambda -> {
+            int x = lambda.getArgument(0);
+            int y = lambda.getArgument(1);
+
+            if (x < 0 || x > MAP_WIDTH-1 || y < 0 || y > MAP_HEIGHT-1) {
+                return invalidCell;
+            } else if (x == 1 && y == 1) {
+                return invalidCell;
+            } else {
+                return validCell;
+            }
+        });
 
         mapManager.setCollisionsLayer(mockLayer);
         mapManager.setRenderer(mock(OrthogonalTiledMapRenderer.class));
@@ -54,9 +65,41 @@ public class MapManagerTest {
     }
 
     @Test
-    public void invalidRectTest() {
-        // A rect that doesn't avoid the (1,1) invalid cell
-        Rectangle testRect = new Rectangle(0f, 1f, 1.5f, 0.5f);
+    public void entirelyInvalidRectTest() {
+        // A rect that is entirely in the blocked cell
+        Rectangle testRect = new Rectangle(1.25f, 1.25f, 0.5f, 0.5f);
+        
+        assertTrue(mapManager.isRectInvalid(testRect));
+    }
+
+    @Test
+    public void partiallyInvalidRectTest() {
+        // A rect that is partially in the blocked cell
+        Rectangle testRect = new Rectangle(0.75f, 0.75f, 0.5f, 0.5f);
+        
+        assertTrue(mapManager.isRectInvalid(testRect));
+    }
+
+    @Test
+    public void fullyOutsideMapRectTest() {
+        // A rect that is not in the blocked cell, but is outside of the map
+        Rectangle testRect = new Rectangle(3f, 3f, 0.5f, 0.5f);
+        
+        assertTrue(mapManager.isRectInvalid(testRect));
+    }
+
+    @Test
+    public void partiallyOutsideMapRectTest() {
+        // A rect that is not in the blocked cell, but partially
+        Rectangle testRect = new Rectangle(0f, 1f, 0.5f, 2f);
+        
+        assertTrue(mapManager.isRectInvalid(testRect));
+    }
+
+    @Test
+    public void boundaryInvalidRectTest() {
+        // A rect that goes (just) collides with the blocked cell
+        Rectangle testRect = new Rectangle(0f, 1f, 1f, 0.5f);
         
         assertTrue(mapManager.isRectInvalid(testRect));
     }
@@ -69,17 +112,10 @@ public class MapManagerTest {
         assertFalse(mapManager.isRectInvalid(testRect));
     }
 
-    @Test
-    public void boundaryInvalidRectTest() {
-        // A rect that goes just over the boundary
-        Rectangle testRect = new Rectangle(0f, 1f, 1f, 0.5f);
-        
-        assertTrue(mapManager.isRectInvalid(testRect));
-    }
-
+    
     @Test
     public void boundaryValidRectTest() {
-        // A rect that stay
+        // A rect that (just) avoids the blocked cell
         Rectangle testRect = new Rectangle(0f, 1f, 0.9999f, 0.5f);
         
         assertFalse(mapManager.isRectInvalid(testRect));
