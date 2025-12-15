@@ -49,17 +49,41 @@ public class MapManagerTest {
     }
     
     @Test
-    public void validPositionTest() {
-        int x = 1;
-        int y = 0;
+    public void validPosTest() {
+        float x = 1.25f;
+        float y = 0.25f;
+
+        assertFalse(mapManager.isPositionInvalid(x, y));
+    }
+
+    @Test
+    public void validBoundaryPosTest() {
+        float x = 0.999f;
+        float y = 1.25f;
 
         assertFalse(mapManager.isPositionInvalid(x, y));
     }
 
     @Test 
-    public void invalidPositionTest() {
-        int x = 1;
-        int y = 1;
+    public void invalidPosTest() {
+        float x = 1.25f;
+        float y = 1.25f;
+
+        assertTrue(mapManager.isPositionInvalid(x, y));
+    }
+
+    @Test 
+    public void invalidBoundaryPosTest() {
+        float x = 1f;
+        float y = 1.5f;
+
+        assertTrue(mapManager.isPositionInvalid(x, y));
+    }
+
+    @Test 
+    public void invalidOutOfMapPosTest() {
+        float x = 2.5f;
+        float y = 1.5f;
 
         assertTrue(mapManager.isPositionInvalid(x, y));
     }
