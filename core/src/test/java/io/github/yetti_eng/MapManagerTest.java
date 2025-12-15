@@ -82,7 +82,7 @@ public class MapManagerTest {
 
     @Test 
     public void invalidOutOfMapPosTest() {
-        float x = 2.5f;
+        float x = 3.5f;
         float y = 1.5f;
 
         assertTrue(mapManager.isPositionInvalid(x, y));
