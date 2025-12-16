@@ -35,11 +35,11 @@ public class MapManagerTest {
             int y = lambda.getArgument(1);
 
             if (x < 0 || x > MAP_WIDTH-1 || y < 0 || y > MAP_HEIGHT-1) {
-                return invalidCell;
+                return invalidCell;  // outside of map
             } else if (x == 1 && y == 1) {
-                return invalidCell;
+                return invalidCell; // block middle cell (1,1)
             } else {
-                return validCell;
+                return validCell; // every other cell is valid
             }
         });
 

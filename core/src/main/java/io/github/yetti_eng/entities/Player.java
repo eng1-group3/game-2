@@ -1,6 +1,7 @@
 package io.github.yetti_eng.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ public class Player extends Entity {
 
     public Player(Texture tex, float x, float y) {
         super(tex, x, y, 0.9f, 1.6f, PLAYER_SPEED, false);
+        setHitbox(new Rectangle(x, y, 0.7f, 1.2f));
     }
 
     public boolean hasUsedItem(String itemID) {
