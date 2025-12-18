@@ -13,9 +13,8 @@ public class CardEvent extends Event {
         screen.spawnInteractionMessage("Got the Key Card");
         return true;
     }
-
     @Override
-    public int getScoreModifier() {
-        return 0;
+    public int[] getScoreModifier() {
+        return new int[] {0,0};
     }
 }
