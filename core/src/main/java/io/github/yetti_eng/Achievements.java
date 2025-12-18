@@ -11,6 +11,10 @@ public class Achievements {
         file = Gdx.files.local("achievements.txt");
     }
 
+    public Achievements(FileHandle file) {
+        this.file = file;
+    }
+
 
     public void unlock(String key) {
         if (!isUnlocked(key)) {
