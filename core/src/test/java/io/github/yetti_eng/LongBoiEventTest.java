@@ -1,28 +1,28 @@
 package io.github.yetti_eng;
 
-import io.github.yetti_eng.events.KeyEvent;
+import io.github.yetti_eng.events.LongBoiEvent;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class KeyEventTest {
+public class LongBoiEventTest {
 
     @Test
     public void testEventCanBeCreated() {
-        KeyEvent event = new KeyEvent();
+        LongBoiEvent event = new LongBoiEvent();
         assertNotNull(event);
     }
 
     @Test
     public void testScoreModifier() {
-        KeyEvent event = new KeyEvent();
-        assertArrayEquals(new int[]{0, 10}, event.getScoreModifier());
+        LongBoiEvent event = new LongBoiEvent();
+        assertArrayEquals(new int[]{0, 100}, event.getScoreModifier());
     }
 
     @Test
     public void testScoreModifierAddsPoints() {
-        KeyEvent event = new KeyEvent();
+        LongBoiEvent event = new LongBoiEvent();
         int[] modifier = event.getScoreModifier();
         assertEquals(0, modifier[0]);
-        assertEquals(10, modifier[1]);
+        assertEquals(100, modifier[1]);
     }
 }

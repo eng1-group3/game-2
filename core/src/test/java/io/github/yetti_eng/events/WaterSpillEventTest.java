@@ -1,4 +1,4 @@
-package io.github.yetti_eng;
+package io.github.yetti_eng.events;
 
 import io.github.yetti_eng.events.WaterSpillEvent;
 import org.junit.jupiter.api.Test;

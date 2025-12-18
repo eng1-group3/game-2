@@ -19,7 +19,7 @@ public abstract class Entity extends Sprite {
     private float speed;
     private boolean solid;
     private Vector2 movement;
-    private final Rectangle hitbox;
+    private Rectangle hitbox;
 
     private boolean visible = true;
     private boolean enabled = true;
@@ -84,6 +84,10 @@ public abstract class Entity extends Sprite {
      */
     public void doMove(float delta) {
         doMove(delta, false);
+    }
+
+    public void setHitbox(Rectangle newHitbox) {
+        hitbox = newHitbox;
     }
 
     public Rectangle getHitbox() {
