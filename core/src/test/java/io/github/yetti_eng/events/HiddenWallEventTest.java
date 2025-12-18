@@ -1,4 +1,4 @@
-package io.github.yetti_eng;
+package io.github.yetti_eng.events;
 
 import com.badlogic.gdx.graphics.Texture;
 import io.github.yetti_eng.events.HiddenWallEvent;

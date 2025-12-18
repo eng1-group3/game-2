@@ -2,18 +2,6 @@
 
 **I think we should use branches to work on features** - It keeps the commit history clean, and separate.
 
-Use this naming pattern for your branches:
-
-#### Example branch types:
-`feat/` - for adding new features (e.g., feat/player-movement-system)
-
-`fix/` - for fixing bugs (e.g., fix/collision-detection-error)
-
-`refactor/` - for code improvements without changing functionality
-
-`docs/` - for documentation updates
-
-
 #### Pull Request Workflow
 
 1. Create your branch from the latest main
