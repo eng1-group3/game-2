@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
     public final YettiGame game;
     private final Stage stage;
 
-    private static final int TIMER_LENGTH = 1; // 300s = 5min
+    private static final int TIMER_LENGTH = 300; // 300s = 5min
 
     private Texture playerTexUp;
     private Texture playerTexDown;
