@@ -1,0 +1,119 @@
+package io.github.yetti_eng.screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.ScreenUtils;
+import io.github.yetti_eng.Achievements;
+import io.github.yetti_eng.YettiGame;
+
+public class AchievementsScreen implements Screen {
+    private final YettiGame game;
+    private final Stage stage;
+    private final Table table;
+    private final Achievements achievementsLogic;
+
+    private Label.LabelStyle titleUnlockedStyle;
+    private Label.LabelStyle titleLockedStyle;
+    private Label.LabelStyle descUnlockedStyle;
+    private Label.LabelStyle descLockedStyle;
+
+    public AchievementsScreen(final YettiGame game) {
+        this.game = game;
+        stage = new Stage(game.uiViewport, game.batch);
+        table = new Table();
+        achievementsLogic = new Achievements();
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+
+        table.setFillParent(true);
+        table.clear();
+        stage.addActor(table);
+
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle(null, null, null, game.font);
+        Label.LabelStyle headerStyle = new Label.LabelStyle(game.font, Color.WHITE);
+
+        // Green for unlocked titles
+        titleUnlockedStyle = new Label.LabelStyle(game.font, Color.GREEN);
+        // Gray for locked titles
+        titleLockedStyle = new Label.LabelStyle(game.font, Color.GRAY);
+
+        // White for unlocked descriptions
+        descUnlockedStyle = new Label.LabelStyle(game.font, Color.WHITE);
+        // Dark Gray for locked descriptions (visible but dimmed)
+        descLockedStyle = new Label.LabelStyle(game.font, Color.DARK_GRAY);
+
+        Label titleLabel = new Label("Achievements", headerStyle);
+        table.add(titleLabel).padBottom(30).row();
+
+        addAchievement("Path Sniffer", "Find the secret path", "path_sniffer");
+        addAchievement("Longboi Master", "Get all long bois", "longboi_master");
+        addAchievement("Ducktorate Degree", "Get a score of 2000", "ducktorate Degree");
+        addAchievement("Turnitin Approved, Soul Freed", "Give the lecturer the assignment", "turnitin Approved, Soul Freed");
+
+        TextButton backButton = new TextButton("Back", buttonStyle);
+        backButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new MenuScreen(game));
+                dispose();
+                return true;
+            }
+        });
+
+        table.add(backButton).padTop(30).center().row();
+    }
+
+    private void addAchievement(String title, String description, String key) {
+        boolean isUnlocked = achievementsLogic.isUnlocked(key);
+
+        Label titleLabel;
+        Label descLabel;
+
+        if (isUnlocked) {
+            titleLabel = new Label(title + " [UNLOCKED]", titleUnlockedStyle);
+            descLabel = new Label(description, descUnlockedStyle);
+        } else {
+            titleLabel = new Label(title + " [LOCKED]", titleLockedStyle);
+            // Now passing the actual description instead of "Hidden"
+            descLabel = new Label(description, descLockedStyle);
+        }
+
+        table.add(titleLabel).left().padTop(10).row();
+        table.add(descLabel).left().padBottom(10).row();
+    }
+
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resume() {}
+
+    @Override
+    public void hide() {}
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
+}

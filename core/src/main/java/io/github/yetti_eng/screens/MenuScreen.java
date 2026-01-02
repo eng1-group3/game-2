@@ -60,6 +60,15 @@ public class MenuScreen implements Screen {
                 return true;
             }
         });
+        TextButton achievementsButton = new TextButton("Achievements", style);
+        achievementsButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new AchievementsScreen(game));
+                dispose();
+                return true;
+            }
+        });
 
         TextButton creditsButton = new TextButton("Credits", style);
         creditsButton.addListener(new InputListener() {
@@ -83,6 +92,7 @@ public class MenuScreen implements Screen {
         table.add(titleLabel).padBottom(20).row();
         table.add(playButton).pad(10).row();
         table.add(settingsButton).pad(10).row();
+        table.add(achievementsButton).pad(10).row();
         table.add(creditsButton).pad(10).row();
         table.add(quitButton).pad(10).row();
 

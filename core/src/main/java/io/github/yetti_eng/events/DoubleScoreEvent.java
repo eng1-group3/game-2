@@ -11,8 +11,8 @@ public class DoubleScoreEvent extends Event {
         if(player.hasUsedItem("assignment")) {
             EventCounter.incrementPositive();
             item.disable();
-            screen.getGame().achievements.unlock("assignment_done");
-            screen.spawnInteractionMessage("Achievement Unlocked: not AI-Generated (i swear) ");
+            screen.getGame().achievements.unlock("Turnitin Approved, Soul Freed");
+            screen.spawnLargeMessage("Achievement Unlocked: not AI-Generated (i swear) ");
 
             return true;
         }

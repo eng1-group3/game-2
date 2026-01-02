@@ -19,7 +19,7 @@ public class HiddenWallEvent extends Event {
         item.setTexture(passableTexture);
         item.setSolid(false);
         screen.getGame().achievements.unlock("path_sniffer");
-        screen.spawnInteractionMessage("achievement unlocked: I wasn't lost, I was exploring. ");
+        screen.spawnLargeMessage("achievement unlocked: I wasn't lost, I was exploring. ");
         return true;
     }
 

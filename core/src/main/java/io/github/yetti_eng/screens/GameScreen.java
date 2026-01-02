@@ -19,16 +19,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import io.github.yetti_eng.InputHelper;
-import io.github.yetti_eng.MapManager;
-import io.github.yetti_eng.Timer;
-import io.github.yetti_eng.YettiGame;
+import io.github.yetti_eng.*;
 import io.github.yetti_eng.entities.Dean;
 import io.github.yetti_eng.entities.Entity;
 import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.events.*;
-import io.github.yetti_eng.EventCounter;
 
 import java.util.ArrayList;
 
@@ -36,7 +32,7 @@ public class GameScreen implements Screen {
     public final YettiGame game;
     private final Stage stage;
 
-    private static final int TIMER_LENGTH = 300; // 300s = 5min
+    private static final int TIMER_LENGTH = 1; // 300s = 5min
 
     private Texture playerTexUp;
     private Texture playerTexDown;
@@ -66,6 +62,7 @@ public class GameScreen implements Screen {
     OrthographicCamera interfaceCamera;
 
     private Table table;
+    private PauseMenu pauseMenu;
 
     private Sound quackSfx;
     private Sound paperSfx;
@@ -99,6 +96,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        //this makes the game start if not paused (there was a bug where the game would be in a paused state)
+        if (game.isPaused()) {
+            game.resume();
+        }
+        //game.score = 0;
+        EventCounter.reset();
+
         playerTexUp = new Texture("character/player_up.png");
         playerTexDown = new Texture("character/player_down.png");
         playerTexLeft = new Texture("character/player_left.png");
@@ -119,11 +123,11 @@ public class GameScreen implements Screen {
         slowDownTexture = new Texture("item/slow_down.png");
         pauseTexture = new Texture("ui/pause.png");
 
-        camera = new  OrthographicCamera();
+        camera = new OrthographicCamera();
         camera.setToOrtho(false, game.gameViewport.getWorldWidth(), game.gameViewport.getWorldHeight());
         game.gameViewport.setCamera(camera);
 
-        interfaceCamera = new  OrthographicCamera();
+        interfaceCamera = new OrthographicCamera();
         interfaceCamera.setToOrtho(false, game.uiViewport.getWorldWidth(), game.uiViewport.getWorldHeight());
         game.uiViewport.setCamera(interfaceCamera);
         mapManager = new MapManager(camera);
@@ -155,8 +159,8 @@ public class GameScreen implements Screen {
         entities.add(new Item(new WaterSpillEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
         entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
-        entities.add(new Item(new SpeedUpEvent(), "speed_up",speedBoostTexture, 58, 2, 2f, 2f));
-        entities.add(new Item(new SlowDownEvent(), "slow_down",slowDownTexture, 2.5f, 6, 2f, 2f));
+        entities.add(new Item(new SpeedUpEvent(), "speed_up", speedBoostTexture, 58, 2, 2f, 2f));
+        entities.add(new Item(new SlowDownEvent(), "slow_down", slowDownTexture, 2.5f, 6, 2f, 2f));
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
         // longboi gang below careful
         entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
@@ -193,13 +197,12 @@ public class GameScreen implements Screen {
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (game.isPaused()) {
-                    game.resume();
-                } else {
-                    game.pause();
-                }
+                togglePause();
             }
         });
+        pauseMenu = new PauseMenu(game, this);
+        stage.addActor(pauseMenu);
+
         table.add(pauseButton).width(50f).height(50f).pad(10).row();
         table.add(scoreText).pad(10).bottom().left().expandY();
     }
@@ -221,7 +224,7 @@ public class GameScreen implements Screen {
         player.resetMovement();
         //vertical movement
         if (InputHelper.moveUpPressed()) {
-            dy  += speed;
+            dy += speed;
             player.setTexture(playerTexUp);
         }
         if (InputHelper.moveDownPressed()) {
@@ -245,7 +248,7 @@ public class GameScreen implements Screen {
             player.addMovement(dx, 0);
         }
         //tests if collision occurs after y movement
-        hitbox.setPosition(currentX, currentY + dy );
+        hitbox.setPosition(currentX, currentY + dy);
         if (!mapManager.isRectInvalid(player.getHitbox())) {
             player.addMovement(0, dy);
         }
@@ -282,8 +285,8 @@ public class GameScreen implements Screen {
 
         int totalScore = game.score + game.timer.getRemainingTime();
 
-        if (totalScore >= 2000 && !game.achievements.isUnlocked("score_2000")) {
-            game.achievements.unlock("score_2000");
+        if (totalScore >= 2000 && !game.achievements.isUnlocked("ducktorate Degree")) {
+            game.achievements.unlock("ducktorate Degree");
             spawnLargeMessage("Achievement Unlocked: Score 2000! Bro Thinks He’s Him");
         }
 
@@ -305,7 +308,7 @@ public class GameScreen implements Screen {
             if (game.isPaused()) {
                 game.resume();
             } else {
-                game.pause();
+                togglePause();
             }
         }
     }
@@ -324,7 +327,9 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(game.gameViewport.getCamera().combined);
         game.batch.begin();
         // Draw only visible entities
-        entities.forEach(e -> { if (e.isVisible()) e.draw(game.batch); });
+        entities.forEach(e -> {
+            if (e.isVisible()) e.draw(game.batch);
+        });
         // Draw exit, player, and dean on top of other entities
         if (exit.isVisible()) exit.draw(game.batch);
         if (player.isVisible()) player.draw(game.batch);
@@ -335,19 +340,10 @@ public class GameScreen implements Screen {
         //separate user interface camera for text on screen
         game.batch.setProjectionMatrix(interfaceCamera.combined);
         game.batch.begin();
-
-        if (game.isPaused()) {
-            game.fontBordered.draw(
-                game.batch, "PAUSED",
-                0, game.uiViewport.getWorldHeight() / 2, game.uiViewport.getWorldWidth(),
-                Align.center, false
-            );
-        }
-
         //draws messages fading out in an upwards direction
         for (Label l : messages) {
-            l.setY(l.getY()+1);
-            l.getColor().add(0, 0, 0, -0.01f);
+            l.setY(l.getY() + 1);
+            l.getColor().add(0, 0, 0, -0.003f);
             l.draw(game.batch, 1);
         }
         messages.removeIf(l -> l.getColor().a <= 0);
@@ -395,7 +391,8 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void dispose() {
@@ -430,8 +427,14 @@ public class GameScreen implements Screen {
 
     public void releaseDean(int timeRemaining, boolean playSound, boolean displayMessage) {
         if (timeRemaining <= 60 && !dean.isEnabled()) {
-                if (playSound) {growlSfx.play(game.volume);};
-                if (displayMessage) {spawnLargeMessage("Run! The dean is coming!");};
+            if (playSound) {
+                growlSfx.play(game.volume);
+            }
+            ;
+            if (displayMessage) {
+                spawnLargeMessage("Run! The dean is coming!");
+            }
+            ;
             dean.show();
             dean.enable();
         }
@@ -440,17 +443,18 @@ public class GameScreen implements Screen {
     /**
      * Spawn a text label at the centre of the screen
      * that floats upwards and fades out. Used to alert the player.
+     *
      * @param text The text that should be displayed.
      */
     public void spawnLargeMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.getFontBordered(), Color.WHITE.cpy()));
-        label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
+        label.setPosition( 999,40); // postion of the lable need attetion and i give up
         messages.add(label);
     }
 
     public void spawnInteractionMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
-        label.setPosition(interfaceCamera.viewportWidth-15, label.getHeight(), Align.right);
+        label.setPosition(interfaceCamera.viewportWidth - 15, label.getHeight(), Align.right);
         messages.add(label);
     }
 
@@ -542,5 +546,19 @@ public class GameScreen implements Screen {
      */
     public YettiGame getGame() {
         return game;
+    }
+
+    public void togglePause() {
+        if (game.isPaused()) {
+
+            game.resume();
+            pauseMenu.setVisible(false); // Hide the menu
+            table.setVisible(true);      // Show the HUD/Table
+        } else {
+
+            game.pause();
+            pauseMenu.setVisible(true);  // Show the menu
+            table.setVisible(false);     // Hide the HUD/Table
+        }
     }
 }
