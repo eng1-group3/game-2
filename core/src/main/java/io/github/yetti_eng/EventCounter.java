@@ -10,6 +10,7 @@ public class EventCounter {
     private static int positive = 0;
     private static int negative = 0;
 
+
     public static void incrementHidden() {
         hidden += 1;
     }
@@ -50,6 +51,7 @@ public class EventCounter {
         hidden = 0;
         positive = 0;
         negative = 0;
+        longBoiCollected = 0;
     }
 
 }

@@ -38,11 +38,12 @@ public class LoseScreen implements Screen {
 
         Label titleLabel = new Label("You Lost! :(", labelStyle);
         Label scoreLabel = new Label("Score: " + score, labelStyle);
+        Label restartmessageLabel = new Label("press R to restart", labelStyle);
 
-        // add time remaining
-        // add 'press R'
+
         table.add(titleLabel).pad(10).row();
-        table.add(scoreLabel).pad(10);
+        table.add(scoreLabel).pad(10).row();
+        table.add(restartmessageLabel).pad(10);
     }
 
     @Override

@@ -12,6 +12,9 @@ import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.Leaderboard;
 import io.github.yetti_eng.LeaderboardEntry;
 import io.github.yetti_eng.YettiGame;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import java.util.List;
 
@@ -37,14 +40,14 @@ public class WinScreen implements Screen {
 
     public WinScreen(final YettiGame game, boolean setUi) {
         this.game = game;
-        if (setUi) { 
+        if (setUi) {
             stage = new Stage(game.uiViewport, game.batch);
             table = new Table();
         } else {
             stage = null;
             table = null;
         }
-        
+
         score = game.calculateFinalScore();
         this.leaderboard = new Leaderboard();
     }
@@ -58,24 +61,38 @@ public class WinScreen implements Screen {
         table.clear();
         table.setFillParent(true);
         stage.addActor(table);
-        //table.setDebug(true);
+        Gdx.input.setInputProcessor(stage);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(game.font, Color.WHITE);
+        TextButton.TextButtonStyle buttonStyle =
+            new TextButton.TextButtonStyle(null, null, null, game.font);
 
         Label titleLabel = new Label("You won :D", labelStyle);
         Label scoreLabel = new Label("Score: " + score, labelStyle);
-        Label topScoresLabel = new Label("Top Scores: ", labelStyle);
+        Label topScoresLabel = new Label("Top Scores:", labelStyle);
 
-        //add time remaining and 'press R'
-        table.add(titleLabel).pad(2).row();
-        table.add(scoreLabel).pad(2).row();
-        table.add(topScoresLabel).pad(20).row();
+        table.add(titleLabel).padTop(10).row();
+        table.add(scoreLabel).padTop(5).row();
+        table.add(topScoresLabel).padTop(20).row();
+
         topScores = leaderboard.getTopScores();
         for (Object obj : topScores) {
             LeaderboardEntry entry = (LeaderboardEntry) obj;
-            Label leaderboardLabel = new Label(entry.getPosition() + ")  " + entry.toString(), labelStyle);
-            table.add(leaderboardLabel).pad(2).left().row();
+            Label lb = new Label(entry.getPosition() + ")  " + entry, labelStyle);
+            table.add(lb).padTop(4).left().row();
         }
+
+        TextButton menuBtn = new TextButton("Main Menu", buttonStyle);
+        menuBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.score = 0;
+                EventCounter.reset();
+                game.setScreen(new MenuScreen(game));
+            }
+        });
+
+        table.add(menuBtn).padTop(20).center().row();
     }
 
     @Override
