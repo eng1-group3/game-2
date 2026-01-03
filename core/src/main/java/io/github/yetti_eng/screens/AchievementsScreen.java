@@ -13,24 +13,37 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.yetti_eng.Achievements;
 import io.github.yetti_eng.YettiGame;
 
+/**
+ * This screen displays the list of achievements to the player.
+ * It shows which ones are unlocked (in Green) and which are still locked (in Gray).
+ */
 public class AchievementsScreen implements Screen {
     private final YettiGame game;
     private final Stage stage;
     private final Table table;
     private final Achievements achievementsLogic;
 
+    // Styles for the text (Different colors for locked vs unlocked)
     private Label.LabelStyle titleUnlockedStyle;
     private Label.LabelStyle titleLockedStyle;
     private Label.LabelStyle descUnlockedStyle;
     private Label.LabelStyle descLockedStyle;
-
+    /**
+     * Sets up the stage and the table for layout.
+     *
+     * @param game The main game object
+     */
     public AchievementsScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
         table = new Table();
         achievementsLogic = new Achievements();
     }
-
+    /**
+     * This runs when the screen is shown.
+     * It sets up the input, creates the font styles (Green for unlocked, Gray for locked),
+     * and adds all the achievements to the table.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -55,11 +68,12 @@ public class AchievementsScreen implements Screen {
         Label titleLabel = new Label("Achievements", headerStyle);
         table.add(titleLabel).padBottom(30).row();
 
+        // Add the specific achievements to the list
         addAchievement("Path Sniffer", "Find the secret path", "path_sniffer");
         addAchievement("Longboi Master", "Get all long bois", "longboi_master");
         addAchievement("Ducktorate Degree", "Get a score of 2000", "ducktorate Degree");
         addAchievement("Turnitin Approved, Soul Freed", "Give the lecturer the assignment", "turnitin Approved, Soul Freed");
-
+        // Create the back button to return to the menu
         TextButton backButton = new TextButton("Back", buttonStyle);
         backButton.addListener(new InputListener() {
             @Override
@@ -72,7 +86,14 @@ public class AchievementsScreen implements Screen {
 
         table.add(backButton).padTop(30).center().row();
     }
-
+    /**
+     * Helper method to add a single achievement to the screen.
+     * It checks if the achievement is unlocked and uses the correct color style.
+     *
+     * @param title The name of the achievement
+     * @param description What the player needs to do
+     * @param key The key used to check if it's unlocked in the preferences
+     */
     private void addAchievement(String title, String description, String key) {
         boolean isUnlocked = achievementsLogic.isUnlocked(key);
 
@@ -80,11 +101,11 @@ public class AchievementsScreen implements Screen {
         Label descLabel;
 
         if (isUnlocked) {
+            // It's unlocked, so use the Green styles
             titleLabel = new Label(title + " [UNLOCKED]", titleUnlockedStyle);
             descLabel = new Label(description, descUnlockedStyle);
         } else {
             titleLabel = new Label(title + " [LOCKED]", titleLockedStyle);
-            // Now passing the actual description instead of "Hidden"
             descLabel = new Label(description, descLockedStyle);
         }
 
