@@ -12,7 +12,7 @@ public class DoubleScoreEvent extends Event {
             EventCounter.incrementPositive();
             item.disable();
             screen.getGame().achievements.unlock("Turnitin Approved, Soul Freed");
-            screen.spawnLargeMessage("Achievement Unlocked: not AI-Generated (i swear) ");
+            screen.spawnLargeMessage("Achievement Unlocked!");
 
             return true;
         }

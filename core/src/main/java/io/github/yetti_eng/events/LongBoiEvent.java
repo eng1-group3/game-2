@@ -25,7 +25,7 @@ public class LongBoiEvent extends Event {
             screen.getGame().achievements.unlock("longboi_master");
 
             // Player feedback
-            screen.spawnLargeMessage("Achievement Unlocked: Duck Dealer!");
+            screen.spawnLargeMessage("Achievement Unlocked!");
         }
         return true;
     }

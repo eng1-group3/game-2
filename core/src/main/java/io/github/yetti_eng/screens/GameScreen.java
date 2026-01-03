@@ -287,7 +287,7 @@ public class GameScreen implements Screen {
 
         if (totalScore >= 2000 && !game.achievements.isUnlocked("ducktorate Degree")) {
             game.achievements.unlock("ducktorate Degree");
-            spawnLargeMessage("Achievement Unlocked: Score 2000! Bro Thinks He’s Him");
+            spawnLargeMessage("Achievement Unlocked!");
         }
 
         //updates event counters
@@ -448,7 +448,7 @@ public class GameScreen implements Screen {
      */
     public void spawnLargeMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.getFontBordered(), Color.WHITE.cpy()));
-        label.setPosition( 999,40); // postion of the lable need attetion and i give up
+        label.setPosition( interfaceCamera.viewportWidth - 15, label.getHeight(), Align.right);
         messages.add(label);
     }
 
