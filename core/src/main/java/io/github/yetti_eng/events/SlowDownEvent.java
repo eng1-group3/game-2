@@ -7,7 +7,6 @@ import io.github.yetti_eng.screens.GameScreen;
 import com.badlogic.gdx.utils.Timer;
 /**
  * This event handles items that make the player move slower for a short time.
- * It's a "bad" event that penalizes the player.
  */
 public class SlowDownEvent extends Event {
 
@@ -49,7 +48,7 @@ public class SlowDownEvent extends Event {
         return true;
     }
     /**
-     * Takes away 200 points from the score because this is a bad event.
+     * Takes away 200 points from the score
      */
     @Override
     public int[] getScoreModifier() {
