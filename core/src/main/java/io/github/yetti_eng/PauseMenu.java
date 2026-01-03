@@ -24,14 +24,14 @@ public class PauseMenu extends Table {
     /**
      * Creates the pause menu user interface.
      *
-     * @param game       The main game object (used to switch screens)
+     * @param game  The main game object (used to switch screens)
      * @param gameScreen The current game screen (used to toggle pause off)
      */
     public PauseMenu(final YettiGame game, final GameScreen gameScreen) {
         setFillParent(true);
         setVisible(false); // Start hidden until the player pauses
 
-        // Create a dark, semi-transparent background
+        // Create a dark semi-transparent background
         // This makes a 1x1 pixel image, sets it to black with 85% opacity,
         // and stretches it to cover the whole menu.
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -75,7 +75,7 @@ public class PauseMenu extends Table {
             }
         });
 
-        //Add everything to the table layout
+        //Adds to the table layout
         add(pauseLabel).padBottom(40).row();
         add(resumeBtn).padBottom(20).row();
         add(restartBtn).padBottom(20).row();

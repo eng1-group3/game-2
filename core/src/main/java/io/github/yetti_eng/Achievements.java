@@ -19,7 +19,7 @@ public class Achievements {
     }
     /**
      * Constructor used for testing.
-     * Allows us to pass a fake file or a specific file path.
+     * Allows a specific file path to pass.
      *
      * @param file The file handle to use
      */
@@ -29,7 +29,7 @@ public class Achievements {
 
     /**
      * Unlocks an achievement by writing it to the file.
-     * It first checks if it's already unlocked so we don't write the same thing twice.
+     * It first checks if it's already unlocked so it don't write the same thing twice.
      *
      * @param key The unique name of the achievement (e.g., "longboi_master")
      */
@@ -41,7 +41,7 @@ public class Achievements {
 
     /**
      * Checks if an achievement has been unlocked yet.
-     * It reads the whole text file and looks for the specific key.
+     * It reads the text file and looks for the specific key.
      *
      * @param key The unique name of the achievement
      * @return true if found, false otherwise
@@ -53,7 +53,6 @@ public class Achievements {
 
     /**
      * Deletes the achievements file.
-     * Useful for resetting the game progress completely.
      */
     public void deleteFile() {
         if (file.exists()) {
