@@ -1,4 +1,4 @@
-package io.github.yetti_eng;
+package io.github.yetti_eng.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;

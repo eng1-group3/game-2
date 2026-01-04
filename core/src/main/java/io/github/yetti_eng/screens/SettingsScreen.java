@@ -20,6 +20,15 @@ import io.github.yetti_eng.YettiGame;
 
 import static io.github.yetti_eng.YettiGame.scaled;
 
+/**
+ * The {@code SettingsScreen} class represents the screen displayed when the player pauses the game.
+ * <p>
+ * It shows a 'Resume' button, 'Restart' button and a "Main Menu" button that takes the player back to the main menu.
+ * </p>
+ *
+ * <p>This class implements LibGDX {@link Screen} interface, shows
+ * methods for managing a screen in a game.</p>
+ */
 public class SettingsScreen implements Screen {
     private final YettiGame game;
     private final Stage stage;
@@ -30,12 +39,22 @@ public class SettingsScreen implements Screen {
     private Texture sliderTexture;
     private Texture knobTexture;
 
+    /**
+     * Sets up the stage and table for layout.
+     *
+     * @param game The main game object
+     */
     public SettingsScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
         table = new Table();
     }
 
+    /**
+     * This runs when the screen is shown.
+     * It sets up the input, creates the button and slider for volume,
+     * and adds these to the table.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);

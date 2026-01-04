@@ -34,12 +34,14 @@ public class GameScreen implements Screen {
 
     private static final int TIMER_LENGTH = 300; // 300s = 5min
 
+    // Textures for the player sprite depending on movement direction.
     private Texture playerTexUp;
     private Texture playerTexDown;
     private Texture playerTexLeft;
     private Texture playerTexRight;
-    private Texture yetiTexture;
 
+    // Textures for events
+    private Texture yetiTexture;
     private Texture exitTexture;
     private Texture checkinCodeTexture;
     private Texture doorTexture;
@@ -53,37 +55,52 @@ public class GameScreen implements Screen {
     private Texture wallPassableTexture;
     private Texture slowDownTexture;
     private Texture speedBoostTexture;
+
     private MapManager mapManager;
+    // Camera for the gameplay.
     OrthographicCamera camera;
+    // Camera for the UI.
+    OrthographicCamera interfaceCamera;
+    // Table for the layout of the UI.
+    private Table table;
 
     float mapWidth;
     float mapHeight;
 
-    OrthographicCamera interfaceCamera;
-
-    private Table table;
+    // Table for the pause menu.
     private PauseMenu pauseMenu;
 
+    // Sound effects for events.
     private Sound quackSfx;
     private Sound paperSfx;
     private Sound doorSfx;
     private Sound slipSfx;
     private Sound growlSfx;
     public Sound speedSfx;
-
+    // Player sprite.
     Player player;
+    // Dean sprite.
     Dean dean;
     private Item exit;
+    // List of events/ entities in game.
     final ArrayList<Entity> entities = new ArrayList<>();
 
+    // Text for event counters.
     Label hiddenText;
     Label negativeText;
     Label positiveText;
+    // Text for game timer.
     private Label timerText;
+    // Text for game score.
     private Label scoreText;
+    // List of messages to display in gameplay.
     final ArrayList<Label> messages = new ArrayList<>();
-    private Button pauseButton;
 
+    /**
+     * Sets up the game and stage for the UI.
+     *
+     * @param game the main game object.
+     */
     public GameScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
@@ -94,13 +111,16 @@ public class GameScreen implements Screen {
         this.stage = null;
     }
 
+    /**
+     * This method is run when the screen is shown. It initialises all attributes and creates the layout
+     * of the UI.
+     */
     @Override
     public void show() {
-        //this makes the game start if not paused (there was a bug where the game would be in a paused state)
+        // This makes the game start if not paused (there was a bug where the game would be in a paused state)
         if (game.isPaused()) {
             game.resume();
         }
-        //game.score = 0;
         EventCounter.reset();
 
         playerTexUp = new Texture("character/player_up.png");
@@ -193,7 +213,7 @@ public class GameScreen implements Screen {
         table.add(hiddenText).pad(10);
 
         Gdx.input.setInputProcessor(stage);
-        pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
+        Button pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -207,6 +227,11 @@ public class GameScreen implements Screen {
         table.add(scoreText).pad(10).bottom().left().expandY();
     }
 
+    /**
+     * Called every frame to everything to the screen.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         input(delta); //handles player input
@@ -215,6 +240,12 @@ public class GameScreen implements Screen {
         postLogic(delta); // Used for logic that should happen after rendering, normally screen changes
     }
 
+    /**
+     * Checks if buttons have been pressed for player movement and updates player texture
+     * accordingly. Also checks if the player is colliding with a map wall.
+     *
+     * @param delta the time in seconds since the last render.
+     */
     private void input(float delta) {
         float dx = 0, dy = 0;
         float currentX = player.getX();
@@ -256,6 +287,12 @@ public class GameScreen implements Screen {
         hitbox.setPosition(player.getX(), player.getY());
     }
 
+    /**
+     * Performs the logic of the game e.g. detecting collisions with events, camera movement, remaining time
+     * and score, and whether to pause the game or not.
+     *
+     * @param delta the time in seconds since the last render.
+     */
     private void logic(float delta) {
         Vector2 currentPos = player.getCurrentPos(); //save initial position of player
         //move only if game isn't paused
@@ -290,7 +327,7 @@ public class GameScreen implements Screen {
             spawnLargeMessage("Achievement Unlocked!");
         }
 
-        //updates event counters
+        // Updates event counters
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());
@@ -313,6 +350,12 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Draws all elements to the screen. First draws all game elements based on the game camera and then
+     * draws UI elements based on the UI camera.
+     *
+     * @param delta time in seconds since last render.
+     */
     private void draw(float delta) {
         ScreenUtils.clear(0f, 0f, 0f, 1f);
         // game world
@@ -354,6 +397,11 @@ public class GameScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Checks if player has ended the game by exiting successfully, being caught by the dean or timer running out.
+     *
+     * @param delta the time in seconds since last render.
+     */
     private void postLogic(float delta) {
         // Exit collision
         if (player.collidedWith(exit) && exit.isEnabled()) {
@@ -373,6 +421,7 @@ public class GameScreen implements Screen {
             return;
         }
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -425,6 +474,13 @@ public class GameScreen implements Screen {
         speedSfx.dispose();
     }
 
+    /**
+     * Method to check whether the dean should be released (if the timer is 60 seconds or less).
+     *
+     * @param timeRemaining the time in seconds left on the timer.
+     * @param playSound boolean which is true if sound of dean being released needs to be played.
+     * @param displayMessage boolean which is true if message of dean being released needs to be shown.
+     */
     public void releaseDean(int timeRemaining, boolean playSound, boolean displayMessage) {
         if (timeRemaining <= 60 && !dean.isEnabled()) {
             if (playSound) {
@@ -441,7 +497,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Spawn a text label at the centre of the screen
+     * Spawn a larger text label at the edge of the screen
      * that floats upwards and fades out. Used to alert the player.
      *
      * @param text The text that should be displayed.
@@ -452,12 +508,23 @@ public class GameScreen implements Screen {
         messages.add(label);
     }
 
+    /**
+     * Spawn a text label at the centre of the screen
+     * that floats upwards and fades out. Used to alert the player.
+     *
+     * @param text The text that should be displayed.
+     */
     public void spawnInteractionMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
         label.setPosition(interfaceCamera.viewportWidth - 15, label.getHeight(), Align.right);
         messages.add(label);
     }
 
+    /**
+     * Fetches the remaining time left on the timer and updates the label to this time.
+     *
+     * @return time left of the timer.
+     */
     public int calculateTimeRemaining() {
         int timeRemaining = game.timer.getRemainingTime();
         String text = game.timer.formatTimer(game.timer.getRemainingTime());
@@ -466,12 +533,20 @@ public class GameScreen implements Screen {
         return timeRemaining;
     }
 
+    /**
+     * Updates the labels on the UI for each event counter.
+     */
     void updateEventCounters() {
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());
     }
 
+    /**
+     * Detects collision between the player and events.
+     *
+     * @param currentPos the player's current position.
+     */
     void detectCollisions(Vector2 currentPos) {
         entities.forEach(e -> {
             if (player.collidedWith(e) && e.isEnabled()) {
@@ -488,6 +563,10 @@ public class GameScreen implements Screen {
         });
     }
 
+    /**
+     * Clamps the camera so that when the player gets to the edge of the map, the camera stops
+     * moving.
+     */
     void clampCamera() {
         // Define camera and viewport variables
         float minCameraX = game.gameViewport.getWorldWidth() / 2;
@@ -548,6 +627,9 @@ public class GameScreen implements Screen {
         return game;
     }
 
+    /**
+     * Pauses or resumes the game based on if game currently paused or not.
+     */
     public void togglePause() {
         if (game.isPaused()) {
 

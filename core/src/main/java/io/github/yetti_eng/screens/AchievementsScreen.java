@@ -15,7 +15,7 @@ import io.github.yetti_eng.YettiGame;
 
 /**
  * This screen displays the list of achievements to the player.
- * It shows which ones are unlocked (in Green) and which are still locked (in Gray).
+ * It shows which ones are unlocked (in green) and which are still locked (in grey).
  */
 public class AchievementsScreen implements Screen {
     private final YettiGame game;
@@ -28,6 +28,7 @@ public class AchievementsScreen implements Screen {
     private Label.LabelStyle titleLockedStyle;
     private Label.LabelStyle descUnlockedStyle;
     private Label.LabelStyle descLockedStyle;
+
     /**
      * Sets up the stage and the table for layout.
      *
@@ -41,7 +42,7 @@ public class AchievementsScreen implements Screen {
     }
     /**
      * This runs when the screen is shown.
-     * It sets up the input, creates the font styles (Green for unlocked, Gray for locked),
+     * It sets up the input, creates the font styles (green for unlocked, grey for locked),
      * and adds all the achievements to the table.
      */
     @Override
@@ -88,7 +89,7 @@ public class AchievementsScreen implements Screen {
         table.add(backButton).padTop(30).center().row();
     }
     /**
-     * Helper method to add a single achievement to the screen.
+     * Method to add a single achievement to the screen.
      * It checks if the achievement is unlocked and uses the correct color style.
      *
      * @param title The name of the achievement

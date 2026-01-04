@@ -18,18 +18,40 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import java.util.List;
 
+/**
+ * The {@code WinScreen} class represents the screen displayed when the player successfully
+ * escapes the maze.
+ * <p>
+ * It shows a congratulatory message and score compared to the leaderboard.
+ * It also includes a "Main Menu" button that takes the player back to the main menu.
+ * </p>
+ *
+ * <p>This class implements LibGDX {@link Screen} interface, shows
+ * methods for managing a screen in a game.</p>
+ */
 public class WinScreen implements Screen {
     private final YettiGame game;
+    /** The player's final score. */
     private int score;
+    /** The leaderboard of top scores. */
     private Leaderboard leaderboard;
+    /** A list of the top scores. */
     private List topScores;
+    /** A string which will contain player's username. */
     private String username = "";
     private boolean typing = true;
     private boolean uniqueUsername = true;
 
+    /** The stage used to render the UI. */
     private final Stage stage;
+    /** The table used for the layout of UI. */
     private final Table table;
 
+    /**
+     * Constructs a new {@code WinScreen} instance.
+     *
+     * @param game the main {@link YettiGame} game instance.
+     */
     public WinScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
@@ -38,6 +60,12 @@ public class WinScreen implements Screen {
         this.leaderboard = new Leaderboard();
     }
 
+    /**
+     * Constructs a new {@code WinScreen} instance.
+     *
+     * @param game the main {@link YettiGame} game instance.
+     * @param setUi boolean which ???
+     */
     public WinScreen(final YettiGame game, boolean setUi) {
         this.game = game;
         if (setUi) {
@@ -56,6 +84,10 @@ public class WinScreen implements Screen {
         return username;
     }
 
+    /**
+     * This method is called when the screen is shown.
+     * It initialises elements of the UI and adds them to the table in correct layout.
+     */
     @Override
     public void show() {
         table.clear();
@@ -95,6 +127,11 @@ public class WinScreen implements Screen {
         table.add(menuBtn).padTop(20).center().row();
     }
 
+    /**
+     * Renders the winning screen depending on if the player has entered their username or not.
+     *  If not, a different UI is shown than the table setup in 'show' method.
+     * @param delta ??
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.15f, 0.4f, 0.2f, 1f);
@@ -125,6 +162,9 @@ public class WinScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * ??
+     */
     void handleTyping() {
         for (int key = Input.Keys.A; key <= Input.Keys.Z; key++) {
             if (Gdx.input.isKeyJustPressed(key)) {
@@ -154,6 +194,12 @@ public class WinScreen implements Screen {
         }
     }
 
+    /**
+     * Called when the screen is resized.
+     *
+     * @param width  the new width of the screen in pixels.
+     * @param height the new height of the screen in pixels.
+     */
     @Override
     public void resize(int width, int height) {
         game.uiViewport.update(width, height, true);

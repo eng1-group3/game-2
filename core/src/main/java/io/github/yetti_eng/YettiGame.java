@@ -34,6 +34,11 @@ public class YettiGame extends Game {
     public Timer timer;
     public int score;
 
+    /**
+     * Called when the game is first created.
+     * Initializes rendering resources, sets up the camera and viewport,
+     * then transitions to the main menu screen.
+     */
     @Override
     public void create() {
         batch = new SpriteBatch();

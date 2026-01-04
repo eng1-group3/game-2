@@ -14,6 +14,15 @@ import io.github.yetti_eng.YettiGame;
 
 import static io.github.yetti_eng.YettiGame.scaled;
 
+/**
+ * The {@code LoseScreen} class represents the screen displayed when the player does not escape the maze.
+ * <p>
+ * It shows a message, the player's score, and an instruction for restarting the game.
+ * </p>
+ *
+ * <p>This class implements LibGDX {@link Screen} interface, shows
+ * methods for managing a screen in a game.</p>
+ */
 public class LoseScreen implements Screen {
     private final YettiGame game;
     private int score;
@@ -21,12 +30,22 @@ public class LoseScreen implements Screen {
     private final Stage stage;
     private final Table table;
 
+    /**
+     * Sets up the stage and table for layout.
+     *
+     * @param game The main game object
+     */
     public LoseScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
         table = new Table();
     }
 
+    /**
+     * This runs when the screen is shown.
+     * It sets up the labels, including a message to the player, their score and an instruction to restart,
+     * and adds these to the table.
+     */
     @Override
     public void show() {
         score = game.calculateFinalScore();
@@ -46,6 +65,12 @@ public class LoseScreen implements Screen {
         table.add(restartmessageLabel).pad(10);
     }
 
+    /**
+     * Renders the losing screen and checks if button 'R' has been clicked to restart the game
+     * each frame.
+     *
+     * @param delta ??
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.8f, 0f, 0.15f, 0.4f);
