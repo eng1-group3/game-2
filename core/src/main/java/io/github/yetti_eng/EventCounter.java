@@ -2,7 +2,7 @@ package io.github.yetti_eng;
 
 /**
  * Tracks the number of hidden, positive and negative events so they can be
- * displayed on the screen
+ * displayed on the screen, as well as tracking how many long boi's have been collected.
  * Counts for each can be incremented and retrieved through getter methods.
  */
 public class EventCounter {
@@ -34,7 +34,6 @@ public class EventCounter {
     public static int getNegativeCount() {
         return negative;
     }
-
 
     private static int longBoiCollected = 0;
 

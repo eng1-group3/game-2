@@ -7,13 +7,13 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.yetti_eng.InputHelper;
 
 /**
- * Entity.java handles setting movement of an object and performs collision and property checks.
- *
+ * Entity handles setting movement of an object and performs collision and property checks.
+ * <p>
  * Represents objects including the player, enemy and items (event triggers).
  * Each entity has a movement, position, collision hitbox and property information on visibility,
- * solidity and speed.
- *
- * Called "Sprite" in the architecture documentation; renamed to avoid clash with LibGDX class name
+ * solidity and speed. </p>
+ * <p>
+ * Called "Sprite" in the architecture documentation; renamed to avoid clash with LibGDX class name. </p>
  */
 public abstract class Entity extends Sprite {
     private float speed;
@@ -25,13 +25,13 @@ public abstract class Entity extends Sprite {
     private boolean enabled = true;
 
     /**
-     * Constructor for a new Entity
-     * @param tex texture to render with
-     * @param x intial x position
-     * @param y initial y position
-     * @param width
-     * @param height
-     * @param speed
+     * Constructor for a new Entity, initialises attributes.
+     * @param tex texture to render with.
+     * @param x initial x position.
+     * @param y initial y position.
+     * @param width width of the texture.
+     * @param height height of the texture.
+     * @param speed movement speed of the entity.
      * @param solid whether object should cause collision with player
      */
     public Entity(Texture tex, float x, float y, float width, float height, float speed, boolean solid) {
@@ -68,7 +68,6 @@ public abstract class Entity extends Sprite {
      * @param speedWasPrecalculated true if the Entity's speed was already accounted for when
      *                              calculating the value of the movement field.
      */
-    // Consolidated "moveLeft()", "moveUp()" etc. into a single "doMove()" method to reduce repetition
     public void doMove(float delta, boolean speedWasPrecalculated) {
         // If speed was precalculated, don't account for it again
         float speed = (speedWasPrecalculated ? 1 : getSpeedThisFrame(delta));
@@ -143,6 +142,7 @@ public abstract class Entity extends Sprite {
     public Vector2 getCurrentPos() {
         return new Vector2(getX(), getY());
     }
+
     public float getSpeed() {
         return speed;
     }

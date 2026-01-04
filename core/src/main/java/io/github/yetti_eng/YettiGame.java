@@ -15,7 +15,7 @@ import io.github.yetti_eng.screens.MenuScreen;
 // Called "Game" in the architecture documentation; renamed to avoid clash with LibGDX class name
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class YettiGame extends Game {
-    private static final float WORLD_SCALE = 80; // 16:9 * 80 = 1280:720
+    private static final float WORLD_SCALE = 80;
 
     public SpriteBatch batch;
     public FillViewport gameViewport;
@@ -36,8 +36,8 @@ public class YettiGame extends Game {
 
     /**
      * Called when the game is first created.
-     * Initializes rendering resources, sets up the camera and viewport,
-     * then transitions to the main menu screen.
+     * Initializes rendering resources, sets up the camera and viewport, then transitions
+     * to the main menu screen.
      */
     @Override
     public void create() {

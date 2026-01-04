@@ -10,6 +10,7 @@ import com.badlogic.gdx.files.FileHandle;
 public class Achievements {
 
     private final FileHandle file;
+
     /**
      * Default constructor.
      * Creates (or finds) a file named "achievements.txt" in the game folder.
@@ -17,6 +18,7 @@ public class Achievements {
     public Achievements() {
         file = Gdx.files.local("achievements.txt");
     }
+
     /**
      * Constructor used for testing.
      * Allows a specific file path to pass.
@@ -29,9 +31,9 @@ public class Achievements {
 
     /**
      * Unlocks an achievement by writing it to the file.
-     * It first checks if it's already unlocked so it don't write the same thing twice.
+     * It first checks if it's already unlocked so it doesn't write the same thing twice.
      *
-     * @param key The unique name of the achievement (e.g., "longboi_master")
+     * @param key The unique name of the achievement (e.g. "longboi_master").
      */
     public void unlock(String key) {
         if (!isUnlocked(key)) {

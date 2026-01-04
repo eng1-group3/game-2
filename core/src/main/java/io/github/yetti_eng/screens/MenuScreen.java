@@ -15,17 +15,37 @@ import io.github.yetti_eng.YettiGame;
 
 import static io.github.yetti_eng.YettiGame.scaled;
 
+/**
+ * The {@code MenuScreen} class represents the screen displayed when the player starts the game or
+ * returns to the main menu.
+ * <p>
+ * It shows a game title, and buttons to go to different screens, play the game or exit.
+ * </p>
+ *
+ * <p>This class implements LibGDX {@link Screen} interface, shows
+ * methods for managing a screen in a game.</p>
+ */
 public class MenuScreen implements Screen {
     private final YettiGame game;
     private final Stage stage;
     private final Table table;
 
+    /**
+     * Sets up the stage and table for layout.
+     *
+     * @param game The main game object.
+     */
     public MenuScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
         table = new Table();
     }
 
+    /**
+     * This runs when the screen is shown.
+     * It sets up the title label and buttons to go to different screens or exit the game,
+     * and adds these to the table.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
