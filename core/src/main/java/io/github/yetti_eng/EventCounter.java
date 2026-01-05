@@ -1,5 +1,7 @@
 package io.github.yetti_eng;
 
+// (Code edited to keep track of long bois as well.)
+
 /**
  * Tracks the number of hidden, positive and negative events so they can be
  * displayed on the screen, as well as tracking how many long boi's have been collected.

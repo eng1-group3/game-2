@@ -19,7 +19,9 @@ public class YettiGame extends Game {
 
     public SpriteBatch batch;
     public FillViewport gameViewport;
+    // --------- NEW CODE ----------
     public ScreenViewport uiViewport;
+    // ----------------------
 
     private FreeTypeFontGenerator robotoGenerator;
     public BitmapFont font;
@@ -29,11 +31,14 @@ public class YettiGame extends Game {
 
     public float volume = 1.0f;
     private boolean paused;
+    // ------ NEW CODE --------------
     public Achievements achievements;
+    // ----------------------
 
     public Timer timer;
     public int score;
 
+    // (New JavaDoc)
     /**
      * Called when the game is first created.
      * Initializes rendering resources, sets up the camera and viewport, then transitions
@@ -42,12 +47,14 @@ public class YettiGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        // ------- NEW CODE -------
         achievements = new Achievements();
         // aspect ratio = width/height.
         float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         gameViewport = new FillViewport(30*aspectRatio,30);
 
         uiViewport = new ScreenViewport();
+        // -----------------------
 
         robotoGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto.ttf"));
 
@@ -79,9 +86,11 @@ public class YettiGame extends Game {
         font.dispose();
         fontBordered.dispose();
         fontBorderedSmall.dispose();
+        // ------- NEW CODE --------
         if (achievements != null) {
             achievements.deleteFile();
         }
+        // ---------------------
 
     }
 
