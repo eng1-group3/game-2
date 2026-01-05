@@ -24,6 +24,7 @@ public abstract class Entity extends Sprite {
     private boolean visible = true;
     private boolean enabled = true;
 
+    // Improved this JavaDoc
     /**
      * Constructor for a new Entity, initialises attributes.
      * @param tex texture to render with.

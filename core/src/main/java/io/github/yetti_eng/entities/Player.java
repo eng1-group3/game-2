@@ -1,5 +1,7 @@
 package io.github.yetti_eng.entities;
 
+// All JavaDoc is new.
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -24,7 +26,9 @@ public class Player extends Entity {
      */
     public Player(Texture tex, float x, float y) {
         super(tex, x, y, 0.9f, 1.6f, PLAYER_SPEED, false);
+        // ------- NEW CODE -------
         setHitbox(new Rectangle(x, y, 0.7f, 1.2f));
+        // ------------------------
     }
 
     /**

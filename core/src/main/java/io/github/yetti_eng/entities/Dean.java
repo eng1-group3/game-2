@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import io.github.yetti_eng.YettiGame;
 import io.github.yetti_eng.screens.LoseScreen;
 
+// This JavaDoc is new, everything else unchanged.
 /**
  * The {@code Dean} class represents the 'dean' entity which is released as a negative event
  * towards the end of the game.

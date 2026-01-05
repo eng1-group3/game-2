@@ -5,7 +5,6 @@ import io.github.yetti_eng.YettiGame;
 import io.github.yetti_eng.events.Event;
 import io.github.yetti_eng.screens.GameScreen;
 
-
 public class Item extends Entity {
     private final Event event;
     private boolean used;
