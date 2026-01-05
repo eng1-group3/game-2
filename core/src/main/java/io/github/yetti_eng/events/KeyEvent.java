@@ -6,7 +6,20 @@ import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
 
+/**
+ * This event handles picking up the check-in code.
+ * The player needs this code to unlock certain doors in the game.
+ */
 public class KeyEvent extends Event {
+    /**
+     * Runs when the player picks up the check-in code.
+     * Hides the item, plays a paper sound, and shows a message.
+     *
+     * @param screen The current game screen
+     * @param player The player
+     * @param item The check-in code item
+     * @return true since the item gets used up
+     */
     @Override
     public boolean activate(GameScreen screen, Player player, Item item) {
 

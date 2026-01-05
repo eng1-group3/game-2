@@ -5,6 +5,10 @@ import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
 
+/**
+ * Base class for all events that happen when the player interacts with items.
+ * Each event can change the player's score and run custom logic when activated.
+ */
 public abstract class Event {
     private int counter = 0;
     /**
@@ -25,6 +29,12 @@ public abstract class Event {
      */
     public abstract int[] getScoreModifier();
 
+    /**
+     * Changes the player's score based on the event type.
+     * It can add, subtract, multiply, or divide the score depending on what the event does.
+     *
+     * @param game The current game instance
+     */
     // Consolidated "scoreIncrement" and "scoreDecrement" into single "modifyScore" method
     public void modifyScore(final YettiGame game) {
         int combined = game.score + game.timer.getRemainingTime();
@@ -46,11 +56,16 @@ public abstract class Event {
         game.score = combined - game.timer.getRemainingTime();
     }
 
-
+    /**
+     * @return How many times this event has been triggered
+     */
     public int getCounter() {
         return counter;
     }
 
+    /**
+     * Adds 1 to the counter when this event gets triggered.
+     */
     public void incrementCounter() {
         this.counter += 1;
     }
