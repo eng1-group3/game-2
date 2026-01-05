@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * Manages the leaderboard, which is made from player scores that are stored in a text file.
+ * The leaderboard handles the highest scores up to a fixed size and assigns positions to each score in the leaderboard.
+ */
 public class Leaderboard {
     private int leaderboardSize = 5;
     private List<LeaderboardEntry> topScores = new ArrayList();
@@ -21,6 +25,13 @@ public class Leaderboard {
         pathname = pathString;
     }
 
+    /**
+     * Creates a {@link LeaderboardEntry} using the playerName and score and adds it to the leaderboard text file.
+     *
+     * @param playerName the name of the player to be added.
+     * @param score the player's score.
+     * @return true if the entry is added to the leaderboard; false otherwise.
+     */
     public boolean addToLeaderboard(String playerName, int score) {
         List<String> usernames = new ArrayList<>();
         File leaderboard = new File(pathname);
@@ -46,13 +57,22 @@ public class Leaderboard {
         return true;
     }
 
-
+    /**
+     * Retrieves the highest scores in the leaderboard text file.
+     * Sorts the scores into descending order.
+     * Assigns ranking positions to each entry.
+     * @return a list of the leaderboard entries with the highest scores.
+     */
     public List getTopScores() {
         sortTopScores();
         setPositions();
         return topScores;
     }
 
+    /**
+     * Looks through the leaderboard text file and retrieves entries with the top scores.
+     * Sorts the retrieved entries into descending order.
+     */
     private void sortTopScores(){
         File leaderboard = new File(pathname);
         topScores.clear();
@@ -126,6 +146,10 @@ public class Leaderboard {
 
     }
 
+    /**
+     * Assigns a ranking to each entry in the {@code topscores} list.
+     * Entries with the same score are given the same ranking.
+     */
     private void setPositions(){
         int position = 1;
         int lastScore = -1;
