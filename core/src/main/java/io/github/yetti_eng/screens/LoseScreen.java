@@ -1,5 +1,14 @@
 package io.github.yetti_eng.screens;
 
+/**
+ * All JavaDoc is new code.
+ *
+ * The original version did not use a table for the layout of the screen, so created and positioned
+ * each label using pixel positioning and then rendered each individually. The new code creates the
+ * same labels (with a couple additions) and adds them to a table for positioning, then
+ * the whole table is drawn using libGDX 'Stage'.
+ */
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -57,8 +66,9 @@ public class LoseScreen implements Screen {
 
         Label titleLabel = new Label("You Lost! :(", labelStyle);
         Label scoreLabel = new Label("Score: " + score, labelStyle);
+        // ------ NEW CODE ---------
         Label restartmessageLabel = new Label("press R to restart", labelStyle);
-
+        // ------------------------
 
         table.add(titleLabel).pad(10).row();
         table.add(scoreLabel).pad(10).row();
@@ -75,6 +85,7 @@ public class LoseScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0.8f, 0f, 0.15f, 0.4f);
 
+        // --------- NEW CODE ---------
         //Reset game variables and return to main menu on pressing R key
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             game.score = 0;      //  reset score
@@ -85,10 +96,12 @@ public class LoseScreen implements Screen {
         }
 
         stage.draw();
+        // ---------------------------
     }
 
     @Override
     public void resize(int width, int height) {
+        // (Changed from 'viewport' to 'uiViewport')
         game.uiViewport.update(width, height, true);
     }
 

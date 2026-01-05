@@ -1,5 +1,14 @@
 package io.github.yetti_eng.screens;
 
+/**
+ * All JavaDoc is new code.
+ *
+ * The original version did not use a table for the layout of the screen, so created and positioned
+ * each label using pixel positioning and then rendered each in a loop. The new code creates the
+ * same labels (with a couple additions) and adds them to a table for positioning, then
+ * the whole table is drawn using libGDX 'Stage'.
+ */
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -122,7 +131,8 @@ public class CreditsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        // (Changed from 'viewport' to 'uiViewport')
+        game.uiViewport.update(width, height, true);
     }
 
     @Override

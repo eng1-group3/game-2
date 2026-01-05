@@ -1,5 +1,8 @@
 package io.github.yetti_eng.screens;
 
+/** All JavaDoc for methods apart from spawnLargeMessage(), spawnInteractionMessage() and
+ * getGame() methods are new.*/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -49,16 +52,19 @@ public class GameScreen implements Screen {
     private Texture longBoiTexture;
     private Texture waterSpillTexture;
     private Texture pauseTexture;
+    // ----- NEW CODE -------
     private Texture lecturerTexture;
     private Texture assignmentTexture;
     private Texture wallSolidTexture;
     private Texture wallPassableTexture;
     private Texture slowDownTexture;
     private Texture speedBoostTexture;
+    // ----------------------
 
     private MapManager mapManager;
     // Camera for the gameplay.
     OrthographicCamera camera;
+    // ------- NEW CODE ---------
     // Camera for the UI.
     OrthographicCamera interfaceCamera;
     // Table for the layout of the UI.
@@ -69,6 +75,7 @@ public class GameScreen implements Screen {
 
     // Table for the pause menu.
     private PauseMenu pauseMenu;
+    // ------------------------
 
     // Sound effects for events.
     private Sound quackSfx;
@@ -91,8 +98,10 @@ public class GameScreen implements Screen {
     Label positiveText;
     // Text for game timer.
     private Label timerText;
+    // ------------ NEW CODE ------------
     // Text for game score.
     private Label scoreText;
+    // ---------------------------------
     // List of messages to display in gameplay.
     final ArrayList<Label> messages = new ArrayList<>();
 
@@ -117,11 +126,13 @@ public class GameScreen implements Screen {
      */
     @Override
     public void show() {
+        // ---------- NEW CODE -----------
         // This makes the game start if not paused (there was a bug where the game would be in a paused state)
         if (game.isPaused()) {
             game.resume();
         }
         EventCounter.reset();
+        // ------------------------------
 
         playerTexUp = new Texture("character/player_up.png");
         playerTexDown = new Texture("character/player_down.png");
@@ -135,6 +146,7 @@ public class GameScreen implements Screen {
         doorframeTexture = new Texture("item/doorframe.png");
         longBoiTexture = new Texture("item/long_boi.png");
         waterSpillTexture = new Texture("item/water_spill.png");
+        // ---------- NEW CODE -----------
         lecturerTexture = new Texture("character/lecturer.png");
         assignmentTexture = new Texture("item/assignment.png");
         wallSolidTexture = new Texture("item/walls_hidden.png");
@@ -143,6 +155,7 @@ public class GameScreen implements Screen {
         slowDownTexture = new Texture("item/slow_down.png");
         pauseTexture = new Texture("ui/pause.png");
 
+        // (Following lines until line 168 edited, not strictly new)
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.gameViewport.getWorldWidth(), game.gameViewport.getWorldHeight());
         game.gameViewport.setCamera(camera);
@@ -162,12 +175,16 @@ public class GameScreen implements Screen {
         //table.setDebug(true);
         table.top().left();
 
+        // ---------------------------------
+
         quackSfx = Gdx.audio.newSound(Gdx.files.internal("audio/duck_quack.mp3"));
         paperSfx = Gdx.audio.newSound(Gdx.files.internal("audio/paper_rustle.wav"));
         doorSfx = Gdx.audio.newSound(Gdx.files.internal("audio/dorm_door_opening.wav"));
         slipSfx = Gdx.audio.newSound(Gdx.files.internal("audio/cartoon_quick_slip.wav"));
         growlSfx = Gdx.audio.newSound(Gdx.files.internal("audio/deep_growl_1.wav"));
+        // -------- NEW CODE ---------
         speedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/speed.mp3"));
+        // ---------------------------
         player = new Player(playerTexDown, 55, 25);
         exit = new Item(new WinEvent(), "exit", exitTexture, 80, 54, 2, 2.2f);
         dean = new Dean(yetiTexture, -2, 4.5f);
@@ -177,12 +194,13 @@ public class GameScreen implements Screen {
         entities.add(new Item(new KeyEvent(), "checkin_code", checkinCodeTexture, 45, 33, 1.5f, 1.5f));
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
         entities.add(new Item(new WaterSpillEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
+        // --------- NEW CODE ---------------
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
         entities.add(new Item(new AssignmentEvent(), "assignment", assignmentTexture, 24, 32, 3f, 3f, false, false));
         entities.add(new Item(new SpeedUpEvent(), "speed_up", speedBoostTexture, 58, 2, 2f, 2f));
         entities.add(new Item(new SlowDownEvent(), "slow_down", slowDownTexture, 2.5f, 6, 2f, 2f));
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
-        // longboi gang below careful
+        // (Code before had one long boi, so all other ones are new)
         entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
         entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 25, 46, 1.5f, 1.5f));
         entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 26, 46, 1.5f, 1.5f));
@@ -197,6 +215,7 @@ public class GameScreen implements Screen {
         HiddenWallEvent wallEvent = new HiddenWallEvent(wallPassableTexture);
         entities.add(new Item(wallEvent, "hidden_wall", wallSolidTexture, 31, 17, 2f, 2f, false, true));
 
+        // (Next 3 lines are unchanged, and the after that until line 228, are only edited.
         //start new timer
         game.timer = new Timer(TIMER_LENGTH);
         game.timer.play();
@@ -212,19 +231,24 @@ public class GameScreen implements Screen {
         table.add(negativeText).pad(10);
         table.add(hiddenText).pad(10);
 
+        // -------------------------
         Gdx.input.setInputProcessor(stage);
         Button pauseButton = new Button(new TextureRegionDrawable(pauseTexture));
+        // (Here we edited the pause button to be within a table, so removed lines which positioned it.)
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 togglePause();
             }
         });
+
+        // ---------- NEW CODE ------------
         pauseMenu = new PauseMenu(game, this);
         stage.addActor(pauseMenu);
 
         table.add(pauseButton).width(50f).height(50f).pad(10).row();
         table.add(scoreText).pad(10).bottom().left().expandY();
+        // ------------------------------
     }
 
     /**
@@ -304,18 +328,23 @@ public class GameScreen implements Screen {
             }
         }
 
+        // (All code within detectCollisions is not new, just put into method)
         // Detect player collisions
         detectCollisions(currentPos);
 
+        // ------------ NEW CODE ------------
         // Centre camera on player
         camera.position.set(currentPos.x, currentPos.y, 0);
 
         // Clamp camera to edges of screen
         clampCamera();
+        // ---------------------------------
 
+        // (All code within calculateTimeRemaining is not new, just put into method)
         // Calculate remaining time
         int timeRemaining = calculateTimeRemaining();
 
+        // ----------- NEW CODE -----------
         // Update score
         scoreText.setText(game.score + timeRemaining);
         scoreText.setStyle(new Label.LabelStyle(game.fontBordered, Color.WHITE));
@@ -326,18 +355,22 @@ public class GameScreen implements Screen {
             game.achievements.unlock("ducktorate Degree");
             spawnLargeMessage("Achievement Unlocked!");
         }
+        // ------------------------------
 
         // Updates event counters
         hiddenText.setText("Hidden:" + EventCounter.getHiddenCount());
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());
 
+        // ---------- NEW CODE -------------
         entities.forEach(e -> {
             if (e instanceof Item item && item.ID.equals("closing_door")) {
                 ((ClosingDoorEvent) item.getEvent()).checkForAutoClose(this, player, item, delta);
             }
         });
+        // -------------------------------
 
+        // (All code within releaseDean is not new, just put into method)
         // Release the Dean if the timer is at 60 or less
         releaseDean(timeRemaining, true, true);
 
@@ -379,8 +412,9 @@ public class GameScreen implements Screen {
         if (dean.isVisible()) dean.draw(game.batch);
         game.batch.end();
 
-        game.uiViewport.apply();
+        // (For following code related to the UI, removed drawing each label individually as now in the table.)
         //separate user interface camera for text on screen
+        game.uiViewport.apply();
         game.batch.setProjectionMatrix(interfaceCamera.combined);
         game.batch.begin();
         //draws messages fading out in an upwards direction
@@ -426,7 +460,9 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         game.gameViewport.update(width, height, true);
+        // ----- NEW CODE ------
         game.uiViewport.update(width, height, true);
+        // --------------------
     }
 
     @Override
@@ -457,10 +493,12 @@ public class GameScreen implements Screen {
         doorframeTexture.dispose();
         longBoiTexture.dispose();
         waterSpillTexture.dispose();
+        // --------- NEW CODE ---------
         lecturerTexture.dispose();
         assignmentTexture.dispose();
         wallSolidTexture.dispose();
         wallPassableTexture.dispose();
+        // ----------------------
 
         pauseTexture.dispose();
         mapManager.dispose();
@@ -471,6 +509,7 @@ public class GameScreen implements Screen {
         doorSfx.dispose();
         slipSfx.dispose();
         growlSfx.dispose();
+        // (Following line new)
         speedSfx.dispose();
     }
 
@@ -504,6 +543,7 @@ public class GameScreen implements Screen {
      */
     public void spawnLargeMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.getFontBordered(), Color.WHITE.cpy()));
+        // (Following line edited to use interfaceCamera.)
         label.setPosition( interfaceCamera.viewportWidth - 15, label.getHeight(), Align.right);
         messages.add(label);
     }
@@ -516,6 +556,7 @@ public class GameScreen implements Screen {
      */
     public void spawnInteractionMessage(String text) {
         Label label = new Label(text, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE.cpy()));
+        // (Following line edited to use interfaceCamera.)
         label.setPosition(interfaceCamera.viewportWidth - 15, label.getHeight(), Align.right);
         messages.add(label);
     }
@@ -533,6 +574,7 @@ public class GameScreen implements Screen {
         return timeRemaining;
     }
 
+    // --------- NEW CODE -----------
     /**
      * Updates the labels on the UI for each event counter.
      */
@@ -541,6 +583,7 @@ public class GameScreen implements Screen {
         positiveText.setText("Positive:" + EventCounter.getPositiveCount());
         negativeText.setText("Negative:" + EventCounter.getNegativeCount());
     }
+    // --------------------------
 
     /**
      * Detects collision between the player and events.
@@ -563,6 +606,7 @@ public class GameScreen implements Screen {
         });
     }
 
+    // ---------- NEW CODE --------------
     /**
      * Clamps the camera so that when the player gets to the edge of the map, the camera stops
      * moving.
@@ -591,6 +635,7 @@ public class GameScreen implements Screen {
             );
         }
     }
+    // ---------------------------------
 
     public Texture getDoorframeTexture() {
         return doorframeTexture;
@@ -616,9 +661,11 @@ public class GameScreen implements Screen {
         return slipSfx;
     }
 
+    // ------------- NEW CODE -----------
     public Sound getspeedSfx() {
         return speedSfx;
     }
+    // ------------------------------
 
     /**
      * @return The current YettiGame object.

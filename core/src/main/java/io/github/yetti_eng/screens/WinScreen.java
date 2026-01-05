@@ -1,5 +1,13 @@
 package io.github.yetti_eng.screens;
 
+/**
+ * All JavaDoc is new code.
+ *
+ * The original version did not use a table for the layout of the screen, so created and positioned
+ * each label using pixel positioning. The new code creates the same labels (with an addition) and adds
+ * them to a table for positioning, then the whole table is drawn using libGDX 'Stage'.
+ */
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -31,20 +39,20 @@ import java.util.List;
  */
 public class WinScreen implements Screen {
     private final YettiGame game;
-    /** The player's final score. */
+    // The player's final score.
     private int score;
-    /** The leaderboard of top scores. */
+    // The leaderboard of top scores.
     private Leaderboard leaderboard;
-    /** A list of the top scores. */
+    // A list of the top scores.
     private List topScores;
-    /** A string which will contain player's username. */
+    // A string which will contain player's username.
     private String username = "";
     private boolean typing = true;
     private boolean uniqueUsername = true;
 
-    /** The stage used to render the UI. */
+    // The stage used to render the UI.
     private final Stage stage;
-    /** The table used for the layout of UI. */
+    // The table used for the layout of UI.
     private final Table table;
 
     /**
@@ -57,15 +65,10 @@ public class WinScreen implements Screen {
         stage = new Stage(game.uiViewport, game.batch);
         table = new Table();
         score = game.calculateFinalScore();
+        // ---- NEW CODE ------
         this.leaderboard = new Leaderboard();
     }
 
-    /**
-     * Constructs a new {@code WinScreen} instance.
-     *
-     * @param game the main {@link YettiGame} game instance.
-     * @param setUi boolean which ???
-     */
     public WinScreen(final YettiGame game, boolean setUi) {
         this.game = game;
         if (setUi) {
@@ -80,9 +83,11 @@ public class WinScreen implements Screen {
         this.leaderboard = new Leaderboard();
     }
 
+    // --------- NEW CODE -----------
     public String getUsername() {
         return username;
     }
+    // -----------------------------
 
     /**
      * This method is called when the screen is shown.
@@ -101,6 +106,7 @@ public class WinScreen implements Screen {
 
         Label titleLabel = new Label("You won :D", labelStyle);
         Label scoreLabel = new Label("Score: " + score, labelStyle);
+        // ---------- NEW CODE ------------
         Label topScoresLabel = new Label("Top Scores:", labelStyle);
 
         table.add(titleLabel).padTop(10).row();
@@ -125,12 +131,13 @@ public class WinScreen implements Screen {
         });
 
         table.add(menuBtn).padTop(20).center().row();
+        // ---------------------------------
     }
 
     /**
      * Renders the winning screen depending on if the player has entered their username or not.
      *  If not, a different UI is shown than the table setup in 'show' method.
-     * @param delta ??
+     * @param delta time since last render.
      */
     @Override
     public void render(float delta) {
@@ -138,6 +145,7 @@ public class WinScreen implements Screen {
         if(typing){
             game.batch.begin();
 
+            // ----------- NEW CODE ----------
             game.font.draw(game.batch, "Enter your username:", 100, 500);
             game.font.draw(game.batch, username + (typing ? "|" : ""), 100, 450);
 
@@ -160,8 +168,10 @@ public class WinScreen implements Screen {
         game.batch.begin();
         game.batch.end();
         stage.draw();
+        // ------------------------------
     }
 
+    // -------------------- NEW CODE -------------------
     /**
      * ??
      */
@@ -193,6 +203,7 @@ public class WinScreen implements Screen {
             }
         }
     }
+    // -------------------------------------------
 
     /**
      * Called when the screen is resized.

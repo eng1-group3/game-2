@@ -1,5 +1,7 @@
 package io.github.yetti_eng.screens;
 
+// WHOLE FILE NEW CODE
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.yetti_eng.YettiGame;
 import io.github.yetti_eng.screens.GameScreen;
 import io.github.yetti_eng.screens.MenuScreen;
+
 /**
  * This class represents the Pause Menu overlay.
  * It is a table that sits on top of the game when the player presses ESC or press the button.
