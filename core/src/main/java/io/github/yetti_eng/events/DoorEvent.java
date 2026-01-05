@@ -1,5 +1,7 @@
 package io.github.yetti_eng.events;
 
+// ALL JAVADOC NEW
+
 import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.YettiGame;
 import io.github.yetti_eng.entities.Item;

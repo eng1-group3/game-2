@@ -1,10 +1,11 @@
 package io.github.yetti_eng.events;
 
+// All JavaDoc new
+
 import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
-
 
 /**
  * This class handles what happens when the player finds a Long Boi item.
@@ -25,7 +26,9 @@ public class LongBoiEvent extends Event {
         final int TOTAL_LONG_BOIS = 9;
 
         EventCounter.incrementPositive();
+        // ----- NEW CODE ------
         EventCounter.incrementLongBoi();
+        // ---------------------
         // Remove the item from the map so it can't be picked up again
         item.disable();
         item.hide();
@@ -33,6 +36,7 @@ public class LongBoiEvent extends Event {
         // Play the sound and show a text message
         screen.getQuackSfx().play(screen.getGame().volume);
         screen.spawnInteractionMessage("Found Long Boi (+" + getScoreModifier()[1] + ")");
+        // ---------- NEW CODE ------------
         if (EventCounter.getLongBoiCollected() == TOTAL_LONG_BOIS) {
 
             // Unlock the achievement
@@ -41,6 +45,7 @@ public class LongBoiEvent extends Event {
             // Player feedback
             screen.spawnLargeMessage("Achievement Unlocked!");
         }
+        // -------------------------------
         return true;
     }
     /**

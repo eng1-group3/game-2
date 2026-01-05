@@ -1,5 +1,7 @@
 package io.github.yetti_eng.events;
 
+// All JavaDoc new
+
 import io.github.yetti_eng.YettiGame;
 import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;

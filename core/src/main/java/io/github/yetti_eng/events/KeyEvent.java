@@ -1,5 +1,7 @@
 package io.github.yetti_eng.events;
 
+// All JavaDoc new
+
 import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.Leaderboard;
 import io.github.yetti_eng.entities.Item;
@@ -22,8 +24,6 @@ public class KeyEvent extends Event {
      */
     @Override
     public boolean activate(GameScreen screen, Player player, Item item) {
-
-
         // negative event record +1
         EventCounter.incrementNegative();
         // Remove the item from the map so it can't be picked up again
