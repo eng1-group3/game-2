@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 
+import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.YettiGame;
 
 public class WinScreenTest {
@@ -53,6 +54,19 @@ public class WinScreenTest {
         screen.handleTyping();
 
         assertEquals("D", screen.getUsername());
+    }
+
+    @Test
+    public void resetGameTest() {
+        YettiGame game = mock(YettiGame.class);
+
+        WinScreen screen = new WinScreen(game, false);
+        screen.resetGame();
+
+        assertEquals(0, EventCounter.getHiddenCount());
+        assertEquals(0, EventCounter.getPositiveCount());
+        assertEquals(0, EventCounter.getNegativeCount());
+        assertEquals(0, game.score);
     }
 
     // Not testing leaderboard logic as this is done in LeaderboardTest

@@ -160,8 +160,7 @@ public class WinScreen implements Screen {
 
         //Reset game variables and return to main menu on pressing R key
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            game.score = 0;      //  reset score
-            EventCounter.reset();  // reset event counter
+            resetGame();
             game.setScreen(new MenuScreen(game)); //return to main menu
             return;
         }
@@ -172,6 +171,15 @@ public class WinScreen implements Screen {
     }
 
     // -------------------- NEW CODE -------------------
+
+    /*
+     * Resets all game variables to their initial state.
+     */
+    void resetGame() {
+        game.score = 0;      //  reset score
+        EventCounter.reset();  // reset event counter
+    }
+
     /**
      * ??
      */
