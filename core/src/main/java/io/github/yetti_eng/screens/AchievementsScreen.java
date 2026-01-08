@@ -54,7 +54,7 @@ public class AchievementsScreen implements Screen {
         table.setFillParent(true);
         table.clear();
         stage.addActor(table);
-        table.setDebug(true);
+        //table.setDebug(true);
 
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle(null, null, null, game.font);
         Label.LabelStyle headerStyle = new Label.LabelStyle(game.font, Color.WHITE);

@@ -132,6 +132,8 @@ public class GameScreen implements Screen {
             game.resume();
         }
         EventCounter.reset();
+        //this to fix the bug of the game not reseting or going back to the mainmenu  the score after resting (i know there might be a better way but this works so do not touch :). )
+        game.score = 0;
         // ------------------------------
 
         playerTexUp = new Texture("character/player_up.png");
