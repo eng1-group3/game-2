@@ -185,7 +185,7 @@ public class GameScreen implements Screen {
         slipSfx = Gdx.audio.newSound(Gdx.files.internal("audio/cartoon_quick_slip.wav"));
         growlSfx = Gdx.audio.newSound(Gdx.files.internal("audio/deep_growl_1.wav"));
         // -------- NEW CODE ---------
-        speedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/speed.mp3"));
+        speedSfx = Gdx.audio.newSound(Gdx.files.internal("audio/power_up.wav"));
         // ---------------------------
         player = new Player(playerTexDown, 55, 25);
         exit = new Item(new WinEvent(), "exit", exitTexture, 80, 54, 2, 2.2f);
