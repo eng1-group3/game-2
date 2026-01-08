@@ -88,6 +88,7 @@ public class CreditsScreen implements Screen {
         Label credit9=addCreditHyperlinkLabel("door opening (CC0 1.0)", "https://freesound.org/people/pagancow/sounds/15419/");
         Label credit10=addCreditHyperlinkLabel("Cartoon Quick Zip (CC0 1.0)", "https://freesound.org/people/se2001/sounds/541506/");
         Label credit11=addCreditHyperlinkLabel("Deep Growl 1 (CC0 1.0)", "https://freesound.org/people/noahpardo/sounds/345733/ ");
+        Label credit12=addCreditHyperlinkLabel("Power Up sfx (CC0 1.0)", "https://brackeysgames.itch.io/brackeys-platformer-bundle?download");
 
         table.add(titleLabel).colspan(2).row();
         table.add(credit1).pad(5);
@@ -100,7 +101,8 @@ public class CreditsScreen implements Screen {
         table.add(credit8).pad(5).row();
         table.add(credit9).pad(5);
         table.add(credit10).pad(5).row();
-        table.add(credit11).pad(5).row();
+        table.add(credit11).pad(5);
+        table.add(credit12).pad(5).row();
         table.add(menuButton).colspan(2);
     }
 
