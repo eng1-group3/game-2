@@ -66,6 +66,7 @@ public class YettiGame extends Game {
         fontParameter.size = 40;
         fontSmall = robotoGenerator.generateFont(fontParameter);
 
+        fontParameter.size = 45;
         fontParameter.color = Color.BLACK.cpy();
         fontParameter.borderColor = Color.WHITE.cpy();
         fontParameter.borderWidth = 2;
