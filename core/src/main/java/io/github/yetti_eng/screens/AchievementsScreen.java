@@ -76,7 +76,7 @@ public class AchievementsScreen implements Screen {
         addAchievement("Path Sniffer", "Find the secret path", "path_sniffer");
         addAchievement("Longboi Master", "Get all long bois", "longboi_master");
         addAchievement("Ducktorate Degree", "Get a score of 2000", "ducktorate Degree");
-        addAchievement("Turnitin Approved, Soul Freed", "Give the lecturer the assignment", "turnitin Approved, Soul Freed");
+        addAchievement("Turnitin Approved, Soul Freed", "Give the lecturer the assignment", "Turnitin Approved, Soul Freed");
         // Create the back button to return to the menu
         TextButton backButton = new TextButton("Back", buttonStyle);
         backButton.addListener(new InputListener() {

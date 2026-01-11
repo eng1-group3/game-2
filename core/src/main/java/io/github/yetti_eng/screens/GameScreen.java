@@ -59,6 +59,7 @@ public class GameScreen implements Screen {
     private Texture wallPassableTexture;
     private Texture slowDownTexture;
     private Texture speedBoostTexture;
+    private Texture exitKeyTexture;
     // ----------------------
 
     private MapManager mapManager;
@@ -134,6 +135,7 @@ public class GameScreen implements Screen {
         EventCounter.reset();
         //this to fix the bug of the game not reseting or going back to the mainmenu  the score after resting (i know there might be a better way but this works so do not touch :). )
         game.score = 0;
+        WinEvent.hasExitKeycard = false;
         // ------------------------------
 
         playerTexUp = new Texture("character/player_up.png");
@@ -156,7 +158,7 @@ public class GameScreen implements Screen {
         speedBoostTexture = new Texture("item/speed.png");
         slowDownTexture = new Texture("item/slow_down.png");
         pauseTexture = new Texture("ui/pause.png");
-
+        exitKeyTexture = new Texture("item/key.png");
         // (Following lines until line 168 edited, not strictly new)
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.gameViewport.getWorldWidth(), game.gameViewport.getWorldHeight());
@@ -202,6 +204,7 @@ public class GameScreen implements Screen {
         entities.add(new Item(new SpeedUpEvent(), "speed_up", speedBoostTexture, 58, 2, 2f, 2f));
         entities.add(new Item(new SlowDownEvent(), "slow_down", slowDownTexture, 2.5f, 6, 2f, 2f));
         entities.add(new Item(new ClosingDoorEvent(19, 2.2f), "closing_door", doorframeTexture, 12, 19, 2, 2.2f, false, false));
+        entities.add(new Item(new ExitKeyCardEvent(), "exit_key",exitKeyTexture, 53, 56, 1.5f, 1.5f));
         // (Code before had one long boi, so all other ones are new)
         entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 2.5f, 8.5f, 1.5f, 1.5f));
         entities.add(new Item(new LongBoiEvent(), "long_boi", longBoiTexture, 25, 46, 1.5f, 1.5f));
