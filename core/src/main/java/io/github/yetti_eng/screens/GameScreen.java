@@ -92,6 +92,7 @@ public class GameScreen implements Screen {
     Player player;
     // Dean sprite.
     Dean dean;
+    BobEvent bob;
     private Item exit;
     // List of events/ entities in game.
     final ArrayList<Entity> entities = new ArrayList<>();
@@ -231,9 +232,11 @@ public class GameScreen implements Screen {
         // Hidden wall that becomes passable when touched
         HiddenWallEvent wallEvent = new HiddenWallEvent(wallPassableTexture);
         entities.add(new Item(wallEvent, "hidden_wall", wallSolidTexture, 31, 17, 2f, 2f, false, true));
-
-        entities.add(new Item(new BobEvent(), "bob", bobTexture, 30, 20, 1.5f, 1.5f ));
-
+        bob = new BobEvent();
+        entities.add(new Item(bob, "bob", bobTexture, 8, 5, 1.5f, 1.5f ));
+        entities.add(new Item(new BobEvent(), "bob", bobTexture, 7, 3, 1.5f, 1.5f ));
+        entities.add(new Item(new BobEvent(), "bob", bobTexture, 5, 6, 1.5f, 1.5f ));
+        entities.add(new Item(new BobEvent(), "bob", bobTexture, 6, 9, 1.5f, 1.5f ));
         // (Next 3 lines are unchanged, and the after that until line 228, are only edited.
         //start new timer
         game.timer = new Timer(TIMER_LENGTH);
