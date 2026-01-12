@@ -59,6 +59,8 @@ public class GameScreen implements Screen {
     private Texture slowDownTexture;
     private Texture speedBoostTexture;
     private MapManager mapManager;
+    private Texture bobTexture;
+
     OrthographicCamera camera;
 
     float mapWidth;
@@ -180,6 +182,8 @@ public class GameScreen implements Screen {
         // Hidden wall that becomes passable when touched
         HiddenWallEvent wallEvent = new HiddenWallEvent(wallPassableTexture);
         entities.add(new Item(wallEvent, "hidden_wall", wallSolidTexture, 31, 17, 2f, 2f, false, true));
+
+        entities.add(new Item(new BobEvent(), "bob", bobTexture, 30, 20, 1.5f, 1.5f ));
 
         //start new timer
         game.timer = new Timer(TIMER_LENGTH);
@@ -435,6 +439,8 @@ public class GameScreen implements Screen {
         slipSfx.dispose();
         growlSfx.dispose();
         speedSfx.dispose();
+        bobTexture.dispose();
+
     }
 
     public void releaseDean(int timeRemaining, boolean playSound, boolean displayMessage) {
