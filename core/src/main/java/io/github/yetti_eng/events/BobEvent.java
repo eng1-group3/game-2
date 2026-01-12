@@ -1,5 +1,6 @@
 package io.github.yetti_eng.events;
 
+import io.github.yetti_eng.EventCounter;
 import io.github.yetti_eng.entities.Item;
 import io.github.yetti_eng.entities.Player;
 import io.github.yetti_eng.screens.GameScreen;
@@ -9,6 +10,7 @@ public class BobEvent extends Event {
     @Override
     public boolean activate(GameScreen screen, Player player, Item item) {
         screen.spawnInteractionMessage("Bob got you! -100 points");
+        EventCounter.incrementNegative();
         // IMPORTANT: don't disable/hide if Bob should remain a hazard
         return true;
     }

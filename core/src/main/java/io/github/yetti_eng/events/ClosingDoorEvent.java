@@ -65,6 +65,7 @@ public class ClosingDoorEvent extends Event {
             timeSincePlayerPassed += delta;
             if (timeSincePlayerPassed >= CLOSE_DELAY) {
                 closeDoor(screen, item);
+                EventCounter.incrementNegative();
             }
         }
     }

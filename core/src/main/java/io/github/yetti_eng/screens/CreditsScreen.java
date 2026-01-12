@@ -89,6 +89,7 @@ public class CreditsScreen implements Screen {
         Label credit10=addCreditHyperlinkLabel("Cartoon Quick Zip (CC0 1.0)", "https://freesound.org/people/se2001/sounds/541506/");
         Label credit11=addCreditHyperlinkLabel("Deep Growl 1 (CC0 1.0)", "https://freesound.org/people/noahpardo/sounds/345733/ ");
         Label credit12=addCreditHyperlinkLabel("Power Up sfx (CC0 1.0)", "https://brackeysgames.itch.io/brackeys-platformer-bundle?download");
+        Label credit13=addCreditHyperlinkLabel("Blobbert the slime (CC0 1.0)", "https://gm48.net/game-jams/watch-them-grow/games/blobbert-the-slime");
 
         table.add(titleLabel).colspan(2).row();
         table.add(credit1).pad(5);
@@ -103,6 +104,7 @@ public class CreditsScreen implements Screen {
         table.add(credit10).pad(5).row();
         table.add(credit11).pad(5);
         table.add(credit12).pad(5).row();
+        table.add(credit13).pad(5).row();
         table.add(menuButton).colspan(2);
     }
 
