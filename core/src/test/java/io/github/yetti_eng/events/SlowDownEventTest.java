@@ -1,4 +1,4 @@
-package io.github.yetti_eng;
+package io.github.yetti_eng.events;
 
 import io.github.yetti_eng.events.SlowDownEvent;
 import org.junit.jupiter.api.Test;

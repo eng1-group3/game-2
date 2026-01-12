@@ -15,8 +15,10 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: read
 
@@ -34,7 +36,7 @@ jobs:
 
     - name: Ensure gradle wrapper is executable
       run: chmod +x gradlew
-    
+
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
@@ -57,3 +59,4 @@ jobs:
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
 #    - name: Generate and submit dependency graph
 #      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+

@@ -1,5 +1,14 @@
 package io.github.yetti_eng.screens;
 
+/**
+ * All JavaDoc is new code.
+ *
+ * The original version did not use a table for the layout of the screen, so created and positioned
+ * each label using pixel positioning and then rendered each in a loop. The new code creates the
+ * same labels (with a couple additions) and adds them to a table for positioning, then
+ * the whole table is drawn using libGDX 'Stage'.
+ */
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -13,17 +22,38 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.yetti_eng.YettiGame;
 
+/**
+ * The {@code CreditsScreen} class represents the screen displayed when the player clicks the 'Credits' button in the
+ *  Main Menu screen.
+ * <p>
+ * It shows a 'Credits' title, all the credits of assets used, and a "Main Menu" button
+ * that takes the player back to the main menu.
+ * </p>
+ *
+ * <p>This class implements LibGDX {@link Screen} interface, shows
+ * methods for managing a screen in a game.</p>
+ */
 public class CreditsScreen implements Screen {
     private final YettiGame game;
     private final Stage stage;
     private final Table table;
 
+    /**
+     * Sets up the stage and table for layout.
+     *
+     * @param game The main game object
+     */
     public CreditsScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
         table = new Table();
     }
 
+    /**
+     * This runs when the screen is shown.
+     * It sets up the input, creates the 'Main Menu' button, credits and license labels for assets in the game,
+     * and adds these to the table.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -58,6 +88,7 @@ public class CreditsScreen implements Screen {
         Label credit9=addCreditHyperlinkLabel("door opening (CC0 1.0)", "https://freesound.org/people/pagancow/sounds/15419/");
         Label credit10=addCreditHyperlinkLabel("Cartoon Quick Zip (CC0 1.0)", "https://freesound.org/people/se2001/sounds/541506/");
         Label credit11=addCreditHyperlinkLabel("Deep Growl 1 (CC0 1.0)", "https://freesound.org/people/noahpardo/sounds/345733/ ");
+        Label credit12=addCreditHyperlinkLabel("Power Up sfx (CC0 1.0)", "https://brackeysgames.itch.io/brackeys-platformer-bundle?download");
 
         table.add(titleLabel).colspan(2).row();
         table.add(credit1).pad(5);
@@ -70,10 +101,19 @@ public class CreditsScreen implements Screen {
         table.add(credit8).pad(5).row();
         table.add(credit9).pad(5);
         table.add(credit10).pad(5).row();
-        table.add(credit11).pad(5).row();
+        table.add(credit11).pad(5);
+        table.add(credit12).pad(5).row();
         table.add(menuButton).colspan(2);
     }
 
+    /**
+     * Method which creates a label that is a clickable hyperlink which will take you to
+     * appropriate asset webpage.
+     *
+     * @param text the text for the label.
+     * @param href the hyperlink which the label will go to on being clicked.
+     * @return the label created.
+     */
     private Label addCreditHyperlinkLabel(String text, String href) {
         Label label = new Label(text, new Label.LabelStyle(game.fontSmall, Color.CYAN.cpy()));
         label.addListener(new ClickListener() {
@@ -93,7 +133,8 @@ public class CreditsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        // (Changed from 'viewport' to 'uiViewport')
+        game.uiViewport.update(width, height, true);
     }
 
     @Override

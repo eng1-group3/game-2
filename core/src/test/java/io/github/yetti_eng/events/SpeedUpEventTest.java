@@ -1,28 +1,28 @@
-package io.github.yetti_eng;
+package io.github.yetti_eng.events;
 
-import io.github.yetti_eng.events.LongBoiEvent;
+import io.github.yetti_eng.events.SpeedUpEvent;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LongBoiEventTest {
+public class SpeedUpEventTest {
 
     @Test
     public void testEventCanBeCreated() {
-        LongBoiEvent event = new LongBoiEvent();
+        SpeedUpEvent event = new SpeedUpEvent();
         assertNotNull(event);
     }
 
     @Test
     public void testScoreModifier() {
-        LongBoiEvent event = new LongBoiEvent();
-        assertArrayEquals(new int[]{0, 100}, event.getScoreModifier());
+        SpeedUpEvent event = new SpeedUpEvent();
+        assertArrayEquals(new int[]{0, 200}, event.getScoreModifier());
     }
 
     @Test
     public void testScoreModifierAddsPoints() {
-        LongBoiEvent event = new LongBoiEvent();
+        SpeedUpEvent event = new SpeedUpEvent();
         int[] modifier = event.getScoreModifier();
         assertEquals(0, modifier[0]);
-        assertEquals(100, modifier[1]);
+        assertEquals(200, modifier[1]);
     }
 }

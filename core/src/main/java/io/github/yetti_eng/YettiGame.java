@@ -15,11 +15,13 @@ import io.github.yetti_eng.screens.MenuScreen;
 // Called "Game" in the architecture documentation; renamed to avoid clash with LibGDX class name
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class YettiGame extends Game {
-    private static final float WORLD_SCALE = 80; // 16:9 * 80 = 1280:720
+    private static final float WORLD_SCALE = 80;
 
     public SpriteBatch batch;
     public FillViewport gameViewport;
+    // --------- NEW CODE ----------
     public ScreenViewport uiViewport;
+    // ----------------------
 
     private FreeTypeFontGenerator robotoGenerator;
     public BitmapFont font;
@@ -29,22 +31,30 @@ public class YettiGame extends Game {
 
     public float volume = 1.0f;
     private boolean paused;
+    // ------ NEW CODE --------------
     public Achievements achievements;
+    // ----------------------
 
     public Timer timer;
     public int score;
 
-    // public boolean hasKeycard = false;
-
+    // (New JavaDoc)
+    /**
+     * Called when the game is first created.
+     * Initializes rendering resources, sets up the camera and viewport, then transitions
+     * to the main menu screen.
+     */
     @Override
     public void create() {
         batch = new SpriteBatch();
+        // ------- NEW CODE -------
         achievements = new Achievements();
         // aspect ratio = width/height.
         float aspectRatio = (float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         gameViewport = new FillViewport(30*aspectRatio,30);
 
         uiViewport = new ScreenViewport();
+        // -----------------------
 
         robotoGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto.ttf"));
 
@@ -56,6 +66,7 @@ public class YettiGame extends Game {
         fontParameter.size = 40;
         fontSmall = robotoGenerator.generateFont(fontParameter);
 
+        fontParameter.size = 45;
         fontParameter.color = Color.BLACK.cpy();
         fontParameter.borderColor = Color.WHITE.cpy();
         fontParameter.borderWidth = 2;
@@ -76,9 +87,11 @@ public class YettiGame extends Game {
         font.dispose();
         fontBordered.dispose();
         fontBorderedSmall.dispose();
+        // ------- NEW CODE --------
         if (achievements != null) {
             achievements.deleteFile();
         }
+        // ---------------------
 
     }
 

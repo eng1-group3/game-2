@@ -1,5 +1,13 @@
 package io.github.yetti_eng.screens;
 
+/**
+ * All JavaDoc is new code.
+ *
+ * The original version did not use a table for the layout of the screen, so created and positioned
+ * each label using pixel positioning. The new code creates the same labels and adds them to a table
+ * for positioning, then the whole table is drawn using libGDX 'Stage'.
+ */
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -15,17 +23,37 @@ import io.github.yetti_eng.YettiGame;
 
 import static io.github.yetti_eng.YettiGame.scaled;
 
+/**
+ * The {@code MenuScreen} class represents the screen displayed when the player starts the game or
+ * returns to the main menu.
+ * <p>
+ * It shows a game title, and buttons to go to different screens, play the game or exit.
+ * </p>
+ *
+ * <p>This class implements LibGDX {@link Screen} interface, shows
+ * methods for managing a screen in a game.</p>
+ */
 public class MenuScreen implements Screen {
     private final YettiGame game;
     private final Stage stage;
     private final Table table;
 
+    /**
+     * Sets up the stage and table for layout.
+     *
+     * @param game The main game object.
+     */
     public MenuScreen(final YettiGame game) {
         this.game = game;
         stage = new Stage(game.uiViewport, game.batch);
         table = new Table();
     }
 
+    /**
+     * This runs when the screen is shown.
+     * It sets up the title label and buttons to go to different screens or exit the game,
+     * and adds these to the table.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -60,6 +88,15 @@ public class MenuScreen implements Screen {
                 return true;
             }
         });
+        TextButton achievementsButton = new TextButton("Achievements", style);
+        achievementsButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new AchievementsScreen(game));
+                dispose();
+                return true;
+            }
+        });
 
         TextButton creditsButton = new TextButton("Credits", style);
         creditsButton.addListener(new InputListener() {
@@ -83,6 +120,7 @@ public class MenuScreen implements Screen {
         table.add(titleLabel).padBottom(20).row();
         table.add(playButton).pad(10).row();
         table.add(settingsButton).pad(10).row();
+        table.add(achievementsButton).pad(10).row();
         table.add(creditsButton).pad(10).row();
         table.add(quitButton).pad(10).row();
 
@@ -96,6 +134,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        // Edited line
         stage.getViewport().update(width, height, true);
     }
 

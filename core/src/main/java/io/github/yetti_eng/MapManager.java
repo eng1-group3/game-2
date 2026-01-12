@@ -17,8 +17,13 @@ public class MapManager {
     private final OrthographicCamera camera;
     private TiledMapTileLayer collisionsLayer;
 
+    /**
+     * Constructor method which initialises the camera used to render the map to the screen.
+     *
+     * @param camera the game camera used to render the map to the screen.
+     */
     public MapManager(OrthographicCamera camera) {
-        this.camera = camera; //for rendering on the screen
+        this.camera = camera;
     }
 
     // Methods for unit testing using Mockito
@@ -40,8 +45,8 @@ public class MapManager {
     // End of unit test methods
 
     /**
-     *Loads the tilemap and defines the collision layer
-     * @param mapName internal path of the file of the map
+     * Loads the tilemap and defines the collision layer.
+     * @param mapName internal path of the file of the map.
      */
     public void loadMap(String mapName) {
         map = new TmxMapLoader().load(mapName);
@@ -56,9 +61,10 @@ public class MapManager {
     }
 
     /**
-     *Checks if a world coordinate is unwalkable/ causes a collision with the player
-     * @param posX
-     * @param posY
+     * Checks if a world coordinate is unwalkable/ causes a collision with the player.
+     *
+     * @param posX given x position within the map.
+     * @param posY given y position within the map.
      * @return true if position falls within a collision tile, false otherwise
      */
     public boolean isPositionInvalid(float posX, float posY) {
@@ -73,12 +79,11 @@ public class MapManager {
     }
 
     /**
-     *Checks if any corner of a rectangle object falls in an invalid position.
+     * Checks if any corner of a rectangle object falls in an invalid position.
      *
      * @param rect represents the hitbox of the player
      * @return true if any corner if in the collision layer
      */
-    //rectangle is blocked if any corners of the rectangle are invalid tiles
     public boolean isRectInvalid(Rectangle rect) {
         return isPositionInvalid(rect.x, rect.y) || // bottom left corner
             isPositionInvalid(rect.x + rect.width, rect.y) || // bottom right
