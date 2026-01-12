@@ -163,6 +163,8 @@ public class GameScreen implements Screen {
         slowDownTexture = new Texture("item/slow_down.png");
         pauseTexture = new Texture("ui/pause.png");
         exitKeyTexture = new Texture("item/key.png");
+        bobTexture = new Texture("character/bob.png");
+
         // (Following lines until line 168 edited, not strictly new)
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.gameViewport.getWorldWidth(), game.gameViewport.getWorldHeight());
@@ -530,7 +532,6 @@ public class GameScreen implements Screen {
         // (Following line new)
         speedSfx.dispose();
         bobTexture.dispose();
-
     }
 
     /**
