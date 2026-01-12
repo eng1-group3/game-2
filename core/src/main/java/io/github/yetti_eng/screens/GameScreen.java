@@ -46,6 +46,7 @@ public class GameScreen implements Screen {
     // Textures for events
     private Texture yetiTexture;
     private Texture exitTexture;
+    private Texture keyCardTexture;
     private Texture checkinCodeTexture;
     private Texture doorTexture;
     private Texture doorframeTexture;
@@ -63,6 +64,8 @@ public class GameScreen implements Screen {
     // ----------------------
 
     private MapManager mapManager;
+    private Texture bobTexture;
+
     // Camera for the gameplay.
     OrthographicCamera camera;
     // ------- NEW CODE ---------
@@ -89,6 +92,7 @@ public class GameScreen implements Screen {
     Player player;
     // Dean sprite.
     Dean dean;
+    BobEvent bob;
     private Item exit;
     // List of events/ entities in game.
     final ArrayList<Entity> entities = new ArrayList<>();
@@ -145,6 +149,7 @@ public class GameScreen implements Screen {
         yetiTexture = new Texture("character/yeti.png");
 
         exitTexture = new Texture("item/exit.png");
+        keyCardTexture = new Texture("item/key_card.png");
         checkinCodeTexture = new Texture("item/checkin_code.png");
         doorTexture = new Texture("item/door.png");
         doorframeTexture = new Texture("item/doorframe.png");
@@ -159,6 +164,8 @@ public class GameScreen implements Screen {
         slowDownTexture = new Texture("item/slow_down.png");
         pauseTexture = new Texture("ui/pause.png");
         exitKeyTexture = new Texture("item/key.png");
+        bobTexture = new Texture("character/bob.png");
+
         // (Following lines until line 168 edited, not strictly new)
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.gameViewport.getWorldWidth(), game.gameViewport.getWorldHeight());
@@ -195,8 +202,14 @@ public class GameScreen implements Screen {
         dean.disable();
         dean.hide();
 
+        //game.hasKeycard = false;
+
         entities.add(new Item(new KeyEvent(), "checkin_code", checkinCodeTexture, 45, 33, 1.5f, 1.5f));
+        // find coordinates
+        entities.add(new Item(new CardEvent(), "key_card", keyCardTexture, 60, 33, 1.5f, 1.5f));
         entities.add(new Item(new DoorEvent(), "door", doorTexture, 44, 21, 2, 2.2f, false, true));
+        //find coordinates
+        entities.add(new Item(new ExitEvent(), "end_door", doorTexture, 60, 21, 2, 2.2f, false, true));
         entities.add(new Item(new WaterSpillEvent(), "water_spill", waterSpillTexture, 59, 11, 3f, 3f, true, true));
         // --------- NEW CODE ---------------
         entities.add(new Item(new DoubleScoreEvent(), "lecturer", lecturerTexture, 11, 46, 3f, 3f, false, false));
@@ -219,7 +232,11 @@ public class GameScreen implements Screen {
         // Hidden wall that becomes passable when touched
         HiddenWallEvent wallEvent = new HiddenWallEvent(wallPassableTexture);
         entities.add(new Item(wallEvent, "hidden_wall", wallSolidTexture, 31, 17, 2f, 2f, false, true));
-
+        bob = new BobEvent();
+        entities.add(new Item(bob, "bob", bobTexture, 8, 5, 1.5f, 1.5f ));
+        entities.add(new Item(new BobEvent(), "bob", bobTexture, 7, 3, 1.5f, 1.5f ));
+        entities.add(new Item(new BobEvent(), "bob", bobTexture, 5, 6, 1.5f, 1.5f ));
+        entities.add(new Item(new BobEvent(), "bob", bobTexture, 6, 9, 1.5f, 1.5f ));
         // (Next 3 lines are unchanged, and the after that until line 228, are only edited.
         //start new timer
         game.timer = new Timer(TIMER_LENGTH);
@@ -493,6 +510,7 @@ public class GameScreen implements Screen {
         yetiTexture.dispose();
 
         exitTexture.dispose();
+        keyCardTexture.dispose();
         checkinCodeTexture.dispose();
         doorTexture.dispose();
         doorframeTexture.dispose();
@@ -516,6 +534,7 @@ public class GameScreen implements Screen {
         growlSfx.dispose();
         // (Following line new)
         speedSfx.dispose();
+        bobTexture.dispose();
     }
 
     /**
